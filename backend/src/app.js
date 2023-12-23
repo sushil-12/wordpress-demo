@@ -1,0 +1,31 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/authRoutes');
+const protectedRoutes = require('./routes/protectedUserRoutes');
+const { CustomError, ErrorHandler } = require('./utils/responseHandler');
+const connectDB = require('./config/database');
+const app = express();
+
+// Connect to MongoDB
+connectDB();
+// Middleware
+app.use(bodyParser.json());
+
+
+app.use('/auth', authRoutes);
+
+// protected route
+app.use('/api', protectedRoutes);
+
+
+// 404 Error Handler
+app.use((req, res, next) => {
+    ErrorHandler.handleNotFound(res);
+});
+
+// Generic Error Handler
+app.use((err, req, res, next) => {
+    ErrorHandler.handleError(err, res);
+});
+
+module.exports = app;
