@@ -2,9 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 const { CustomError, ErrorHandler, ResponseHandler } = require('../../utils/responseHandler');
+const AuthValidator = require('../../validator/AuthValidator');
 
 const register = async (req, res) => {
   try {
+    AuthValidator.validateRegistration(req.body);
     const { username, password, email, firstName, lastName } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword, email, firstName, lastName });
@@ -12,14 +14,14 @@ const register = async (req, res) => {
 
     ResponseHandler.success(res, { message: 'User registered successfully' }, 200);
   } catch (error) {
-    ErrorHandler.handleDatabaseError(error, res);
+    ErrorHandler.handleError(error, res);
   }
 };
 
 const login = async (req, res) => {
   try {
+    AuthValidator.validateLogin(req.body);
     const { username, password, email } = req.body;
-    console.log("email", email);
     const user = username ? await User.findOne({ username }) : await User.findOne({email});
     if (!user) {
       throw new CustomError(404, 'User not found');

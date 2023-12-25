@@ -5,12 +5,13 @@ const protectedRoutes = require('./routes/protectedUserRoutes');
 const { CustomError, ErrorHandler } = require('./utils/responseHandler');
 const connectDB = require('./config/database');
 const app = express();
+const cors = require('cors');
 
 // Connect to MongoDB
 connectDB();
 // Middleware
 app.use(bodyParser.json());
-
+app.use(cors());
 
 app.use('/auth', authRoutes);
 
