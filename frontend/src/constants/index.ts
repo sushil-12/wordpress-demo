@@ -6,12 +6,12 @@ export const sidebarLinks = [
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
-      route: "/all-technologies",
+      route: "/technologies",
       label: "Technology",
     },
     {
       imgURL: "/assets/icons/people.svg",
-      route: "/all-users",
+      route: "/users",
       label: "Users",
     },
   ];
@@ -24,12 +24,12 @@ export const sidebarLinks = [
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
-      route: "/all-technologies",
+      route: "/technologies",
       label: "Technology",
     },
     {
       imgURL: "/assets/icons/people.svg",
-      route: "/all-users",
+      route: "/users",
       label: "Users",
     },
   ];

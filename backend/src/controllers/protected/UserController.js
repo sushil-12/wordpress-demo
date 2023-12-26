@@ -10,9 +10,7 @@ const getProfile = async (req, res) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.userId;
 
-    const user = await User.findById(userId);
-    const roles = await Role.find({ _id: { $in: user.role } });
-    const permissions = await Permission.find({ _id: { $in: user.permissions } });
+    const user = await User.findById(userId).populate('role').populate('permissions');
     if (!user) {
       throw new CustomError(404, 'User not found');
     }
@@ -24,8 +22,9 @@ const getProfile = async (req, res) => {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      role: roles[0].name,
-      permissions: permissions.map(permission => permission.name), // Map permissions to an array of permission names
+      roles: user.role?.name,
+      permissions: user.permissions.map(({ name, module }) => ({ name, module }))
+
     };
 
     ResponseHandler.success(res, userProfile,200);

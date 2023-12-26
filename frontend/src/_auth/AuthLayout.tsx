@@ -1,12 +1,8 @@
-import Loader from '@/components/shared/Loader';
-import { useUserContext } from '@/context/AuthProvider';
-import { Outlet, Navigate } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 const AuthLayout = () => {
-    const { isAuthenticated, isLoading } = useUserContext();
-    
-    if (isLoading) {
-        return <Loader />;
-    }
+    const isAuthenticated  = sessionStorage.getItem('token')!==null ? true:false;
+    const location = useLocation();
+    console.log(location);
     return (
         <>
             {isAuthenticated ? (<Navigate to="/" />)

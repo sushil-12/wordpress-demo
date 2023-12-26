@@ -18,6 +18,9 @@ app.use('/auth', authRoutes);
 // protected route
 app.use('/api', protectedRoutes);
 
+app.get('/', (req, res) => {
+    res.send('Hey this is my API running 🥳')
+})
 
 // 404 Error Handler
 app.use((req, res, next) => {

@@ -16,10 +16,10 @@ import { z } from "zod";
 const SignInForm = () => {
 
     const { toast } = useToast()
-    const { checkAuthUser, isLoading: isUserLoading, setIsAuthenticated } = useUserContext();
+    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
     const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
     const navigate = useNavigate();
-    
+    console.log(isUserLoading)
     const form = useForm<z.infer<typeof signInValidationSchema>>({
         resolver: zodResolver(signInValidationSchema),
         defaultValues: {
@@ -40,7 +40,6 @@ const SignInForm = () => {
         }
         const isLoggedIn = await checkAuthUser();
         if (isLoggedIn) {
-            console.log("__________user_________________", isLoggedIn, isSigningIn, isUserLoading)
             form.reset();
             toast({ title: "Logged In sucessfuly" })
             navigate('/');

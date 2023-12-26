@@ -114,7 +114,7 @@
 
   /* All Users */
   .user-container {
-    @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
+    @apply  flex flex-col items-start w-full gap-6 md:gap-9;
   }
 
   .user-grid {
@@ -188,7 +188,8 @@
 
   /* Bottom bar */
   .bottom-bar {
-    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-light-2 px-5 py-4 md:hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-light-1 px-5 py-4 md:hidden;
   }
 
   /* File uploader */
@@ -220,7 +221,7 @@
   /* Left sidebar */
   .leftsidebar {
     @apply hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px] bg-light-1;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adjust the values as needed */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   }
 
   .leftsidebar-link {
@@ -238,7 +239,7 @@
 
   /* Topbar */
   .topbar {
-    @apply sticky top-0 z-50 md:hidden bg-dark-2 w-full;
+    @apply sticky top-0 z-50 md:hidden bg-light-1 w-full;
   }
 
   /* User card */

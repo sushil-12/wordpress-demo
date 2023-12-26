@@ -1,6 +1,3 @@
-import { Query } from "appwrite";
-
-import { appwriteConfig, account, databases } from "./config";
 import { INewUser } from "../types";
 import Apiservices from "../api/Apiservices";
 import AuthenticatedApiService from "../api/AuthenticatedApiService";
@@ -32,7 +29,8 @@ export async function signInAccount(user: { email: string; password: string }) {
 // ============================== GET ACCOUNT
 export async function getAccount() {
   try {
-    const currentAccount = await account.get();
+    const authenticatedApiService = new AuthenticatedApiService();
+    const currentAccount = await authenticatedApiService.getAccount();
     return currentAccount;
   } catch (error) {
     return error;
@@ -55,8 +53,7 @@ export async function getCurrentUser() {
 // ============================== SIGN OUT
 export async function signOutAccount() {
   try {
-    const session = await account.deleteSession("current");
-    return session;
+    sessionStorage.removeItem("token");
   } catch (error) {
     console.log(error);
   }

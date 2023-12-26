@@ -17,14 +17,14 @@ const SignUpForm = () => {
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount();
   const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
   const navigate = useNavigate();
-
+  console.log(isUserLoading, isSigningIn)
   const form = useForm<z.infer<typeof signUpValidationSchema>>({
     resolver: zodResolver(signUpValidationSchema),
     defaultValues: {
-      username: "sushil",
-      firstName: "Sushil",
+      username: "demo",
+      firstName: "demo",
       lastName: "kumar",
-      email: "sushil.kumar@infostride.com",
+      email: "demo@yopmail.com",
       password: "12345678",
     },
   });

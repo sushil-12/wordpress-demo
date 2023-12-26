@@ -34,6 +34,9 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    if(user.role.name == "admin"){
+      throw new CustomError(401, 'Only Admin is able to login currently');
+    }
     ResponseHandler.success(res, { token }, 200);
   } catch (error) {
     ErrorHandler.handleError(error, res);

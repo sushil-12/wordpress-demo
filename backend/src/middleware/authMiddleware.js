@@ -13,14 +13,20 @@ const verifyToken = (req, res, next) => {
             throw new CustomError(401, 'Unauthorized - Invalid token format');
         }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decodedToken.userId;
-
-        next();
+        try {
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            req.userId = decodedToken.userId;
+            next();
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new CustomError(401, 'Unauthorized - Your session has expired! Please login again');
+            } else {
+                throw new CustomError(401, 'Unauthorized - Invalid token');
+            }
+        }
     } catch (error) {
         next(error);
     }
 };
 
 module.exports = { verifyToken };
-

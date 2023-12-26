@@ -1,10 +1,11 @@
+import { useUserContext } from "@/context/AuthProvider";
 import {
   Outlet,
 } from "react-router-dom";
 
 const Profile = () => {
-
-  const currentUser = { name: "sushil", username: "SUSHIL", email: "username@user.com" };
+  const {user} = useUserContext();
+  const currentUser = user;
   return (
     <div className="profile-container">
       <div className="profile-inner_container">
@@ -17,7 +18,7 @@ const Profile = () => {
           <div className="flex flex-col flex-1 justify-between md:mt-2">
             <div className="flex flex-col w-full">
               <h1 className="text-center xl:text-left h3-bold md:h1-semibold w-full">
-                {currentUser?.name}
+                {currentUser?.firstName}
               </h1>
               <p className="small-regular md:body-medium text-light-3 text-center xl:text-left">
                 @{currentUser?.username}

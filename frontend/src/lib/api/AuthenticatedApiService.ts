@@ -1,19 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-class CustomError extends Error {
-  constructor(name: string, message: string, public originalError?: any) {
-    super(message);
-    this.name = name;
-  }
-}
 class AuthenticatedApiService {
   private token: string | null;
   private api: AxiosInstance;
 
   constructor() {
     this.token = sessionStorage.getItem("token");
+    console.log("TOKEN", this.token)
     this.api = axios.create({
-      baseURL: 'http://127.0.0.1:3000',
+      baseURL: import.meta.env.VITE_API_URL,
     });
   }
 
