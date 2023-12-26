@@ -11,7 +11,7 @@ import Technology from './_root/pages/Technology.tsx';
 
 const App = () => {
     return (
-        <main className='flex h-screen'>
+        <main className='flex h-screen comment-added'>
             
             <Routes>
                 {/* Public Routes start */}
