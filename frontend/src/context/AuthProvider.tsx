@@ -48,7 +48,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect (()=>{
         const cookieFallback = sessionStorage.getItem("token");
         if (cookieFallback === "[]" ||cookieFallback === null ||cookieFallback === undefined  ) {
-          navigate("/sign-in");
+          navigate("/login");
         }
         checkAuthUser()
     }, [])
