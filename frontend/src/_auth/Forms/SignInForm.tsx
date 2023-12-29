@@ -19,7 +19,6 @@ const SignInForm = () => {
     const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
     const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
     const navigate = useNavigate();
-    console.log(isUserLoading)
     const form = useForm<z.infer<typeof signInValidationSchema>>({
         resolver: zodResolver(signInValidationSchema),
         defaultValues: {
@@ -27,7 +26,7 @@ const SignInForm = () => {
             password: "adminPassword",
         },
     });
-
+    console.log(isUserLoading, "iseUserLoading")
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof signInValidationSchema>) {
 
@@ -36,6 +35,7 @@ const SignInForm = () => {
             password: values.password
         })
         if (!session) {
+            console.log(session);
             return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
         }
         const isLoggedIn = await checkAuthUser();
@@ -80,7 +80,7 @@ const SignInForm = () => {
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="shad-form_message"/>
                             </FormItem>
                             
                         )}
@@ -99,7 +99,7 @@ const SignInForm = () => {
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="shad-form_message"/>
                             </FormItem>
                         )}
                     />

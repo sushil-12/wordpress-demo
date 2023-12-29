@@ -27,3 +27,14 @@ export const postValidationSchema = z.object({
     tags : z.string(),
     
 })
+
+export const mediaEditFormSchema= z.object({
+    id:z.string(),
+    caption : z.string().min(0, {message: "Too Short"}).max(2000,  'Too big less than 50 character please'),
+    alt_text : z.string().min(0, {message: "Too Short"}).max(2000,  'Too big less than 50 character please'),
+    description : z.string().min(0, {message: "Too Short"}).max(2000,  'Too big less than 50 character please'),
+    filename:z.string(),
+    category:z.string(),
+    tags : z.string(),
+    title: z.string(),
+})

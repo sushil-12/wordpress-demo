@@ -34,6 +34,8 @@ module.exports = {
         'light-3': '#7878A3',
         'light-4': '#5C5C7B',
         'danger':"#810b00",
+        'success':"#274e13",
+        
       },
 
       screens: {

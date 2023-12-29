@@ -86,7 +86,7 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="shad-form_message"/>
               </FormItem>
             )}
           />
@@ -103,7 +103,7 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="shad-form_message"/>
               </FormItem>
             )}
           />
@@ -120,7 +120,7 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="shad-form_message"/>
               </FormItem>
             )}
           />
@@ -137,7 +137,7 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="shad-form_message"/>
               </FormItem>
             )}
           />
@@ -155,7 +155,7 @@ const SignUpForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="shad-form_message"/>
               </FormItem>
             )}
           />

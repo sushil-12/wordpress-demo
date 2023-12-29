@@ -1,29 +1,25 @@
-// utils/PromiseHandler.ts
-class PromiseHandler {
-    static async handle<T>(promise: Promise<T>): Promise<[T | null, Error | null]> {
-      try {
-        const result = await promise;
-        return [result, null];
-      } catch (error) {
-        const enhancedError = PromiseHandler.enhanceError(error);
-        return [null, enhancedError];
-      }
-    }
-  
-    private static enhanceError(error: any): Error {
-      if (error.response) {
-        const data = error.response.data;
-        console.log(error.response.data)
-        return data;
-      } else if (error.request) {
-        // The request was made but no response was received
-        return new Error('Request did not receive a response');
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        return new Error(`Error setting up the request: ${error.message}`);
-      }
-    }
+import { toast } from "@/components/ui/use-toast";
+
+class PromiseHandler extends Error {
+  public code: string | undefined;
+  public details: any;
+
+  constructor(message: string, code?: string, details?: any) {
+    super(message);
+    this.code = code;
+    this.details = details;
+
+    // Ensure the correct prototype chain
+    Object.setPrototypeOf(this, PromiseHandler.prototype);
+
+    // Show toast notification
+    this.showNotification();
   }
+
+  private showNotification() {
+    return toast({ variant: "destructive", title: this.code, description: this.message })
+  }
+}
   
   export default PromiseHandler;
   

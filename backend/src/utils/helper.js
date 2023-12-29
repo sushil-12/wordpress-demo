@@ -1,22 +1,22 @@
-// Creating predefined permissions
-export const createPermissions = async () => {
-    const permissions = ['read', 'write', 'delete'];
-    const permissionObjects = permissions.map((name) => new Permission({ name }));
-    await Permission.insertMany(permissionObjects);
-};
+const cloudinary = require('../config/cloudinary');
 
-// Creating predefined roles with associated permissions
-export const createRoles = async () => {
-    const adminRole = new Role({
-        name: 'admin',
-        permissions: await Permission.find(),
-    });
-
-    const userRole = new Role({
-        name: 'user',
-        permissions: await Permission.find({ name: 'read' }),
-    });
-
-    await adminRole.save();
-    await userRole.save();
-};
+ const uploadImageToCloudinary = async (buffer, originalname) => {
+    try {
+      // Upload image to Cloudinary
+      const result = await cloudinary.uploader.upload(buffer.toString('base64'));
+  
+      // Extract relevant information
+      const { public_id, secure_url } = result;
+      const size = buffer.length;
+  
+      return {
+        cloudinary_id: public_id,
+        url: secure_url,
+        size,
+        filename: originalname,
+      };
+    } catch (error) {
+      throw new Error('Error uploading image to Cloudinary: ' + error.message);
+    }
+  };
+  module.exports = uploadImageToCloudinary;

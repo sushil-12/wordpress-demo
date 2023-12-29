@@ -10,6 +10,11 @@ export const sidebarLinks = [
       label: "Technology",
     },
     {
+      imgURL: "/assets/icons/wallpaper.svg",
+      route: "/media",
+      label: "Media",
+    },
+    {
       imgURL: "/assets/icons/people.svg",
       route: "/users",
       label: "Users",

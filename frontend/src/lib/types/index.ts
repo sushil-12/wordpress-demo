@@ -30,3 +30,40 @@ export type INavLink = {
     password: string;
     username: string;
   };
+
+ export type MediaItem = {
+  id:string,
+  title: string,
+  tempUrl:string,
+  caption: string,
+  description: string,
+  alt_text: string,
+  filename: string,
+  cloudinary_id: string,
+  url: string,
+  size: string, 
+  storage_type: string
+  author: string,
+  category: string,
+  tags: string,
+  createdAt: string,
+ }
+
+ export type MediaItemCopy = {
+  id:string,
+  title: string,
+  tempUrl:string,
+  isLoading:boolean,
+  caption: string,
+  description: string,
+  alt_text: string,
+  filename: string,
+  cloudinary_id: string,
+  url: string,
+  size: string, 
+  storage_type: string
+  author: string,
+  category: string,
+  tags: string,
+  createdAt: string,
+ }

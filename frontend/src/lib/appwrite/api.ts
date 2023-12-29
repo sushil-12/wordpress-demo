@@ -1,17 +1,17 @@
 import { INewUser } from "../types";
 import Apiservices from "../api/Apiservices";
 import AuthenticatedApiService from "../api/AuthenticatedApiService";
+import PromiseHandler from "@/utils/PromiseHandler";
 
 // ============================== SIGN UP
 export async function createUserAccount(user: INewUser) {
   try {
-    console.log("USERS", user)
     // async register(username: string, email: string, password: string, firstName:string, lastName:string): Promise<any> {
     const newAccount = await Apiservices.authService.register(user);
     if (!newAccount) throw Error;
     return newAccount;
   } catch (error) {
-    return error;
+    throw new PromiseHandler('Failed to create user account', 'CREATE USER FAILED', { user });
   }
 }
 
@@ -19,10 +19,10 @@ export async function createUserAccount(user: INewUser) {
 export async function signInAccount(user: { email: string; password: string }) {
   try {
     const session = await Apiservices.authService.login(user.email, user.password);
-    sessionStorage.setItem("token", session?.data?.data?.token);
+    session ? sessionStorage.setItem("token", session?.data?.data?.token) : '';
     return session;
-  } catch (error) {
-    return error;
+  } catch (error: any) {
+    throw new PromiseHandler(error.message, 'SIGNIN ERROR', { user, error });
   }
 }
 
@@ -33,7 +33,7 @@ export async function getAccount() {
     const currentAccount = await authenticatedApiService.getAccount();
     return currentAccount;
   } catch (error) {
-    return error;
+    throw new PromiseHandler('Error getting user account', 'GET ACCOUNT ERROR', { error });
   }
 }
 
@@ -45,8 +45,7 @@ export async function getCurrentUser() {
 
     return currentAccount?.data;
   } catch (error) {
-    console.log(error);
-    return null;
+    throw new PromiseHandler('Error getting current user', 'GET_CURRENT_USER_ERROR', { error });
   }
 }
 
@@ -55,6 +54,52 @@ export async function signOutAccount() {
   try {
     sessionStorage.removeItem("token");
   } catch (error) {
-    console.log(error);
+    throw new PromiseHandler('Error during user sign-out', 'SIGN_OUT_ERROR', { error });
+  }
+}
+
+export async function uploadMediaFile(files: File) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const newMedia = await authenticatedApiService.uploadFiles(files)
+    if (!newMedia) throw Error;
+    return newMedia.data;
+  } catch (error) {
+    throw new PromiseHandler('Failed to upload a media', 'CREATE USER FAILED', { files });
+  }
+}
+
+export async function getAllMedia(page: number, limit: number): Promise<any> {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.getAllMediaFiles(page, limit);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all media files', 'Something went wrong', { error });
+  }
+}
+
+
+
+export async function editMedia(media:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.editMediaApi(media);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error editing this Media', 'Media Edit error', { error });
+  }
+}
+
+export async function deleteMedia(media_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.deleteMediaApi(media_id);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error deleting this media', 'Delete Operation faied', { error });
   }
 }

@@ -1,6 +1,8 @@
 import {
     useQuery,
     useMutation,
+    useQueryClient,
+    UseMutationResult,
   } from "@tanstack/react-query";
   
   import {
@@ -8,6 +10,10 @@ import {
     signInAccount,
     getCurrentUser,
     signOutAccount,
+    uploadMediaFile,
+    getAllMedia,
+    editMedia,
+    deleteMedia,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -36,6 +42,8 @@ import {
       mutationFn: signOutAccount,
     });
   };
+
+
   
 // ============================================================
 // USER QUERIES
@@ -47,6 +55,39 @@ import {
       queryFn: getCurrentUser,
     });
   };
-  
-  
- 
+
+
+  export const useGetAllMediaFiles = (): UseMutationResult<any, unknown, { page: number; limit: number }, unknown> => {
+    return useMutation({
+      mutationFn: ({ page, limit }) => getAllMedia(page, limit),
+    });
+  };
+
+
+  export const useUploadFiles = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: (files: File) => uploadMediaFile(files),  
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.CREATE_MEDIA_FILE],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_ALL_MEDIA],
+        })
+      },
+    });
+  };
+
+
+  export const useEditMedia = () => {
+    return useMutation({
+      mutationFn: (media: any) => editMedia(media),
+    });
+  };
+
+  export const useDeleteMedia = () => {
+    return useMutation({
+      mutationFn: (media_id: string) => deleteMedia(media_id),
+    });
+  };
