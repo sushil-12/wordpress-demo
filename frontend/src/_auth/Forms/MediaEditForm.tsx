@@ -46,9 +46,10 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal:any }> = ({ item, h
 
     async function onSubmit(values: z.infer<typeof mediaEditFormSchema>) {
         const editMediaResponse = await editMedia(values);
-        const updatedItems = media.map(item =>
-            item.id === item?.id ? editMediaResponse.data?.media : item
+        const updatedItems = media.map(currentItem =>
+            currentItem.id === item.id ? editMediaResponse.data?.media : currentItem
         );
+        console.log(updatedItems.map((item)=>item.id), editMediaResponse.data?.media)
         setMedia(updatedItems);
         if (!editMediaResponse) {
             return toast({ variant: "destructive", title: "Edit Failed", description: "Something went wrong" })

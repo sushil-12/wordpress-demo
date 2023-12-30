@@ -106,7 +106,8 @@ const editMedia = async (req, res) => {
         media.tags = tags || media.tags;
 
         // Save the updated media item
-        const updatedMedia = await media.save();
+        let updatedMedia = await media.save();
+        updatedMedia = { ...updatedMedia.toObject(), id: updatedMedia._id };
 
         ResponseHandler.success(res, { media: updatedMedia }, 200);
     } catch (error) {
