@@ -46,7 +46,7 @@ const getAllMedia = async (req, res) => {
             filename: media?.filename || media?.originalname || 'upload file to hegroup',
             cloudinary_id: media?.cloudinary_id || '',
             url: media?.url || '',
-            size: bytesToSize(media?.size),
+            size: media?.size,
             storage_type: 'cloudinary',
             author: media?.author || '', // Ensure req.user is defined
             category: media?.category || '',
