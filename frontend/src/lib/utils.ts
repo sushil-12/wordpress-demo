@@ -56,3 +56,12 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
 export const checkIsLiked = (likeList: string[], userId: string) => {
   return likeList.includes(userId);
 };
+
+export const bytesToSize = (bytes: number): string => {
+  const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+
+  if (bytes === 0) return '0 Byte';
+
+  const i: number = parseInt(String(Math.floor(Math.log(bytes) / Math.log(1024))));
+  return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
+};

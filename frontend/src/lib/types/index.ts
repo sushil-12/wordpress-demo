@@ -41,12 +41,13 @@ export type INavLink = {
   filename: string,
   cloudinary_id: string,
   url: string,
-  size: string, 
+  size: any, 
   storage_type: string
   author: string,
   category: string,
   tags: string,
   createdAt: string,
+  domain:string,
  }
 
  export type MediaItemCopy = {

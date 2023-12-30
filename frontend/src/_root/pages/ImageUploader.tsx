@@ -25,7 +25,7 @@ const ImageUploader: React.FC = () => {
       const tempImage: MediaItem = {
         id,
         tempUrl,
-        title: '',
+        title: isLoading?'true':'false',
         caption: '',
         description:  '',
         alt_text:  '',
@@ -37,6 +37,7 @@ const ImageUploader: React.FC = () => {
         author: '',
         category: '',
         tags: '',
+        domain:'hegroup',
         createdAt:''
       };
   
@@ -61,6 +62,7 @@ const ImageUploader: React.FC = () => {
         author: response.data.author || '',
         category: response.data.category || '',
         tags: response.data.tags || [],
+        domain: response.data.domain || [],
         createdAt: response.data.createdAt || '',
       };
   
