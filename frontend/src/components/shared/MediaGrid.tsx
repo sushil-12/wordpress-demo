@@ -60,7 +60,6 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
         confirmDialog({
             message: 'Do you want to delete this media file?',
             header: 'Delete Confirmation',
-            icon: 'pi pi-info-circle',
             acceptClassName: 'pl-4 outline-none',
             rejectClassName: 'pr-4 outline-none',
             className: 'gap-4 border bg-light-1 p-6 shadow-lg',
