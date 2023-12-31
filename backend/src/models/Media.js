@@ -15,7 +15,7 @@ const mediaSchema = new mongoose.Schema({
     default: 'cloudinary',
   },
   author: String,
-  role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
+  domain: String,
   category: String,
   tags: [String],
   createdAt: { type: Date, default: Date.now },

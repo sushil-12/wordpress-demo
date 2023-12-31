@@ -3,12 +3,15 @@ import { useNavigate } from "react-router";
 import { createContext, useContext, useEffect, useState } from "react"
 import { getCurrentUser } from "@/lib/appwrite/api";
 export const INITIAL_USER = {id: '',firstName: '', lastName: '',username: '',email: '', role:'', permissions:[]};
+
 export const INITIAL_STATE = {
     user: INITIAL_USER,
     isLoading: false,
     setUser: () => { },
     isAuthenticated: false,
     setIsAuthenticated: () => { },
+    currentDomain:'he_group', 
+    setCurrentDomain: async (newDomain: string) => {},
     checkAuthUser: async () => false as boolean,
 }
 
@@ -18,11 +21,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<IUser>(INITIAL_USER);
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [currentDomain, setCurrentDomain]= useState('he_group');
     const checkAuthUser = async () => {
         try {
             const currentAccount = await getCurrentUser();
             const userData = currentAccount?.data;
-            console.log(userData)
             if (currentAccount) {
                 setUser({
                     id: userData?._id,
@@ -58,10 +61,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser,
         isAuthenticated,
         isLoading,
+        currentDomain, 
+        setCurrentDomain: async (newDomain: string) => {
+            setCurrentDomain(newDomain);
+            sessionStorage.setItem('domain', newDomain)
+        },
         setIsAuthenticated,
         checkAuthUser
     }
-    console.log("VALUES", value)
+    console.log("DOMAIN CURRENT", currentDomain)
     return (
        <AuthContext.Provider value={value}>
         {children}

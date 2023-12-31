@@ -42,7 +42,7 @@ export async function getCurrentUser() {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const currentAccount = await authenticatedApiService.getAccount();
-
+    console.log(currentAccount);
     return currentAccount?.data;
   } catch (error) {
     throw new PromiseHandler('Error getting current user', 'GET_CURRENT_USER_ERROR', { error });
@@ -99,6 +99,16 @@ export async function deleteMedia(media_id:string) {
     const allMedia = await authenticatedApiService.deleteMediaApi(media_id);
 
     return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error deleting this media', 'Delete Operation faied', { error });
+  }
+}
+
+
+export async function getAllDomains() {
+  try {
+    const domains = await Apiservices.commonService.getAllDomains();
+    return domains?.data;
   } catch (error) {
     throw new PromiseHandler('Error deleting this media', 'Delete Operation faied', { error });
   }

@@ -52,14 +52,14 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal:any }> = ({ item, h
         console.log(updatedItems.map((item)=>item.id), editMediaResponse.data?.media)
         setMedia(updatedItems);
         if (!editMediaResponse) {
-            return toast({ variant: "destructive", title: "Edit Failed", description: "Something went wrong" })
+            return toast({ variant: "destructive", description: "Edit Failed" })
         }
         if (editMediaResponse?.code == 200) {
             handleModal()
-            return toast({ variant: "default", title: "Edit Media", description: 'Media Updated Successfuly' })
+            return toast({ variant: "default", description: 'Media Updated Successfuly' })
         } else {
             handleModal()
-            return toast({ variant: "default", title: "Edit Media", description: 'Media Updated Successfuly' })
+            return toast({ variant: "default", description: 'Media Editing Failed' })
         }
     }
 

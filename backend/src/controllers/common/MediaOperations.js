@@ -14,6 +14,7 @@ const bytesToSize = (bytes) => {
 
 const getAllMedia = async (req, res) => {
     try {
+        const domainHeader = req.headers['domain'];
         const { page = 1, limit = 50, search, filterBy } = req.query;
 
         const query = {};
@@ -25,13 +26,11 @@ const getAllMedia = async (req, res) => {
         }
 
         const media = await Media.find(query)
+            .where('domain',domainHeader)
             .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
             .skip((page - 1) * limit)
             .limit(Number(limit));
-
-        if (!media.length) {
-            throw new CustomError(404, 'Media not found');
-        }
+        
 
         // Simulate pagination metadata
         const totalDocuments = await Media.countDocuments(query);
@@ -86,8 +85,6 @@ const editMedia = async (req, res) => {
             tags,
         } = req.body;
 
-        // Find the media item by ID
-        console.log(id , "MEDIA AIDD")
         const media = await Media.findById(id);
 
         // Check if the media item exists

@@ -10,6 +10,7 @@ const upload = multer({ storage: storage });
 
 const uploadMediaToLibrary = async (req, res) => {
   try {
+    const domainHeader = req.headers['domain'];
     upload.single('file')(req, res, async (err) => {
       if (err) {
         throw new CustomError(400, 'Error handling file upload.');
@@ -36,6 +37,7 @@ const uploadMediaToLibrary = async (req, res) => {
         author: req.userId, // Ensure req.user is defined
         category: req.body.category?req.file.category : '',
         tags: req.body.tags,
+        domain:domainHeader,
       };
 
       const savedMedia = await Media.create(uploadedMedia);
@@ -50,6 +52,7 @@ const uploadMediaToLibrary = async (req, res) => {
 async function handleUpload(file, originalname, req) {
   const res = await cloudinary.uploader.upload(file, {
     resource_type: "auto",
+    folder:req.headers['domain']
     // Include any other Cloudinary upload options if needed
   });
 

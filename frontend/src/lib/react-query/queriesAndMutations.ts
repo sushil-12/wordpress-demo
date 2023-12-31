@@ -14,6 +14,7 @@ import {
     getAllMedia,
     editMedia,
     deleteMedia,
+    getAllDomains,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -83,6 +84,12 @@ import {
   export const useEditMedia = () => {
     return useMutation({
       mutationFn: (media: any) => editMedia(media),
+    });
+  };
+
+  export const useGetAllDomains = () => {
+    return useMutation({
+      mutationFn: () => getAllDomains(),
     });
   };
 

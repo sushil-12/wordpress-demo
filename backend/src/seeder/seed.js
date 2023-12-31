@@ -4,6 +4,7 @@ const Permission = require('../models/Permission');
 const User = require('../models/User');
 require('dotenv').config();
 const bcrypt = require('bcrypt');
+const Domain = require('../models/Domain');
 mongoose.connect(process.env.MONGODB_URI);
 
 // Function to seed permissions
@@ -104,6 +105,35 @@ const seedUsers = async () => {
     }
 };
 
+const seedDomains = async () => {
+    try {
+        // Check if domains already exist
+        const existingDomains = await Domain.find();
+
+        if (existingDomains.length === 0) {
+            // Create sample domains
+            const domains = [
+                { name: 'he_group', title:"He-GROUP", href: 'http://hegroup.com' },
+                { name: 'the_logician',title:"THE-LOGICIAN", href: 'http://logician.com' },
+                { name: 'x_wear',title:"X-WEAR", href: 'http://xwear.com' },
+            ];
+
+            // Save domains to the database
+            await Domain.create(domains);
+
+            console.log('Domains seeded successfully');
+        } else {
+            console.log('Domains already exist. Skipping seeding.');
+        }
+    } catch (error) {
+        console.error('Error seeding domains:', error.message);
+    } finally {
+        mongoose.disconnect();
+    }
+};
+
+// Run the domain seeder
+seedDomains();
 // Call the functions to seed data
 seedPermissions().then(() => {
     seedRoles().then(() => {

@@ -8,8 +8,7 @@ import { useMedia } from '@/context/MediaProvider';
 const ImageUploader: React.FC = () => {
   const [uploadedImages, setUploadedImages] = useState<MediaItem[]>([]);
   const { mutateAsync: uploadMediaFile, isPending: isLoading } = useUploadFiles();
-  const { media, setMedia } = useMedia();
-  console.log(media)
+  const { setMedia } = useMedia();
   useEffect(() => {
     return () => {
       uploadedImages.forEach((image) => URL.revokeObjectURL(image.tempUrl || ''));
@@ -37,7 +36,7 @@ const ImageUploader: React.FC = () => {
         author: '',
         category: '',
         tags: '',
-        domain:'hegroup',
+        domain:'he_group',
         createdAt:''
       };
   

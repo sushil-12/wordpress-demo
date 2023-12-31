@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { PrimeReactProvider } from 'primereact/api';
 
 import './globals.css';
+import 'primeicons/primeicons.css';
 import { Home } from './_root/pages';
 import SignInForm from './_auth/Forms/SignInForm';
 

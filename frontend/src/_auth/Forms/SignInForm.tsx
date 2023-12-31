@@ -36,7 +36,7 @@ const SignInForm = () => {
         })
         if (!session) {
             console.log(session);
-            return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
+            return toast({ variant: "destructive", title: "SignIn Failed", description: "Something went wrong" })
         }
         const isLoggedIn = await checkAuthUser();
         if (isLoggedIn) {

@@ -1,7 +1,8 @@
-import { bottombarLinks } from "@/constants";
+import { domainbottombarLinks } from "@/constants";
 import { INavLink } from "@/lib/types";
 import { Link, useLocation } from "react-router-dom"
 
+const bottombarLinks = domainbottombarLinks['he_group'] || [];
 const BottomBar = () => {
   const { pathname } = useLocation();
   return (
