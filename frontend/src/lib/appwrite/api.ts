@@ -22,7 +22,7 @@ export async function signInAccount(user: { email: string; password: string }) {
     session ? sessionStorage.setItem("token", session?.data?.data?.token) : '';
     return session;
   } catch (error: any) {
-    throw new PromiseHandler(error.message, 'SIGNIN ERROR', { user, error });
+    throw new PromiseHandler(error?.response?.data?.message, 'Login Failed', { user, error });
   }
 }
 
