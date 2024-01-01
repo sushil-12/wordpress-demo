@@ -22,8 +22,9 @@ const UseTokenExpiration = () => {
       try {
         const decodedToken: DecodedToken = jwtDecode(token);
         const expirationTime = decodedToken.exp * 1000; // Convert expiration time to milliseconds
-        if (expirationTime > Date.now()) {
+        if (expirationTime < Date.now()) {
             toast({ variant: "info", title: "Session Expired", description: "Logging You out! Please login again" })
+            navigate('/login');
         }
       } catch (error) {
         navigate('/login');
