@@ -115,7 +115,12 @@
     color: #4338CA !important;
   }
 
-  
+  .p-image-toolbar{
+    @apply bg-primary-500 text-white;
+  }
+  .p-dialog{
+    @apply p-12;
+  }
   .common-container {
     @apply flex flex-col flex-1 gap-10 overflow-auto py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
   }
@@ -233,7 +238,7 @@
   }
 
   .leftsidebar-link {
-    @apply rounded-lg base-medium hover:bg-primary-500 transition;
+    @apply rounded-lg base-medium hover:bg-primary-500 hover:text-slate-50 transition;
   }
 
   /* Post Card */

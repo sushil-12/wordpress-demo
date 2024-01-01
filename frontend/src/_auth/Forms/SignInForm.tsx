@@ -35,7 +35,6 @@ const SignInForm = () => {
             password: values.password
         })
         if (!session) {
-            console.log(session);
             return toast({ variant: "destructive", title: "SignIn Failed", description: "Something went wrong" })
         }
         const isLoggedIn = await checkAuthUser();
@@ -103,8 +102,8 @@ const SignInForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className="shad-button_primary">
-                        {isSigningIn ? (
+                    <Button type="submit" className="shad-button_primary" disabled={isSigningIn || isUserLoading}>
+                        {isSigningIn && isUserLoading ? (
                             <div className="flex-center gap-2">
                                 <Loader />
                             </div>

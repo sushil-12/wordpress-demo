@@ -1,7 +1,7 @@
 const Loader = () => {
   return (
     <div className="flex-center">
-        <img src="/assets/icons/loader.svg" alt="Loader" width={24} height={24}/>
+      <i className="pi pi-spin pi-spinner" style={{ fontSize: '2rem' }}></i>
     </div>
   )
 }

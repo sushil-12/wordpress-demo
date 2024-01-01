@@ -66,6 +66,24 @@ const getAllMedia = async (req, res) => {
     }
 };
 
+const getAllImages = async (req, res) => {
+    try {
+        const domainHeader = req.headers['domain'];
+        const images = await Media.find({ domain: domainHeader }).select('url alt_text');
+
+        const imagesdata = images.map((media) => ({
+            id: media._id,
+            url: media.url,
+            alt_text: media?.alt_text,
+        }));
+
+        // Return the media and pagination information
+        ResponseHandler.success(res, { imagesdata}, 200);
+    } catch (error) {
+        ErrorHandler.handleError(error, res);
+    }
+};
+
 const editMedia = async (req, res) => {
     try {
         const { id } = req.body;
@@ -114,6 +132,6 @@ const editMedia = async (req, res) => {
 
 
 module.exports = {
-    getAllMedia,
+    getAllMedia,getAllImages,
     editMedia
 };

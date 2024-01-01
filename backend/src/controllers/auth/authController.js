@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 const { CustomError, ErrorHandler, ResponseHandler } = require('../../utils/responseHandler');
 const AuthValidator = require('../../validator/AuthValidator');
+const { HTTP_STATUS_CODES, HTTP_STATUS_MESSAGES } = require('../../constants/error_message_codes');
 
 const register = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ const register = async (req, res) => {
     const newUser = new User({ username, password: hashedPassword, email, firstName, lastName });
     await newUser.save();
 
-    ResponseHandler.success(res, { message: 'User registered successfully' }, 200);
+    ResponseHandler.success(res, { message: 'User registered successfully' }, HTTP_STATUS_CODES.OK);
   } catch (error) {
     ErrorHandler.handleError(error, res);
   }
@@ -30,14 +31,14 @@ const login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new CustomError(401, 'Incorrect password');
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     if(user.role.name == "admin"){
-      throw new CustomError(401, 'Only Admin is able to login currently');
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
-    ResponseHandler.success(res, { token }, 200);
+    ResponseHandler.success(res, { token }, HTTP_STATUS_CODES.OK);
   } catch (error) {
     ErrorHandler.handleError(error, res);
   }

@@ -38,6 +38,11 @@ class AuthenticatedApiService {
     return await this.api.get('/api/media/all', config);
   }
 
+  async getAllImageFiles(): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/images/all', config);
+  }
+
   async editMediaApi(media: any): Promise<any> {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.put('/api/edit/media', media, config);

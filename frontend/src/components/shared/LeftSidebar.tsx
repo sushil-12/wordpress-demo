@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useGetAllDomains, useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { domainSidebarLinks, logos } from "@/constants";
 import { INavLink } from "@/lib/types";
+import { Settings } from "lucide-react";
 
 interface domain {
     name: string,
@@ -39,18 +40,18 @@ const LeftSidebar = () => {
     return (
         <div className="leftsidebar">
             <div className="flex flex-col gap-11">
-            <select
-                id="location"
-                name="location"
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                value={currentDomain} // Use the state value here
-                onChange={(e) => setCurrentDomain(e.target.value)}
+                <select
+                    id="location"
+                    name="location"
+                    className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    value={currentDomain} // Use the state value here
+                    onChange={(e) => setCurrentDomain(e.target.value)}
                 >
-                {domain.map((item) => (
-                    <option key={item?.name} value={item?.name}>
-                    {item.title}
-                    </option>
-                ))}
+                    {domain.map((item) => (
+                        <option key={item?.name} value={item?.name}>
+                            {item.title}
+                        </option>
+                    ))}
                 </select>
                 <Link to="/" className="flex gap-3 items-center">
                     <img src={logoPath} alt="Logo" width={200} height={60} />
@@ -77,14 +78,23 @@ const LeftSidebar = () => {
                             </li>
                         )
                     })}
+                    <li className={`leftsidebar-link group ${pathname=='/settings' ? 'bg-primary-500 text-white ' : ''}`} >
+                    <NavLink className="flex gap-4 items-center p-4" to='/settings'>
+                        <Settings  className={`group-hover:invert-white text-primary-500 ${pathname=='/settings' ? 'text-white ' : ''}`} />
+                        <p className="small-medium lg:base-medium" >Settings</p>
+                    </NavLink>
+                    </li>
                 </ul>
 
             </div>
-            <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
-                <img src="/assets/icons/logout.svg" />
-                <p className="small-medium lg:base-medium" >Logout</p>
-            </Button>
-        </div>
+            <div className="user_profile_actions">
+                <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
+                    <img src="/assets/icons/logout.svg" />
+                    <p className="small-medium lg:base-medium" >Logout</p>
+                </Button>
+            </div>
+
+        </div >
     )
 }
 

@@ -14,7 +14,6 @@ const UseTokenExpiration = () => {
     const token = sessionStorage.getItem('token');
     const checkTokenExpiration = () => {
       if (!token || token == undefined || token == null) {
-        console.log('tokem', token);
         navigate('/login');
         return;
       }
@@ -24,9 +23,11 @@ const UseTokenExpiration = () => {
         const expirationTime = decodedToken.exp * 1000; // Convert expiration time to milliseconds
         if (expirationTime < Date.now()) {
             toast({ variant: "info", title: "Session Expired", description: "Logging You out! Please login again" })
+            sessionStorage.removeItem('token')
             navigate('/login');
         }
       } catch (error) {
+        sessionStorage.removeItem('token')
         navigate('/login');
       }
     };

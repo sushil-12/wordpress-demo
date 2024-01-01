@@ -15,6 +15,7 @@ import {
     editMedia,
     deleteMedia,
     getAllDomains,
+    getAllImages,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -63,8 +64,12 @@ import {
       mutationFn: ({ page, limit }) => getAllMedia(page, limit),
     });
   };
-
-
+  export const useGetAllImages = () => {
+    return useMutation({
+      mutationFn: () => getAllImages(),
+    });
+  };
+  
   export const useUploadFiles = () => {
     const queryClient = useQueryClient();
     return useMutation({

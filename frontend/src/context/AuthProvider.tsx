@@ -18,10 +18,11 @@ export const INITIAL_STATE = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
+    const savedDomain:any = sessionStorage.hasOwnProperty('domain') ? sessionStorage.getItem('domain') :'he_group';
     const [user, setUser] = useState<IUser>(INITIAL_USER);
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [currentDomain, setCurrentDomain]= useState('he_group');
+    const [currentDomain, setCurrentDomain]= useState(savedDomain);
     const checkAuthUser = async () => {
         try {
             const currentAccount = await getCurrentUser();
@@ -69,7 +70,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated,
         checkAuthUser
     }
-    console.log("DOMAIN CURRENT", currentDomain)
     return (
        <AuthContext.Provider value={value}>
         {children}

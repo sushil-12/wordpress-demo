@@ -33,8 +33,7 @@ export default function Media() {
         const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit });
         setMedia(mediaResponse?.data?.mediadata);
         setPagination(mediaResponse?.data?.pagination || {});
-        console.log("PAGINATION", pagination)
-        return toast({ variant: "default", description: "Fetched sucessfully" })
+        // return toast({ variant: "default", description: "Fetched sucessfully" })
       } catch (error) {
         return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
 
@@ -50,9 +49,7 @@ export default function Media() {
 
   return (
     <div className="common-container">
-      <div className="border-b border-gray-200 bg-white px-4 py-2 sm:px-6">
-        <h3 className="text-base font-semibold leading-6 text-gray-900">Manage Media</h3>
-      </div>
+      
       {isLoading ? (
         <div className="w-full mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"><MediaGridSkeletonDemo /></div>
       ) : (

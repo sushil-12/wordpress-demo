@@ -3,6 +3,7 @@ export type IContextType = {
   isLoading: boolean;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
   isAuthenticated: boolean;
+  checkAuthUser: () => Promise<boolean>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentDomain: (newDomain: string) => Promise<void>; // Updated type to accept a string
   currentDomain:string;

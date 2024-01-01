@@ -12,11 +12,15 @@ import RootLayout from './_root/RootLayout.tsx';
 import { Toaster } from "@/components/ui/toaster"
 import UsersList from './_root/pages/UsersList.tsx';
 import Technology from './_root/pages/Technology.tsx';
+import Setting from './_root/pages/Setting.tsx';
 import Media from './_root/pages/Media.tsx';
+import AddEditTechnology from './_root/pages/AddEditTechnology.tsx';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { MediaProvider } from './context/MediaProvider.tsx';
+import * as routes from './constants/routes.ts';
 
 const App = () => {
+    
     return (
         <PrimeReactProvider>
             <main className='flex h-screen'>
@@ -27,6 +31,8 @@ const App = () => {
                         <Route path='/users' element={<UsersList />} />
                         <Route path='/technologies' element={<Technology />} />
                         <Route path='/media' element={ <MediaProvider><Media /></MediaProvider>} />
+                        <Route path='/settings' element={ <Setting />} />
+                        <Route path={routes.ADD_NEW_TECHNOLOGY_ROUTE} element={ <AddEditTechnology />} />
 
                     </Route>
                     {/* Private Routes */}

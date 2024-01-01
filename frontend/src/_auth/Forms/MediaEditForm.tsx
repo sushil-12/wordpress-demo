@@ -49,7 +49,6 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal:any }> = ({ item, h
         const updatedItems = media.map(currentItem =>
             currentItem.id === item.id ? editMediaResponse.data?.media : currentItem
         );
-        console.log(updatedItems.map((item)=>item.id), editMediaResponse.data?.media)
         setMedia(updatedItems);
         if (!editMediaResponse) {
             return toast({ variant: "destructive", description: "Edit Failed" })

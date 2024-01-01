@@ -1,16 +1,17 @@
 const jwt = require('jsonwebtoken');
 const { CustomError, ErrorHandler } = require('../utils/responseHandler');
+const { HTTP_STATUS_CODES, HTTP_STATUS_MESSAGES } = require('../constants/error_message_codes');
 
 const verifyToken = (req, res, next) => {
     try {
         const authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
-            throw new CustomError(401, 'Unauthorized - No Authorization token passed!');
+            throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
         }
 
         const token = authorizationHeader.split(' ')[1];
         if (!token) {
-            throw new CustomError(401, 'Unauthorized - Invalid token format');
+            throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
         }
 
         try {
@@ -19,9 +20,9 @@ const verifyToken = (req, res, next) => {
             next();
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                throw new CustomError(401, 'Unauthorized - Your session has expired! Please login again');
+                throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
             } else {
-                throw new CustomError(401, 'Unauthorized - Invalid token');
+                throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
             }
         }
     } catch (error) {

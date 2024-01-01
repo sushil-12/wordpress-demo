@@ -42,7 +42,6 @@ export async function getCurrentUser() {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const currentAccount = await authenticatedApiService.getAccount();
-    console.log(currentAccount);
     return currentAccount?.data;
   } catch (error) {
     throw new PromiseHandler('Error getting current user', 'GET_CURRENT_USER_ERROR', { error });
@@ -79,7 +78,16 @@ export async function getAllMedia(page: number, limit: number): Promise<any> {
     throw new PromiseHandler('Error getting all media files', 'Something went wrong', { error });
   }
 }
+export async function getAllImages(): Promise<any> {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allImages = await authenticatedApiService.getAllImageFiles();
 
+    return allImages?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all media files', 'Something went wrong', { error });
+  }
+}
 
 
 export async function editMedia(media:any) {

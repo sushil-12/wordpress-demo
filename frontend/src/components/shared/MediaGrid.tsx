@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { Galleria } from 'primereact/galleria';
 import { Dialog } from 'primereact/dialog';
-import { LiaSpinnerSolid } from 'react-icons/lia';
 import { MediaItem } from '@/lib/types';
 import GalleryMediaItem from './GalleryMediaItem';
 import { Button } from 'primereact/button';
@@ -69,7 +68,6 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
     }
 
     return (
-        
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             <ConfirmDialog />
             {media.map((mediaItem: MediaItem) => (
@@ -87,7 +85,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                         </a>
                     )}
                     {mediaItem.title !== 'false' && (
-                        <a className={`card group cursor-pointer ${isDeleting ? 'blur-sm' : ''}`}>
+                        <a className={`card group cursor-pointer ${isDeleting ? 'blur-sm' : ''}`} >
                             <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border p-4 surface-card overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 object-contain" onClick={() => openEditModal(mediaItem)}>
                                 <img
                                     src={mediaItem.url}
@@ -95,8 +93,6 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                                     className="h-full w-full object-cover object-center group-hover:opacity-75"
                                 />
                             </div>
-                            <a className="card group cursor-pointer">
-                        </a>
                             <div className="flex place-content-between-end mt-3" style={{ "placeContent": "space-between" }}>
                                 <div className="flex flex-col">
                                     <h3 className="mt-4 text-sm text-gray-700">{mediaItem.title}</h3>

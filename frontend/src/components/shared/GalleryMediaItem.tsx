@@ -14,7 +14,7 @@ const GalleryMediaItem: React.FC<{ item: MediaItem, modalVisibility:any }> = ({ 
             <div className="w-1/2 ml-auto h-full">
                 <div className="w-full p-12 box-border h-auto  border-4">
                 <div className="mx-auto rounded w-100 h-auto max-w-40  text-white flex items-center justify-center">
-                        <Image src={currentItem?.url} alt={currentItem?.alt_text} className="align-items-center" preview />
+                        <Image src={currentItem?.url} alt={currentItem?.alt_text} className="align-items-center" preview data-pr-tooltip='p-image-toolbar'/>
                     </div>
                 </div>
             </div>
