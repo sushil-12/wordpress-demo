@@ -20,7 +20,6 @@ app.use('/api/common', commonRoutes);
 // protected route
 app.use('/api', protectedRoutes);
 
-
 app.get('/', (req, res) => {
     res.send('Hey this is my API running 🥳')
 })

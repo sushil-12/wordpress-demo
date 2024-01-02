@@ -52,6 +52,12 @@ class AuthenticatedApiService {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.delete('/api/delete/media/' + media_id, config);
   }
+
+  async createOrEditPost(post: any): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.post('/api/create-or-update/post', post, config);
+  }
 }
+
 
 export default AuthenticatedApiService;

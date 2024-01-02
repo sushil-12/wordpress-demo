@@ -260,7 +260,9 @@ export default function DataTableDemo() {
         <div className="common-container">
             <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
                 <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> <Router />Technologies</h3>
-                <Button className="shad-button_primary place-self-end " size="sm" onClick={() =>  navigate(routes.ADD_NEW_TECHNOLOGY_ROUTE)} > <PlusSquare />Add New</Button>
+                <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post-operations/technology`)}>
+                    <PlusSquare /> Add New
+                </Button>
             </div>
             <div className="w-full">
                 <div className="flex items-center py-4">

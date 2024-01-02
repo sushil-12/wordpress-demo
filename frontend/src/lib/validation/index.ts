@@ -25,12 +25,13 @@ export const postValidationSchema = z.object({
     location : z.string().min(3, {message: "Too Short"}).max(2000,  'Too big less than 50 character please'),
     file : z.custom<File[]>(),
     tags : z.string(),
-    
 })
 
-export const technologyFormSchema = z.object({
+export const PostFormSchema = z.object({
+    id:z.string(),
+    post_type:z.string(),
     title : z.string(),
-    description : z.string(),
+    content : z.string(),
     featured_image:z.string(),
 })
 

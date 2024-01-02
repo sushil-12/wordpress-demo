@@ -5,7 +5,6 @@ import { Image as ImageView } from 'primereact/image';
 import { Card } from 'primereact/card';
 import { MousePointerSquare, TrashIcon } from 'lucide-react';
 import { Button } from 'primereact/button';
-import { SelectIcon } from '@radix-ui/react-select';
 
 interface MediaPickerProps {
   onSelect: (image: Image) => void;
@@ -37,7 +36,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect }) => {
 
   return (
     <div>
-      <Button onClick={openModal} className='p-2'><MousePointerSquare /> Open Media Library</Button>
+      <div onClick={openModal} className='p-2 flex'><MousePointerSquare /> Open Media Library</div>
       {selectedImage && (
         <Card>
           <ImageView src={selectedImage.url} alt={selectedImage.alt_text} preview title='Featured Image' />

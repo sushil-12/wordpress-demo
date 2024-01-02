@@ -70,3 +70,16 @@ export type INavLink = {
   tags: string,
   createdAt: string,
  }
+ export type PostModel = {
+  id:string,
+  title: string,
+  content: string,
+  author: string,
+  publicationDate: Date,
+  categories: string[],
+  tags: string[],
+  featuredImage: string,
+  status: string,
+  // comments: [{ user: String, content: String, date: Date, default: Date.now, }, },],
+  // customFields: [],
+ }

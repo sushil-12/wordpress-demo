@@ -3,6 +3,7 @@ const { verifyToken } = require('../middleware/authMiddleware');
 const { getProfile } = require('../controllers/protected/UserController');
 const { uploadMediaToLibrary, deleteMedia } = require('../controllers/common/FileUploader');
 const { getAllMedia, editMedia, getAllImages } = require('../controllers/common/MediaOperations');
+const { createEditPost } = require('../controllers/protected/PostOperations');
 
 const router = express.Router();
 
@@ -16,5 +17,8 @@ router.get('/media/all', getAllMedia);
 router.get('/images/all', getAllImages);
 router.put('/edit/media', editMedia);
 router.delete('/delete/media/:media_id', deleteMedia);
+
+
+router.post('/create-or-update/post', createEditPost);
 
 module.exports = router;

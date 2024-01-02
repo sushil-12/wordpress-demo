@@ -3,31 +3,53 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { technologyFormSchema } from "@/lib/validation";
-import Loader from "@/components/shared/Loader";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast"
+import { PostFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { Editor } from "primereact/editor";
 import MediaPicker from "@/components/shared/MediaPicker";
 import { Card } from "primereact/card";
+import { useCreateOrEditPost } from "@/lib/react-query/queriesAndMutations";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader } from "lucide-react";
+import { PostModel } from "@/lib/types";
+import { useState } from "react";
 
+interface PostFormSchema {
+    post_type: string | undefined,
+    post: PostModel|undefined,
+}
+const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
+    const { mutateAsync: createOrEditPost, isPending: isOperating } = useCreateOrEditPost();
+    const [currentPost, setCurrentPost] = useState<PostModel | undefined>(post);
 
-const TechnologyForm = () => {
-
-    const { toast } = useToast()
-    const navigate = useNavigate();
-    const form = useForm<z.infer<typeof technologyFormSchema>>({
-        resolver: zodResolver(technologyFormSchema),
+    const { toast } = useToast();
+    const form = useForm<z.infer<typeof PostFormSchema>>({
+        resolver: zodResolver(PostFormSchema),
         defaultValues: {
-            title: "",
-            description: "",
-            featured_image: ''
-        },
-    });
+            id: currentPost?.id || '',
+            post_type: post_type,
+            title: currentPost?.title || '',
+            content: currentPost?.content || '',
+            featured_image: currentPost?.featuredImage || '',
+          },
+      });
     // 2. Define a submit handler.
-    async function onSubmit(values: z.infer<typeof technologyFormSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof PostFormSchema>) {
+        const createOrEditPostResponse = await createOrEditPost(values);
+        if (!createOrEditPostResponse) {
+            return toast({ variant: "destructive", description: "Edit Failed" })
+        }
+        if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
+            const updatedPost = createOrEditPostResponse?.data?.post;
+            setCurrentPost(updatedPost); 
+            form.setValue('id', updatedPost?.id);
+
+            console.log(currentPost, form.getValues())
+            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post': 'Successfully Created Post';
+            return toast({ variant: 'default', description: message });
+          } else {
+            return toast({ variant: 'default', description: 'Something went wrong' });
+          }
     }
 
     return (
@@ -59,16 +81,16 @@ const TechnologyForm = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="description"
+                                name="content"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Content</FormLabel>
                                         <FormControl>
                                             <Editor
                                                 value={field.value}
                                                 onTextChange={(e) => field.onChange({ target: { value: e.htmlValue } })}
                                                 style={{ height: '320px' }}
-                                                name="description"
+                                                name="content"
                                             />
                                         </FormControl>
                                         <FormMessage className="shad-form_message" />
@@ -80,14 +102,11 @@ const TechnologyForm = () => {
                             <FormField
                                 control={form.control}
                                 name="featured_image"
-                                render={({ field }) => (
+                                render={() => (
                                     <FormItem>
                                         <FormLabel>Featured Image</FormLabel>
                                         <FormControl>
-                                            {/* Use the custom MediaPicker component */}
                                             <MediaPicker onSelect={(selectedImage) => {
-                                                // Assuming selectedImage is an object with 'id' property
-                                                // Handle the selected image ID (e.g., update the form state)
                                                 form.setValue('featured_image', selectedImage.id)
                                             }} />
                                         </FormControl>
@@ -98,8 +117,8 @@ const TechnologyForm = () => {
 
                         </Card>
                     </div>
-                    <Button type="submit" className="shad-button_primary max-w-fit align-end">
-                        Create Post
+                    <Button type="submit" className="shad-button_primary max-w-fit align-end" disabled={isOperating}>
+                        {isOperating ? <Loader /> : 'Create Post'}
                     </Button>
                 </form>
             </div>
@@ -107,4 +126,4 @@ const TechnologyForm = () => {
     );
 };
 
-export default TechnologyForm;
+export default PostForm;

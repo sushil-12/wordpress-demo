@@ -16,6 +16,7 @@ import {
     deleteMedia,
     getAllDomains,
     getAllImages,
+    createOrEditPost,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -101,5 +102,11 @@ import {
   export const useDeleteMedia = () => {
     return useMutation({
       mutationFn: (media_id: string) => deleteMedia(media_id),
+    });
+  };
+
+  export const useCreateOrEditPost = () => {
+    return useMutation({
+      mutationFn: (post: any) => createOrEditPost(post),
     });
   };

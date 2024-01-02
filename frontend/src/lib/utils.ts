@@ -57,6 +57,12 @@ export const checkIsLiked = (likeList: string[], userId: string) => {
   return likeList.includes(userId);
 };
 
+export const formatString = (inputString: string)=>{
+  const words = inputString.split('_');
+  const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+  return capitalizedWords.join(' ');
+}
+
 export const bytesToSize = (bytes: number): string => {
   const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 

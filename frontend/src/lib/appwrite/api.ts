@@ -121,3 +121,14 @@ export async function getAllDomains() {
     throw new PromiseHandler('Error deleting this media', 'Delete Operation faied', { error });
   }
 }
+
+export async function createOrEditPost(post:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.createOrEditPost(post);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error editing this Media', 'Media Edit error', { error });
+  }
+}
