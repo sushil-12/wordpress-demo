@@ -57,6 +57,16 @@ class AuthenticatedApiService {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.post('/api/create-or-update/post', post, config);
   }
+
+  async getAllPostApi(page: number, limit: number, post_type:string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders(), params: { page, limit } };
+    return await this.api.get('/api/get-all-post/'+post_type, config);
+  }
+
+  async getPostByIdApi(post_id: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/get-post/' + post_id, config);
+  }
 }
 
 

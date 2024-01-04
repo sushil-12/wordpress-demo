@@ -132,3 +132,26 @@ export async function createOrEditPost(post:any) {
     throw new PromiseHandler('Error editing this Media', 'Media Edit error', { error });
   }
 }
+
+export async function getAllPosts(page: number, limit: number, post_type:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.getAllPostApi(page, limit, post_type);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all Posts', 'Error while Fetching', { error });
+  }
+}
+
+export async function getPostsByID(post_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.getPostByIdApi(post_id);
+
+    return post?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting this Media', 'Media fetch error', { error });
+  }
+}
+

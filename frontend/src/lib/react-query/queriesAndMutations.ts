@@ -17,6 +17,8 @@ import {
     getAllDomains,
     getAllImages,
     createOrEditPost,
+    getAllPosts,
+    getPostsByID,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -93,6 +95,12 @@ import {
     });
   };
 
+  export const usegetPostbyID = () => {
+    return useMutation({
+      mutationFn: (post_id: string) => getPostsByID(post_id),
+    });
+  };
+
   export const useGetAllDomains = () => {
     return useMutation({
       mutationFn: () => getAllDomains(),
@@ -110,3 +118,10 @@ import {
       mutationFn: (post: any) => createOrEditPost(post),
     });
   };
+
+  export const useGetAllPosts = (): UseMutationResult<any, unknown, { post_type:string , page: number; limit: number }, unknown> => {
+    return useMutation({
+      mutationFn: ({ page, limit, post_type }) => getAllPosts(page, limit, post_type),
+    });
+  };
+  

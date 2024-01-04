@@ -29,6 +29,7 @@ export const postValidationSchema = z.object({
 
 export const PostFormSchema = z.object({
     id:z.string(),
+    domain:z.string(),
     post_type:z.string(),
     title : z.string(),
     content : z.string(),

@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader } from "lucide-react";
 import { PostModel } from "@/lib/types";
 import { useState } from "react";
+import { useUserContext } from "@/context/AuthProvider";
 
 interface PostFormSchema {
     post_type: string | undefined,
@@ -21,6 +22,7 @@ interface PostFormSchema {
 const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     const { mutateAsync: createOrEditPost, isPending: isOperating } = useCreateOrEditPost();
     const [currentPost, setCurrentPost] = useState<PostModel | undefined>(post);
+    const {currentDomain} = useUserContext();
 
     const { toast } = useToast();
     const form = useForm<z.infer<typeof PostFormSchema>>({
@@ -28,6 +30,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
         defaultValues: {
             id: currentPost?.id || '',
             post_type: post_type,
+            domain:currentDomain,
             title: currentPost?.title || '',
             content: currentPost?.content || '',
             featured_image: currentPost?.featuredImage || '',
