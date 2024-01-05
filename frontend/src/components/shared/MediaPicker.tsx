@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ImageLibrary from './ImageLibrary';
 import { Dialog } from 'primereact/dialog';
 import { Image as ImageView } from 'primereact/image';
@@ -6,19 +6,24 @@ import { Card } from 'primereact/card';
 import { MousePointerSquare, TrashIcon } from 'lucide-react';
 import { Button } from 'primereact/button';
 
-interface MediaPickerProps {
-  onSelect: (image: Image) => void;
-}
+
 
 interface Image {
   id: string;
   url: string;
   alt_text: string;
 }
-
-const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect }) => {
+interface MediaPickerProps {
+  onSelect: (image: Image | null) => void;
+  defaultValue?: Image | null; // Added defaultValue prop
+}
+const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, defaultValue }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(defaultValue || null);
+
+  useEffect(() => {
+    setSelectedImage(defaultValue || null);
+  }, [defaultValue]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -33,14 +38,17 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect }) => {
     onSelect(image);
     closeModal();
   };
-
+  const removeFeaturedImage = () => {
+    setSelectedImage(null);
+    onSelect(null); // Call onSelect with null when removing the featured image
+  };
   return (
     <div>
       <div onClick={openModal} className='p-2 flex'><MousePointerSquare /> Open Media Library</div>
       {selectedImage && (
         <Card>
           <ImageView src={selectedImage.url} alt={selectedImage.alt_text} preview title='Featured Image' />
-          <Button onClick={() => setSelectedImage(null)} className='p-4'><TrashIcon/> Remove Featured Image</Button>
+          <Button onClick={removeFeaturedImage} className='p-4'><TrashIcon /> Remove Featured Image</Button>
         </Card>
       )}
 

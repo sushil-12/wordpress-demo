@@ -67,6 +67,12 @@ class AuthenticatedApiService {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.get('/api/get-post/' + post_id, config);
   }
+
+
+  async deletePostByIdApi(post_id: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.delete('/api/delete-post/' + post_id, config);
+  }
 }
 
 

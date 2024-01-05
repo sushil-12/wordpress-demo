@@ -1,21 +1,18 @@
-import { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 import { PostModel } from '@/lib/types';
 import { Button } from '../ui/button';
-import { Edit2 } from 'lucide-react';
+import { Edit2, Trash2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface PostDataTableProps {
     posts: PostModel[];
+    post_type:string
 }
 
-const PostDataTable: React.FC<PostDataTableProps> = ({ posts }) => {
-    const [currentPost, setCurrentPosts] = useState<PostModel[]>([]);
+const PostDataTable: React.FC<PostDataTableProps> = ({ posts, post_type }) => {
     const navigate = useNavigate();
-
-    console.log(posts);
     const titleTemplate = (rowData: PostModel) => {
         return <h6>{rowData.title}</h6>;
     };
@@ -28,9 +25,16 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ posts }) => {
         return new Date(rowData?.publicationDate).toLocaleDateString();
     }
     const actionTemplate = (rowData: PostModel) => {
-        return (<Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post-operations/technology/${rowData?._id}`)}>
-            <Edit2 />
-        </Button>)
+        return (
+            <div className='flex'>
+                <Button className="rounded-full bg-none p-1 text-dark shadow-sm hover:text-primary-500  " size="sm" onClick={() => navigate(`/post-operations/${post_type}/${rowData?.id}`)}>
+                    <Edit2  className='h-5' />
+                </Button>
+                {/* <Button className="p-1 rounded-full text-danger shadow-sm hover:text-danger focus-visible:outline " size="sm" onClick={() => navigate(`/post-operations/${post_type}/${rowData?.id}`)}>
+                    <Trash2Icon className='h-5'/>
+                </Button> */}
+            </div>
+        )
     }
 
     const getSeverity = (rowData: PostModel) => {
@@ -49,25 +53,28 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ posts }) => {
         }
     };
 
-    const header = (
-        <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-            <span className="text-xl text-900 font-bold">Posts</span>
-            {/* <Button icon="pi pi-refresh" rounded raised /> */}
-        </div>
-    );
-    const footer = `In total there are ${currentPost ? currentPost.length : 0} posts.`;
+    // const header = (
+    //     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+    //         <span className="text-xl text-900 font-bold">Posts</span>
+    //         {/* <Button icon="pi pi-refresh" rounded raised /> */}
+    //     </div>
+    // );
+    // const footer = `In total there are ${posts ? posts.length : 0} posts.`;
 
     return (
-        <div className="card">
-            <DataTable value={posts} header={header} footer={footer} tableStyle={{ minWidth: '60rem' }}>
-                {/* Replace 'name', 'price', and 'category' with actual properties of PostModel */}
-                <Column field="title" header="Title" body={titleTemplate}></Column>
-                {/* <Column header="Image" body={(rowData) => <img src={rowData.image} alt={rowData.name} className="w-6rem shadow-2 border-round" />} /> */}
-                {/* <Column field="price" header="Price"></Column> */}
-                <Column field="publicationDate" header="Publication Date" body={publicationDateTemplate}></Column>
-                {/* <Column field="rating" header="Reviews" body={titleTemplate}></Column> */}
-                <Column header="Status" body={statusBodyTemplate}></Column>
-                <Column field="id" header="Actions" body={actionTemplate}></Column>
+        <div className="card bg-white shadow-lg rounded-md overflow-hidden">
+            <DataTable
+                value={posts}
+                tableStyle={{ minWidth: '60rem'}}
+                className="w-full p-8"
+            >
+                <Column field="title" header="Title" body={titleTemplate} className=" font-semibold"></Column>
+                <Column field="publicationDate" header="Publication Date" body={publicationDateTemplate} className="text-gray-600"></Column>
+                <Column field="status" header="Status" body={statusBodyTemplate} className="text-green-500"></Column>
+                <Column field="id" header="Actions" body={actionTemplate} className="text-center">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">Edit</button>
+                    {/* Add other action buttons/icons as needed */}
+                </Column>
             </DataTable>
         </div>
     );

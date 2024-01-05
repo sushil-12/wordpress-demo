@@ -78,7 +78,7 @@ export type INavLink = {
   publicationDate: Date,
   categories: string[],
   tags: string[],
-  featuredImage: string,
+  featuredImage: any,
   status: string,
   // comments: [{ user: String, content: String, date: Date, default: Date.now, }, },],
   // customFields: [],

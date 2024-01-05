@@ -155,3 +155,13 @@ export async function getPostsByID(post_id:string) {
   }
 }
 
+export async function deletePostById(post_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.deletePostByIdApi(post_id);
+
+    return post?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting this Media', 'Media fetch error', { error });
+  }
+}

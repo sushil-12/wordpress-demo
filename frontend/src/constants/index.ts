@@ -19,8 +19,13 @@ export const domainSidebarLinks: DomainLinks = {
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
-      route: "/technologies",
+      route: "/posts/technology",
       label: "Technology",
+    },
+    {
+      imgURL: "/assets/icons/wallpaper.svg",
+      route: "/posts/invention",
+      label: "Invention",
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
@@ -68,8 +73,13 @@ export const domainbottombarLinks: DomainLinks = {
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
-      route: "/technologies",
+      route: "/technology",
       label: "Technology",
+    },
+    {
+      imgURL: "/assets/icons/wallpaper.svg",
+      route: "/invention",
+      label: "Invention",
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",
@@ -111,7 +121,7 @@ export const bottombarLinks = [
   },
   {
     imgURL: "/assets/icons/wallpaper.svg",
-    route: "/technologies",
+    route: "/technology",
     label: "Technology",
   },
   {

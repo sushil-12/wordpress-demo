@@ -12,47 +12,53 @@ import { useCreateOrEditPost } from "@/lib/react-query/queriesAndMutations";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader } from "lucide-react";
 import { PostModel } from "@/lib/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 interface PostFormSchema {
     post_type: string | undefined,
-    post: PostModel|undefined,
+    post: PostModel | null,
 }
 const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
-    const { mutateAsync: createOrEditPost, isPending: isOperating } = useCreateOrEditPost();
-    const [currentPost, setCurrentPost] = useState<PostModel | undefined>(post);
-    const {currentDomain} = useUserContext();
-
     const { toast } = useToast();
+    const navigate = useNavigate();
+    const { mutateAsync: createOrEditPost, isPending: isOperating } = useCreateOrEditPost();
+    const [currentPost, setCurrentPost] = useState<PostModel | null>(post);
+    const { currentDomain } = useUserContext();
+    useEffect(() => {
+        console.log(currentPost)
+    }, [currentPost]);
+
+
     const form = useForm<z.infer<typeof PostFormSchema>>({
         resolver: zodResolver(PostFormSchema),
         defaultValues: {
             id: currentPost?.id || '',
             post_type: post_type,
-            domain:currentDomain,
+            domain: currentDomain,
             title: currentPost?.title || '',
             content: currentPost?.content || '',
-            featured_image: currentPost?.featuredImage || '',
-          },
-      });
-    // 2. Define a submit handler.
+            featuredImage: currentPost?.featuredImage.id || '',
+        },
+    });
+
     async function onSubmit(values: z.infer<typeof PostFormSchema>) {
+
         const createOrEditPostResponse = await createOrEditPost(values);
         if (!createOrEditPostResponse) {
             return toast({ variant: "destructive", description: "Edit Failed" })
         }
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             const updatedPost = createOrEditPostResponse?.data?.post;
-            setCurrentPost(updatedPost); 
+            setCurrentPost(updatedPost);
             form.setValue('id', updatedPost?.id);
-
-            console.log(currentPost, form.getValues())
-            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post': 'Successfully Created Post';
+            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
+            navigate('/posts/'+post_type)
             return toast({ variant: 'default', description: message });
-          } else {
+        } else {
             return toast({ variant: 'default', description: 'Something went wrong' });
-          }
+        }
     }
 
     return (
@@ -104,14 +110,22 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                         <Card className="media_image w-2/6 p-4 max-h-fit">
                             <FormField
                                 control={form.control}
-                                name="featured_image"
+                                name="featuredImage"
                                 render={() => (
                                     <FormItem>
                                         <FormLabel>Featured Image</FormLabel>
                                         <FormControl>
-                                            <MediaPicker onSelect={(selectedImage) => {
-                                                form.setValue('featured_image', selectedImage.id)
-                                            }} />
+                                            <MediaPicker
+                                                defaultValue={post?.featuredImage}
+                                                onSelect={(selectedImage) => {
+                                                    if (selectedImage) {
+                                                        form.setValue('featuredImage', selectedImage.id);
+                                                    } else {
+                                                        console.log("HERE", selectedImage)
+                                                        form.setValue('featuredImage', '');
+                                                    }
+                                                }}
+                                            />
                                         </FormControl>
                                         <FormMessage className="shad-form_message" />
                                     </FormItem>

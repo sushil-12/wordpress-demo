@@ -19,6 +19,7 @@ import {
     createOrEditPost,
     getAllPosts,
     getPostsByID,
+    deletePostById,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -98,6 +99,12 @@ import {
   export const usegetPostbyID = () => {
     return useMutation({
       mutationFn: (post_id: string) => getPostsByID(post_id),
+    });
+  };
+
+  export const usedeltePostbyID = () => {
+    return useMutation({
+      mutationFn: (post_id: string) => deletePostById(post_id),
     });
   };
 

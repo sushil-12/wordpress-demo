@@ -11,13 +11,12 @@ import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout.tsx';
 import { Toaster } from "@/components/ui/toaster"
 import UsersList from './_root/pages/UsersList.tsx';
-import Technology from './_root/pages/Technology.tsx';
+import PostComponent from './_root/pages/PostComponent.tsx';
 import Setting from './_root/pages/Setting.tsx';
 import Media from './_root/pages/Media.tsx';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { MediaProvider } from './context/MediaProvider.tsx';
-import * as routes from './constants/routes.ts';
-import PostOperation from './plugin/_custom_post/PostOperation.tsx';
+import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
 
 const App = () => {
     return (
@@ -28,10 +27,12 @@ const App = () => {
                     <Route element={<RootLayout />} >
                         <Route index element={<Home />} />
                         <Route path='/users' element={<UsersList />} />
-                        <Route path='/technologies' element={<Technology />} />
                         <Route path='/media' element={ <MediaProvider><Media /></MediaProvider>} />
                         <Route path='/settings' element={ <Setting />} />
-                        <Route path='/post-operations/:post_type/:post_id?' element={ <PostOperation />} />
+                        {/* START____Will be a dynamic routes for creating Custom Post Types (ROUTE NAME MUST BE SIMILAR TO post_type) */}
+                        <Route path='/posts/:post_type' element={<PostComponent />} />
+                        {/* END____Will be a dynamic routes for creating Custom Post Types */}
+                        <Route path='/post-operations/:post_type/:post_id?' element={ <PostOperation />} /> 
 
                     </Route>
                     {/* Private Routes */}

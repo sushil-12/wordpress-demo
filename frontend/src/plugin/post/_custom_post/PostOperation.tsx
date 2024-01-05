@@ -1,4 +1,4 @@
-import PostForm from "@/plugin/_custom_form/PostForm";
+import PostForm from "@/plugin/post/_custom_form/PostForm";
 import Header from "@/components/ui/header";
 import { useParams } from "react-router-dom";
 import { formatString } from "@/lib/utils";
@@ -16,6 +16,7 @@ const PostOperation = () => {
       try {
         if (post_id) {
           const response = await getPostByID(post_id);
+          console.log(response.data)
           setPost(response?.data?.post);
         }
       } catch (error) {
@@ -24,14 +25,15 @@ const PostOperation = () => {
     };
 
     fetchPost();
-  }, [getPostByID, post_id]);
+  }, [getPostByID, post_id, post_type]);
 
   const formattedPostType = post_type ? formatString(post_type) : "";
-  console.log(post)
   return (
     <div className="common-container h-100">
       <Header title={`Manage ${formattedPostType}`} />
-      {post && <PostForm post_type={post_type} post={post} />}
+      {post_id ? (post && <PostForm post_type={post_type} post={post} />) : <PostForm post_type={post_type} post={post} />}
+
+     
     </div>
   );
 };
