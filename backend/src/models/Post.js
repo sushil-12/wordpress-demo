@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
     categories: { type: [String], default: [], },
     tags: { type: [String], default: [], },
     featuredImage: { type: String, },
-    status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft', },
+    status: { type: String, enum: ['draft', 'published', 'archived','trash'], default: 'draft', },
     comments: [{ user: String, content: String, date: { type: Date, default: Date.now, }, },],
     customFields: [{ key: String, value: String, },],
 });

@@ -20,6 +20,10 @@ import {
     getAllPosts,
     getPostsByID,
     deletePostById,
+    quickEditPostById,
+    createOrEditCategory,
+    getAllCategories,
+    getCategorybyID,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -102,6 +106,12 @@ import {
     });
   };
 
+  export const useQuickEditPostById = (): UseMutationResult<any, unknown, { post_id: string; postData: any }> => {
+    return useMutation({
+      mutationFn: ({ post_id, postData }) => quickEditPostById(post_id, postData),
+    });
+  };
+  
   export const usedeltePostbyID = () => {
     return useMutation({
       mutationFn: (post_id: string) => deletePostById(post_id),
@@ -131,4 +141,21 @@ import {
       mutationFn: ({ page, limit, post_type }) => getAllPosts(page, limit, post_type),
     });
   };
+
+  export const useCreateOrEditCategory = () => {
+    return useMutation({
+      mutationFn: (post: any) => createOrEditCategory(post),
+    });
+  };
+
+  export const useGetAllCategories = () => {
+    return useMutation({
+      mutationFn: (post_type:string ) => getAllCategories(post_type),
+    });
+  };
   
+  export const useGetCategorybyID = () => {
+    return useMutation({
+      mutationFn: (category_id: string) => getCategorybyID(category_id),
+    });
+  };

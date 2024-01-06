@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import ImageLibrary from './ImageLibrary';
 import { Dialog } from 'primereact/dialog';
 import { Image as ImageView } from 'primereact/image';
-import { Card } from 'primereact/card';
 import { MousePointerSquare, TrashIcon } from 'lucide-react';
 import { Button } from 'primereact/button';
 
@@ -46,10 +45,10 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, defaultValue }) => 
     <div>
       <div onClick={openModal} className='p-2 flex'><MousePointerSquare /> Open Media Library</div>
       {selectedImage && (
-        <Card>
-          <ImageView src={selectedImage.url} alt={selectedImage.alt_text} preview title='Featured Image' />
-          <Button onClick={removeFeaturedImage} className='p-4'><TrashIcon /> Remove Featured Image</Button>
-        </Card>
+        <div className='p-0'>
+          <ImageView src={selectedImage.url} alt={selectedImage.alt_text} preview title='Featured Image' className='p-0' />
+          <Button label="Remove Featured Image" className='p-2 text-sm bg-transparent text-danger border-none text-right' icon="pi pi-trash" onClick={removeFeaturedImage} />
+        </div>
       )}
 
       <Dialog

@@ -17,6 +17,7 @@ import Media from './_root/pages/Media.tsx';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { MediaProvider } from './context/MediaProvider.tsx';
 import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
+import Category from './plugin/category/Category.tsx';
 
 const App = () => {
     return (
@@ -29,10 +30,11 @@ const App = () => {
                         <Route path='/users' element={<UsersList />} />
                         <Route path='/media' element={ <MediaProvider><Media /></MediaProvider>} />
                         <Route path='/settings' element={ <Setting />} />
+                        <Route path='/category/:post_type' element={ <Category/>} />
                         {/* START____Will be a dynamic routes for creating Custom Post Types (ROUTE NAME MUST BE SIMILAR TO post_type) */}
                         <Route path='/posts/:post_type' element={<PostComponent />} />
                         {/* END____Will be a dynamic routes for creating Custom Post Types */}
-                        <Route path='/post-operations/:post_type/:post_id?' element={ <PostOperation />} /> 
+                        <Route path='/post/:post_type/:post_id?' element={ <PostOperation />} /> 
 
                     </Route>
                     {/* Private Routes */}

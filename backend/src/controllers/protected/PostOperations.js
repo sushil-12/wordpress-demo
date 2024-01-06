@@ -168,8 +168,45 @@ const deletePost = async (req, res) => {
     }
 };
 
+const quickEditPost = async (req, res) => {
+    try {
+        const { post_id } = req.params;
+        const { title, content, status } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(post_id)) {
+            throw new CustomError(400, 'Invalid post ID');
+        }
+
+        const post = await Post.findById(post_id);
+
+        if (!post) {
+            throw new CustomError(404, 'Post not found');
+        }
+
+        if (title) {
+            post.title = title;
+        }
+
+        if (content) {
+            post.content = content;
+        }
+        const allowedStatuses = ['draft', 'published', 'trash', 'archived'];
+
+        if (status && allowedStatuses.includes(status)) {
+            post.status = status;
+        }
+
+        await post.save();
+
+        ResponseHandler.success(res, { message: 'Post updated successfully' }, 200);
+    } catch (error) {
+        ErrorHandler.handleError(error, res);
+    }
+};
+
+
 
 
 module.exports = {
-    createEditPost, getPostById, getAllPosts, deletePost
+    createEditPost, getPostById, getAllPosts, deletePost, quickEditPost
 };

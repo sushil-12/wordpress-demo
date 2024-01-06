@@ -63,6 +63,13 @@ export const formatString = (inputString: string)=>{
   return capitalizedWords.join(' ');
 }
 
+export const createSlug = (inputString: string): string => {
+  const lowercaseString = inputString.toLowerCase();
+  const words = lowercaseString.split(' ');
+  const slug = words.join('-');
+  return slug;
+};
+
 export const bytesToSize = (bytes: number): string => {
   const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 

@@ -61,7 +61,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
             header: 'Delete Confirmation',
             acceptClassName: 'pl-4 outline-none',
             rejectClassName: 'pr-4 outline-none',
-            className: 'gap-4 border bg-light-1 p-6 shadow-lg',
+            className: 'border bg-light-1 shadow-lg',
             accept: () => accept(media_id),
             reject: reject
         });
@@ -98,7 +98,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                                     <h3 className="mt-4 text-sm text-gray-700">{mediaItem.title}</h3>
                                     <p className="mt-1 text-lg font-medium text-gray-900">{bytesToSize(mediaItem.size)}</p>
                                 </div>
-                                <Button onClick={() => confirmDelete(mediaItem.id)} className='outline-none' ><Trash2Icon className='text-danger outline-none' /></Button>
+                                <Button onClick={() => confirmDelete(mediaItem.id)} className='outline-none p-0 bg-transparent border-none' ><Trash2Icon className='text-danger outline-none' /></Button>
                             </div>
                         </a>
                     )}

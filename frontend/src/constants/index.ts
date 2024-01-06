@@ -8,6 +8,7 @@ type DomainLinks = {
     imgURL: string;
     route: string;
     label: string;
+    subcategory?:any,
   }[];
 };
 export const domainSidebarLinks: DomainLinks = {
@@ -21,6 +22,13 @@ export const domainSidebarLinks: DomainLinks = {
       imgURL: "/assets/icons/wallpaper.svg",
       route: "/posts/technology",
       label: "Technology",
+      subcategory: [
+        {
+          imgURL: "/assets/icons/filter.svg",
+          route: "/category/technology",
+          label: "Manage category",
+        },
+      ],
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",

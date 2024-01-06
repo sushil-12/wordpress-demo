@@ -3,7 +3,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer tailwind-base, primereact, tailwind-utilities;
 
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
 @layer base {
   * {
     @apply box-border list-none p-0 m-0 scroll-smooth;
@@ -84,6 +93,10 @@
 
   .flex-between {
     @apply flex justify-between items-center;
+  }
+  .p-button{
+    background: none!important;
+    padding: 0px !important;
   }
 
   .flex-start {

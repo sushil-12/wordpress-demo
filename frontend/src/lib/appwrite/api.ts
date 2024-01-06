@@ -151,9 +151,23 @@ export async function getPostsByID(post_id:string) {
 
     return post?.data;
   } catch (error) {
-    throw new PromiseHandler('Error getting this Media', 'Media fetch error', { error });
+    throw new PromiseHandler('Error getting this Post', 'Post fetch error', { error });
   }
 }
+
+
+export async function quickEditPostById(post_id:string, postData:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.quickEditPostByIdApi(post_id, postData);
+
+    return post?.data;
+  } catch (error:any) {
+    throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
+  }
+}
+
+
 
 export async function deletePostById(post_id:string) {
   try {
@@ -162,6 +176,39 @@ export async function deletePostById(post_id:string) {
 
     return post?.data;
   } catch (error) {
-    throw new PromiseHandler('Error getting this Media', 'Media fetch error', { error });
+    throw new PromiseHandler('Error getting this Post', 'Post fetch error', { error });
+  }
+}
+
+//Categories
+export async function createOrEditCategory(category:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const categoryData = await authenticatedApiService.createOrEditCategoryApi(category);
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error editing this Category', 'Category Edit error', { error });
+  }
+}
+
+export async function getAllCategories(post_type:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    console.log("POST :", post_type)
+    const categoryData = await authenticatedApiService.getAllCategoriesApi(post_type);
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all Category', 'Category Fetch error', { error });
+  }
+}
+
+export async function getCategorybyID(category_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.getCategorybyIDApi(category_id);
+
+    return post?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting this Category', 'Category fetch error', { error });
   }
 }

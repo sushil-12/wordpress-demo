@@ -38,7 +38,7 @@ const PostComponent = () => {
     <div className="common-container">
       <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
         <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> <Router />{post_type}</h3>
-        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post-operations/${post_type}`)}>
+        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post/${post_type}`)}>
           <PlusSquare /> Add New
         </Button>
       </div>

@@ -1,11 +1,11 @@
 import { useUserContext } from "@/context/AuthProvider";
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
+import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom"
 import { Button } from "../ui/button";
 import { useGetAllDomains, useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { domainSidebarLinks, logos } from "@/constants";
 import { INavLink } from "@/lib/types";
-import { Settings } from "lucide-react";
+import { ArrowBigDownIcon, ArrowDownSquareIcon, Settings } from "lucide-react";
 
 interface domain {
     name: string,
@@ -15,6 +15,7 @@ interface domain {
 const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
     const navigate = useNavigate();
+    const { post_type } = useParams();
     const { pathname } = useLocation();
     const { user, currentDomain, setCurrentDomain } = useUserContext();
     const { mutateAsync: getAllDomains, isPending: isDomainLoading } = useGetAllDomains();
@@ -29,7 +30,11 @@ const LeftSidebar = () => {
             console.error('Error fetching domains:', error);
         }
     };
+    const [showSubcategories, setShowSubcategories] = useState(false);
 
+    const handleToggleSubcategories = () => {
+      setShowSubcategories(!showSubcategories);
+    };
     useEffect(() => {
         if (isSuccess) {
             navigate(0);
@@ -70,21 +75,32 @@ const LeftSidebar = () => {
                 <ul className="flex flex-col gap-6">
                     {sidebarLinks?.map((link: INavLink) => {
                         const isActive = pathname === link.route;
+
                         return (
                             <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`} key={link?.label}>
-                                <NavLink className="flex gap-4 items-center p-4" to={link?.route}>
-                                    <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white  ${isActive ? 'invert-white' : ''}`} />{link.label}
-                                </NavLink>
+                                <div className="flex gap-4 items-center p-4" onClick={handleToggleSubcategories}>
+                                    <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />
+                                    {link.label}
+                                    {link.subcategory && <ArrowDownSquareIcon />}
+                                </div>
+
+                                {link.subcategory && showSubcategories && (
+                                    <ul>
+                                        {link.subcategory.map((subLink:any) => (
+                                            <li className={`leftsidebar-link group ${pathname === subLink.route ? 'bg-primary-500 text-white ' : ''}`} key={subLink?.label}>
+                                                <NavLink className="flex gap-4 items-center p-4" to={subLink?.route}>
+                                                    <img src={subLink?.imgURL} alt={subLink?.label} className={`group-hover:invert-white ${pathname === subLink.route ? 'invert-white' : ''}`} />
+                                                    {subLink.label}
+                                                </NavLink>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </li>
-                        )
+                        );
                     })}
-                   {/*  <li className={`leftsidebar-link group ${pathname=='/settings' ? 'bg-primary-500 text-white ' : ''}`} >
-                    <NavLink className="flex gap-4 items-center p-4" to='/settings'>
-                        <Settings  className={`group-hover:invert-white text-primary-500 ${pathname=='/settings' ? 'text-white ' : ''}`} />
-                        <p className="small-medium lg:base-medium" >Settings</p>
-                    </NavLink>
-                    </li> */}
                 </ul>
+
 
             </div>
             <div className="user_profile_actions">

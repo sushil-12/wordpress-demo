@@ -107,7 +107,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                                 )}
                             />
                         </div>
-                        <Card className="media_image w-2/6 p-4 max-h-fit">
+                        <Card className="media_image w-2/6 ">
                             <FormField
                                 control={form.control}
                                 name="featuredImage"
