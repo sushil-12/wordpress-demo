@@ -23,6 +23,14 @@ export default {
     tsconfigRootDir: __dirname,
   },
 }
+
+
+ {/*  <li className={`leftsidebar-link group ${pathname=='/settings' ? 'bg-primary-500 text-white ' : ''}`} >
+            <NavLink className="flex gap-4 items-center p-4" to='/settings'>
+              <Settings  className={`group-hover:invert-white text-primary-500 ${pathname=='/settings' ? 'text-white ' : ''}`} />
+              <p className="small-medium lg:base-medium" >Settings</p>
+            </NavLink>
+          </li> */}
 ```
 
  // single text fieild
