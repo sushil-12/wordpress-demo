@@ -6,6 +6,7 @@ import { domainSidebarLinks, logos } from "@/constants";
 import { INavLink } from "@/lib/types";
 import { Settings } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
+import { set } from "react-hook-form";
 
 interface domain {
     name: string;
@@ -37,11 +38,15 @@ const LeftSidebar = () => {
         }
     };
 
+    const handleDomainChange= (value:string) => {
+        setCurrentDomain(value)
+        navigate('/');
+    }
+
     useEffect(() => {
         if (isSuccess) {
             navigate(0);
         }
-        // Fetch domains when component mounts
         fetchDomains();
     }, [isSuccess]);
 
@@ -52,8 +57,8 @@ const LeftSidebar = () => {
                     id="location"
                     name="location"
                     className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    value={currentDomain} // Use the state value here
-                    onChange={(e) => setCurrentDomain(e.target.value)}
+                    value={currentDomain}
+                    onChange={(e) => handleDomainChange(e.target.value)}
                 >
                     {domain.map((item) => (
                         <option key={item?.name} value={item?.name}>

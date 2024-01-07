@@ -194,7 +194,6 @@ export async function createOrEditCategory(category:any) {
 export async function getAllCategories(post_type:string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
-    console.log("POST :", post_type)
     const categoryData = await authenticatedApiService.getAllCategoriesApi(post_type);
     return categoryData?.data;
   } catch (error) {

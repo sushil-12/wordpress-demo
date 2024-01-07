@@ -42,7 +42,7 @@ const PostComponent = () => {
           <PlusSquare /> Add New
         </Button>
       </div>
-      <PostDataTable posts={posts} post_type = {defaultPostType}/>
+      <PostDataTable posts={posts} post_type = {defaultPostType} isPostLoading={isLoading}/>
     </div>
   )
 }

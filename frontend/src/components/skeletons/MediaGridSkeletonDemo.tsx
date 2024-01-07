@@ -1,4 +1,3 @@
-// Import the Skeleton component from your chosen library
 import { Skeleton } from 'primereact/skeleton';
 
 export default function MediaGridSkeletonDemo() {
@@ -9,9 +8,8 @@ export default function MediaGridSkeletonDemo() {
                 <div className="card" key={index}>
                     <div className="border-round border-1 surface-border p-4 surface-card">
                         <Skeleton width="100%" height="150px"></Skeleton>
-                        <div className="flex place-content-between-end mt-3">
+                        <div className="flex place-content-between-end mt-3 justify-between">
                             <div className="flex flex-col">
-                                <Skeleton width="4rem" height="2rem"></Skeleton>
                                 <Skeleton width="4rem" height="2rem"></Skeleton>
                             </div>
                             <Skeleton width="4rem" height="2rem"></Skeleton>

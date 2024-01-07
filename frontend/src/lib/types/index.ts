@@ -78,6 +78,7 @@ export type PostModel = {
   author: string,
   publicationDate: Date,
   categories: string[],
+  categoryObject?:any,
   tags: string[],
   featuredImage: any,
   status: string,

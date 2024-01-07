@@ -28,6 +28,12 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
 
     const [selectedNodeKeys, setSelectedNodeKeys] = useState<any>('');
+    function filterOutSelectedCategory(categories:any, selectedCategoryId:any) {
+        if (selectedCategoryId) {
+            return categories.filter((category:any) => category.key !== selectedCategoryId);
+        }
+        return categories;
+    }
     useEffect(() => {
         setCurrentCategory(selectedCategory);
         setSelectedNodeKeys(selectedCategory?.parentCategory)
@@ -61,7 +67,6 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     });
 
     async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
-
         const createOrEditPostResponse = await createOrEditCategory(values);
         if (!createOrEditPostResponse) {
             return toast({ variant: "destructive", description: "Edit Failed" })
@@ -69,8 +74,9 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             const updatedPost = createOrEditPostResponse?.data?.post;
             setCurrentCategory(updatedPost);
+            setSelectedCategory(updatedPost);
             form.setValue('id', updatedPost?.id);
-            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
+            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Category' : 'Successfully Created Category';
             navigate('/category/' + post_type)
             return toast({ variant: 'default', description: message });
         } else {
@@ -134,11 +140,13 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
                                         <FormControl>
                                             <TreeSelect
                                                 value={selectedNodeKeys}
+                                                showClear={true}
+                                                defaultValue=""
                                                 onChange={(e: TreeSelectChangeEvent) => {
                                                     setSelectedNodeKeys(e.value || '');
                                                     field.onChange(e.value);
                                                 }}
-                                                options={categories}
+                                                options={filterOutSelectedCategory(categories,  selectedCategory?.id)}
                                                 metaKeySelection={false}
                                                 className="md:w-20rem w-full"
                                                 selectionMode="single"
@@ -172,7 +180,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
 
                     </div>
                     <Button type="submit" className="shad-button_primary max-w-fit self-end" disabled={isOperating}>
-                        {isOperating ? <Loader /> : 'Create'}
+                        {isOperating ? <Loader /> : selectedCategory ? 'Update' : 'Create'}
                     </Button>
                 </form>
             </div>

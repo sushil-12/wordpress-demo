@@ -3,6 +3,7 @@ const { HTTP_STATUS_CODES } = require("../../constants/error_message_codes");
 const Post = require("../../models/Post");
 const { CustomError, ResponseHandler, ErrorHandler } = require("../../utils/responseHandler");
 const Media = require("../../models/Media");
+const Category = require("../../models/Category");
 
 const createEditPost = async (req, res) => {
     try {
@@ -90,15 +91,21 @@ const getPostById = async (req, res) => {
         }
 
         const featuredImageId = post.featuredImage;
-
+        const categoryIds = post?.categories || [];
+        const categoryObject = categoryIds.reduce((acc, categoryId) => {
+            acc[categoryId] = true;
+            return acc;
+          }, {});
         if (featuredImageId && mongoose.Types.ObjectId.isValid(featuredImageId)) {
             const media = await Media.findById(featuredImageId).select('url alt_text').lean();
             media.id = media._id;
             delete media._id;
-            const updatedPost = { ...post.toObject(), id: post._id, featuredImage: media };
+            const updatedPost = { ...post.toObject(), id: post._id, featuredImage: media,  categoryObject: categoryObject };
             ResponseHandler.success(res, { post: updatedPost }, 200);
         } else {
-            ResponseHandler.success(res, { post: post.toObject() }, 200);
+            const updatedPost = { ...post.toObject(), id: post._id, categoryObject: categoryObject };
+            console.log
+            ResponseHandler.success(res, { post: updatedPost }, 200);
         }
     } catch (error) {
         ErrorHandler.handleError(error, res);
@@ -119,35 +126,51 @@ const getAllPosts = async (req, res) => {
                 { content: { $regex: new RegExp(search, 'i') } },
             ];
         }
+
         const posts = await Post.find(query)
             .where('post_type').equals(post_type)
             .where('domain').equals(domainHeader)
             .limit(parseInt(limit))
             .skip((parseInt(page) - 1) * parseInt(limit))
             .sort({ publicationDate: -1 });
+
         const postIds = posts
             .filter(post => post.featuredImage)
             .map(post => post.featuredImage);
-        const images = await Media.find({ _id: { $in: postIds } }).select('url alt_text');
 
+        const images = await Media.find({ _id: { $in: postIds } }).select('url alt_text');
+        
         const imagesData = images.map(media => ({
             id: media._id,
             url: media.url,
             alt_text: media.alt_text,
         }));
 
-        const formattedPosts = posts.map(post => ({
-            ...post._doc,
-            id: post._id,
-            images: imagesData.filter(img => img.id === post.featuredImage),
+        const formattedPosts = await Promise.all(posts.map(async (post) => {
+            const categories = await Promise.all(post.categories.map(async (item) => {
+                try {
+                    const category = await Category.findById(item).exec();
+                    return category ? category.name : null;
+                } catch (error) {
+                    console.error(`Error fetching category with ID ${item}:`, error);
+                    return null;
+                }
+            }));
+        
+            return {
+                ...post._doc,
+                id: post._id,
+                images: imagesData.filter(img => img.id === post.featuredImage),
+                categories,
+            };
         }));
-
         const totalCount = await Post.countDocuments(query);
         ResponseHandler.success(res, { posts: formattedPosts, totalCount, currentPage: parseInt(page) }, 200);
     } catch (error) {
         ErrorHandler.handleError(error, res);
     }
 };
+
 
 const deletePost = async (req, res) => {
     try {

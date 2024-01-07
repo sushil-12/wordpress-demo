@@ -6,25 +6,32 @@ import Header from '@/components/ui/header';
 import { Card } from 'primereact/card';
 import { CategoryProvider } from './CategoryContext';
 import { useParams } from 'react-router-dom';
-
-
-
+import SkeletonTable from '@/components/skeletons/SkeletonTable';
 
 const Category = () => {
-  const {post_type} = useParams();
+  const { post_type } = useParams();
   const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
   const [categories, setCategories] = useState(null);
+  const [key, setKey] = useState(0); // Add key state
+
   useEffect(() => {
+    console.log(post_type);
+
     async function fetchCategories() {
-      if(post_type){
+      if (post_type) {
         const categories = await getAllCategories(post_type);
-        setCategories(categories.data.categories)
+        setCategories(categories.data.categories);
       }
     }
+
     fetchCategories();
-  }, []);
+
+    // Increment key when post_type changes
+    setKey((prevKey) => prevKey + 1);
+  }, [post_type]);
+
   return (
-    <div className='common-container'>
+    <div key={key} className='common-container'> {/* Use key on the parent div */}
       <CategoryProvider>
         <Header title='Manage Categories' />
         <div className="flex p-0 ">
@@ -32,7 +39,7 @@ const Category = () => {
             <CategoryForm post_type={post_type} />
           </Card>
           <div className="data_table p-4" style={{ width: "66%" }}>
-            <CategoryDataTable />
+            <CategoryDataTable isCategoryLoading={isLoading} />  
           </div>
         </div>
       </CategoryProvider>

@@ -34,6 +34,13 @@ export const domainSidebarLinks: DomainLinks = {
       imgURL: "/assets/icons/wallpaper.svg",
       route: "/posts/invention",
       label: "Invention",
+      subcategory: [
+        {
+          imgURL: "/assets/icons/filter.svg",
+          route: "/category/invention",
+          label: "Manage invention",
+        },
+      ]
     },
     {
       imgURL: "/assets/icons/wallpaper.svg",

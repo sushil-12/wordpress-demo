@@ -25,7 +25,7 @@ export const categoryFormSchema = z.object({
     description: z.string(),
     postType: z.string(),
     slug: z.string(),
-    parentCategory: z.string(),
+    parentCategory: z.string().optional(), 
     name: z.string(),
 
 })
@@ -43,7 +43,8 @@ export const PostFormSchema = z.object({
     title: z.string(),
     content: z.string(),
     featuredImage: z.string(),
-})
+    categories: z.array(z.string()), 
+});
 
 export const mediaEditFormSchema = z.object({
     id: z.string(),

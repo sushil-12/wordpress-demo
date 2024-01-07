@@ -11,12 +11,13 @@ const PostOperation = () => {
   const [post, setPost] = useState<PostModel | null>(null);
   const { mutateAsync: getPostByID, isPending: isLoading } = usegetPostbyID();
 
+
+ 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         if (post_id) {
           const response = await getPostByID(post_id);
-          console.log(response.data)
           setPost(response?.data?.post);
         }
       } catch (error) {

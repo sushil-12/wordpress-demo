@@ -17,7 +17,7 @@ import Media from './_root/pages/Media.tsx';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { MediaProvider } from './context/MediaProvider.tsx';
 import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
-import Category from './plugin/category/Category.tsx';
+import Category from './plugin/post/category/Category.tsx';
 
 const App = () => {
     return (

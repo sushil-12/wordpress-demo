@@ -12,8 +12,6 @@ const UseTokenExpiration = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   useEffect(() => {
-    const token = sessionStorage.getItem('token') || '';
-    console.log(token, token == '')
     const checkTokenExpiration = () => {
       const token = sessionStorage.getItem('token') || '';
     
@@ -42,7 +40,6 @@ const UseTokenExpiration = () => {
     };
 
     checkTokenExpiration();
-    console.log(checkTokenExpiration())
   }, [navigate]);
 
   return null;
