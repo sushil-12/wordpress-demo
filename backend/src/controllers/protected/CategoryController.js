@@ -31,7 +31,7 @@ const createEditCategory = async (req, res) => {
         // Update or set fields based on the request body
         category.name = name || category.name;
         category.slug = slug || category.slug;
-        category.parentCategory = parentCategory || category.parentCategory;
+        category.parentCategory = parentCategory;
         category.description = description || category.description;
         category.postType = postType || category.postType;
        

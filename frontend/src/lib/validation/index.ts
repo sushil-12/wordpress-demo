@@ -43,7 +43,7 @@ export const PostFormSchema = z.object({
     title: z.string(),
     content: z.string(),
     featuredImage: z.string(),
-    categories: z.array(z.string()), 
+    categories: z.array(z.string()),
 });
 
 export const mediaEditFormSchema = z.object({

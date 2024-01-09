@@ -7,7 +7,6 @@ import { PostFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { Editor } from "primereact/editor";
 import MediaPicker from "@/components/shared/MediaPicker";
-import { Card } from "primereact/card";
 import { useCreateOrEditPost, useGetAllCategories } from "@/lib/react-query/queriesAndMutations";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader } from "lucide-react";

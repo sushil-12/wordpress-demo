@@ -101,7 +101,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
                                         <FormLabel>Category Name</FormLabel>
                                         <FormControl>
                                             <Input
-                                                onBeforeInput={(e: React.FocusEvent<HTMLInputElement>) => {
+                                                onInput={(e: React.FocusEvent<HTMLInputElement>) => {
                                                     form.setValue('slug', createSlug(e.target.value));
                                                 }}
                                                 className="shad-input"

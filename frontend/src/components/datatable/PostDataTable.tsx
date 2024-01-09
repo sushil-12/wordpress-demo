@@ -102,7 +102,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
             ) : (
                 <DataTable
                     value={posts}
-                    paginator={posts.length > 10} rows={10} rowsPerPageOptions={[5, 10, 15, 20]}
+                    paginator={posts.length > 2} rows={2} rowsPerPageOptions={[5, 10, 15, 20]}
                     tableStyle={{ minWidth: '60rem' }}
                     className="w-full p-8"
                 >
