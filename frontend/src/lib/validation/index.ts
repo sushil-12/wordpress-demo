@@ -1,6 +1,14 @@
 import * as z from "zod";
 
-
+const CustomFieldSchema = z.object({
+    name: z.string(),
+    value: z.string(),
+});
+const CustomRepeaterFieldSchema = z.object({
+    id: z.string(),  // Change the type to match your ID type (string or number)
+    name: z.string(),
+    values: z.array(z.string()),
+});
 export const signUpValidationSchema = z.object({
     firstName: z.string().min(2, { message: "Too Short" }).max(50, 'Too big less than 50 character please'),
     lastName: z.string(),
@@ -25,7 +33,7 @@ export const categoryFormSchema = z.object({
     description: z.string(),
     postType: z.string(),
     slug: z.string(),
-    parentCategory: z.string().optional(), 
+    parentCategory: z.string().optional(),
     name: z.string(),
 
 })
@@ -44,6 +52,8 @@ export const PostFormSchema = z.object({
     content: z.string(),
     featuredImage: z.string(),
     categories: z.array(z.string()),
+    customFields: z.array(CustomFieldSchema).optional(),
+    customRepeaterFields: z.array(CustomRepeaterFieldSchema).optional(),
 });
 
 export const mediaEditFormSchema = z.object({

@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { Tree } from "primereact/tree";
+import CustomField from "@/plugin/myCustomFields/_custom_field";
+import RepeaterCustomField from "@/plugin/myCustomFields/_repeater_custom_field";
 
 interface PostFormSchema {
     post_type: string | undefined,
@@ -30,6 +32,8 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     const { mutateAsync: getAllCategories, isPending: isCategoryLoading } = useGetAllCategories();
     const [selectedKeys, setSelectedKeys] = useState(post?.categoryObject);
     const [metaKey, setMetaKey] = useState(false);
+    const [customFields, setCustomFields] = useState<{ name: string; value: string }[]>([]);
+    const [customRepeaterFields, setCustomRepeaterFields] = useState([]);
 
     async function fetchCategories() {
         if (post_type) {
@@ -39,11 +43,11 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     }
 
     useEffect(() => {
-        if(post?.categoryObject) {setSelectedKeys(post.categoryObject)}
+        if (post?.categoryObject) { setSelectedKeys(post.categoryObject) }
         fetchCategories();
     }, [currentPost]);
 
-    const handleTreeSelectionChange = (selectedItems:any) => {
+    const handleTreeSelectionChange = (selectedItems: any) => {
         setSelectedKeys(selectedItems)
         const selectedValuesArray = Object.keys(selectedItems);
         form.setValue('categories', selectedValuesArray);
@@ -57,10 +61,11 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
             title: currentPost?.title || '',
             content: currentPost?.content || '',
             featuredImage: currentPost?.featuredImage.id || '',
-            categories: currentPost?.categories|| []
+            categories: currentPost?.categories || [],
+            customFields: currentPost?.postMeta.customFields,
         },
     });
-
+    
     async function onSubmit(values: z.infer<typeof PostFormSchema>) {
         const createOrEditPostResponse = await createOrEditPost(values);
         if (!createOrEditPostResponse) {
@@ -173,6 +178,38 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                             </div>
                         </div>
 
+
+                    </div>
+                    <div className="flex flex-col w-full gap-8">
+                        <div className="custom_fields flex flex-col w-full gap-4">
+                            <CustomField
+                                label="Custom Title Input Box"
+                                name="customTitle"
+                                type="text"
+                                form={form}
+                                customFields={customFields}
+                                setCustomFields={setCustomFields}
+                                placeholder="Enter title"
+                            />
+                            <CustomField
+                                label="Custom Text Area Box"
+                                name="customTextArea"
+                                type="textarea"
+                                form={form}
+                                customFields={customFields}
+                                setCustomFields={setCustomFields}
+                                placeholder="Enter title"
+                            />
+                            <RepeaterCustomField
+                             label="Custom Repeater Text Area Box"
+                             name="customTextArea"
+                             type="text"
+                             form={form}
+                             customRepeaterFields={customRepeaterFields}
+                             setCustomRepeaterFields={setCustomRepeaterFields}
+                             placeholder="Enter title"
+                            />
+                        </div>
                     </div>
                     <Button type="submit" className="shad-button_primary max-w-fit self-end" disabled={isOperating}>
                         {isOperating ? <Loader /> : !currentPost ? 'Create' : 'Update'}

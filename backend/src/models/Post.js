@@ -12,7 +12,8 @@ const postSchema = new mongoose.Schema({
     featuredImage: { type: String, },
     status: { type: String, enum: ['draft', 'published', 'archived','trash'], default: 'draft', },
     comments: [{ user: String, content: String, date: { type: Date, default: Date.now, }, },],
-    customFields: [{ key: String, value: String, },],
+    postMeta: { type: mongoose.Schema.Types.ObjectId, ref: 'PostMeta' },
+
 });
 
 const Post = mongoose.model('Post', postSchema);

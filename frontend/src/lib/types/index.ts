@@ -82,8 +82,8 @@ export type PostModel = {
   tags: string[],
   featuredImage: any,
   status: string,
+  postMeta?:any,
   // comments: [{ user: String, content: String, date: Date, default: Date.now, }, },],
-  // customFields: [],
 }
 
 export type CategoryModel = {

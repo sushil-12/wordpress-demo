@@ -4,6 +4,7 @@ const Post = require("../../models/Post");
 const { CustomError, ResponseHandler, ErrorHandler } = require("../../utils/responseHandler");
 const Media = require("../../models/Media");
 const Category = require("../../models/Category");
+const PostMeta = require("../../models/PostMeta");
 
 const createEditPost = async (req, res) => {
     try {
@@ -21,7 +22,8 @@ const createEditPost = async (req, res) => {
             featuredImage,
             status,
             comments,
-            customFields
+            customFields,
+            customRepeaterFields
         } = req.body;
 
         const postObject = {
@@ -36,7 +38,6 @@ const createEditPost = async (req, res) => {
             featuredImage,
             status,
             comments,
-            customFields
         };
 
         let post;
@@ -66,13 +67,41 @@ const createEditPost = async (req, res) => {
         post.status = status || post.status;
         post.comments = comments || post.comments;
         post.domain = domain || post.domain;
-        post.customFields = customFields || post.customFields;
 
         let updatedPost = await post.save();
         updatedPost = { ...updatedPost.toObject(), id: updatedPost._id };
 
-        // Return the updated or newly created post
-        ResponseHandler.success(res, { post: updatedPost }, mongoose.Types.ObjectId.isValid(id) ? HTTP_STATUS_CODES.OK : HTTP_STATUS_CODES.CREATED);
+        // Save or update PostMeta
+        const postMetaObject = {
+            title: title || post.title,
+            customFields: customFields || [],
+        };
+
+
+        console.log('POST META OBJECT', postMetaObject)
+
+        // Remove any custom fields with empty values
+        postMetaObject.customFields = postMetaObject.customFields.filter(field => field.value !== undefined);
+        postMetaObject.customRepeaterFields = postMetaObject.customFields.filter(field => field.value !== undefined);
+
+        let postMeta;
+
+        if (post.postMeta && mongoose.Types.ObjectId.isValid(post.postMeta) && (await PostMeta.findById(post.postMeta))) {
+            // If postMeta already exists, update it
+            postMeta = await PostMeta.findByIdAndUpdate(post.postMeta, postMetaObject, { new: true });
+        } else {
+            // If postMeta doesn't exist, create a new one
+            postMeta = new PostMeta(postMetaObject);
+            await postMeta.save();
+
+            // Update the post with the reference to the created PostMeta
+            post.postMeta = postMeta._id;
+
+            await post.save();
+        }
+
+        // Return the updated or newly created post and associated PostMeta
+        ResponseHandler.success(res, { post: updatedPost, postMeta }, mongoose.Types.ObjectId.isValid(id) ? HTTP_STATUS_CODES.OK : HTTP_STATUS_CODES.CREATED);
     } catch (error) {
         ErrorHandler.handleError(error, res);
     }
@@ -85,7 +114,11 @@ const getPostById = async (req, res) => {
             throw new CustomError(400, 'Invalid post ID');
         }
 
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate({
+            path: 'postMeta',
+            model: 'PostMeta',
+          });
+
         if (!post) {
             throw new CustomError(404, 'Post not found');
         }
@@ -104,7 +137,6 @@ const getPostById = async (req, res) => {
             ResponseHandler.success(res, { post: updatedPost }, 200);
         } else {
             const updatedPost = { ...post.toObject(), id: post._id, categoryObject: categoryObject };
-            console.log
             ResponseHandler.success(res, { post: updatedPost }, 200);
         }
     } catch (error) {
