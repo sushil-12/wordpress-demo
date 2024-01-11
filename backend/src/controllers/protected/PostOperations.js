@@ -75,14 +75,13 @@ const createEditPost = async (req, res) => {
         const postMetaObject = {
             title: title || post.title,
             customFields: customFields || [],
+            customRepeaterFields: customRepeaterFields || []
         };
 
 
-        console.log('POST META OBJECT', postMetaObject)
-
         // Remove any custom fields with empty values
         postMetaObject.customFields = postMetaObject.customFields.filter(field => field.value !== undefined);
-        postMetaObject.customRepeaterFields = postMetaObject.customFields.filter(field => field.value !== undefined);
+        postMetaObject.customRepeaterFields = postMetaObject.customRepeaterFields.filter(field => field.value !== undefined);
 
         let postMeta;
 

@@ -33,7 +33,7 @@ const CustomField: React.FC<CustomFieldProps & { customFields: any[]; setCustomF
 
     });
   };
-  console.log(form)
+  
   return (
     <FormField
       control={form.control}

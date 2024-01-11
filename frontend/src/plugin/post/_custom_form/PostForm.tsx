@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Tree } from "primereact/tree";
 import CustomField from "@/plugin/myCustomFields/_custom_field";
 import RepeaterCustomField from "@/plugin/myCustomFields/_repeater_custom_field";
+import RepeaterField from "@/plugin/myCustomFields/_repeater_custom_field";
 
 interface PostFormSchema {
     post_type: string | undefined,
@@ -43,9 +44,13 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     }
 
     useEffect(() => {
-        if (post?.categoryObject) { setSelectedKeys(post.categoryObject) }
-        fetchCategories();
-    }, [currentPost]);
+        if (post?.postMeta) {
+            if (post.categoryObject) { setSelectedKeys(post.categoryObject); }
+            if (post.postMeta.customFields) { setCustomFields(post.postMeta.customFields); }
+            if (post.postMeta.customRepeaterFields) { setCustomRepeaterFields(post.postMeta.customRepeaterFields); }
+            fetchCategories();
+        }
+    }, [post?.postMeta, post?.categoryObject, currentPost]);
 
     const handleTreeSelectionChange = (selectedItems: any) => {
         setSelectedKeys(selectedItems)
@@ -65,7 +70,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
             customFields: currentPost?.postMeta.customFields,
         },
     });
-    
+
     async function onSubmit(values: z.infer<typeof PostFormSchema>) {
         const createOrEditPostResponse = await createOrEditPost(values);
         if (!createOrEditPostResponse) {
@@ -200,14 +205,23 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                                 setCustomFields={setCustomFields}
                                 placeholder="Enter title"
                             />
-                            <RepeaterCustomField
-                             label="Custom Repeater Text Area Box"
-                             name="customTextArea"
-                             type="text"
-                             form={form}
-                             customRepeaterFields={customRepeaterFields}
-                             setCustomRepeaterFields={setCustomRepeaterFields}
-                             placeholder="Enter title"
+                            <RepeaterField
+                                label="Repeater Field"
+                                name="repeaterFieldNameOne"
+                                type="text"
+                                form={form}
+                                customRepeaterFields={customRepeaterFields}
+                                setCustomRepeaterFields={setCustomRepeaterFields}
+                                placeholder="Enter value"
+                            />
+                            <RepeaterField
+                                label="Second Repeater Field"
+                                name="repeaterFieldNameTwo"
+                                type="text"
+                                form={form}
+                                customRepeaterFields={customRepeaterFields}
+                                setCustomRepeaterFields={setCustomRepeaterFields}
+                                placeholder="Enter value"
                             />
                         </div>
                     </div>

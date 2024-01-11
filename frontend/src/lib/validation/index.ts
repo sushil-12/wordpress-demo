@@ -5,9 +5,9 @@ const CustomFieldSchema = z.object({
     value: z.string(),
 });
 const CustomRepeaterFieldSchema = z.object({
-    id: z.string(),  // Change the type to match your ID type (string or number)
     name: z.string(),
-    values: z.array(z.string()),
+    type:z.string(),
+    value: z.array(z.string()),
 });
 export const signUpValidationSchema = z.object({
     firstName: z.string().min(2, { message: "Too Short" }).max(50, 'Too big less than 50 character please'),

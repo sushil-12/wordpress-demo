@@ -8,6 +8,13 @@ const postMetaSchema = new mongoose.Schema({
       value: { type: mongoose.Schema.Types.Mixed, required: true },
     },
   ],
+  customRepeaterFields: [
+    {
+      id:{type:String},
+      name: { type: String, required: true },
+      value: { type: mongoose.Schema.Types.Mixed, required: true },
+    },
+  ]
 });
 
 const PostMeta = mongoose.model('PostMeta', postMetaSchema);
