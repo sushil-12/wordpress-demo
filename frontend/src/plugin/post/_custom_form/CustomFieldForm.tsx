@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 import { usecreateOrEditCustomField } from '@/lib/react-query/queriesAndMutations';
 import { CustomFormFieldSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +18,7 @@ interface CustomFieldFormSchema {
 const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selectedCustomField }) => {
     const { mutateAsync: createOrEditCustomField, isPending: isCreating } = usecreateOrEditCustomField();
     const { control, getValues } = useForm();
-
+    const {toast}  = useToast();
     let { fields, append, remove } = useFieldArray({
         control,
         name: 'fields', // Name of the field array in the form data
@@ -65,8 +66,10 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
         values.customFields = repeaterValues
 
         const createOrEditCustomFieldResponse = await createOrEditCustomField(values);
-        console.log(createOrEditCustomFieldResponse)
+        const message = createOrEditCustomFieldResponse?.code === 200 ? 'Successfully Updated CustomField' : 'Successfully Created CustomField';
         setVisible(false)
+        selectedCustomField={};
+        if(createOrEditCustomFieldResponse){    return toast({ variant: 'default', description: message });}
         return;
     }
 

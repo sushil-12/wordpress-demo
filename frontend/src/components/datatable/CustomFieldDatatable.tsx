@@ -6,18 +6,23 @@ import SkeletonTable from '../skeletons/SkeletonTable';
 import { DataTable } from 'primereact/datatable';
 import { Button } from '../ui/button';
 import { Edit2, PlusSquare } from 'lucide-react';
-import { useGetCustomFieldsbyIDApi } from '@/lib/react-query/queriesAndMutations';
+import { useGetAllCustomFields, useGetCustomFieldsbyIDApi } from '@/lib/react-query/queriesAndMutations';
 import { Dialog } from 'primereact/dialog';
 import CustomFieldForm from '@/plugin/post/_custom_form/CustomFieldForm';
 
-interface CustomFieldDatatableScema {
-    isCustomFieldLoading: boolean,
-    customFields: any
-}
-const CustomFieldDatatable: React.FC<CustomFieldDatatableScema> = ({ isCustomFieldLoading, customFields }) => {
+
+const CustomFieldDatatable = () => {
     const [visible, setVisible] = useState(false);
+    const [customFields, setCustomFields] = useState([]);
     const [selectedCustomField, setSelectedCustomField] = useState({});
-    useEffect(() => { console.log(customFields) }, [customFields])
+    const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
+
+    async function  fetchCustomFields() {
+        const customFieldsResponse = await getAllCustomFields('all');
+        setCustomFields(customFieldsResponse?.data?.customField)
+    }
+
+    useEffect(() => {fetchCustomFields() }, [visible])
     const titleTemplate = (rowData: any) => {
         return <>{!isCustomFieldLoading ? rowData.title : <Skeleton width='100' height='1.5rem' />}</>;
     };
