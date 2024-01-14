@@ -26,7 +26,7 @@ const CustomFieldDatatable: React.FC<CustomFieldDatatableScema> = ({ isCustomFie
         return <Tag value={rowData.post_type} className='px-4 py-2'></Tag>;
     };
 
-    const header = <div className="text-xl font-bold flex justify-between">Custom Fields Template </div>;
+    const header = <div className="text-lg font-bold flex justify-between">Custom Fields Template </div>;
     const handleEditData = async (custom_field_id: any) => {
         try {
             setSelectedCustomField(custom_field_id);
@@ -47,8 +47,8 @@ const CustomFieldDatatable: React.FC<CustomFieldDatatableScema> = ({ isCustomFie
 
     return (
         <div className="card bg-slate-100 shadow-lg rounded-md">
-            <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
-                <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> Manage Custom Fields</h3>
+            <div className="border-b border-gray-200 bg-white  py-2 flex justify-between px-4">
+                <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3 p-4"> Manage Custom Fields</h3>
                 <Button className="shad-button_primary place-self-end" size="sm" onClick={() => setVisible(true)} >
                     <PlusSquare /> Add New
                 </Button>
