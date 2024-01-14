@@ -12,7 +12,7 @@ const PostOperation = () => {
   const { mutateAsync: getPostByID, isPending: isLoading } = usegetPostbyID();
 
 
- 
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -30,12 +30,16 @@ const PostOperation = () => {
 
   const formattedPostType = post_type ? formatString(post_type) : "";
   return (
-    <div className="common-container h-100">
-      <Header title={`Manage ${formattedPostType}`} />
-      {post_id ? (post && <PostForm post_type={post_type} post={post} />) : <PostForm post_type={post_type} post={post} />}
-
-     
-    </div>
+    <>
+      {post_type ? (
+        <div className="common-container h-100">
+          <Header title={`Manage ${formattedPostType}`} />
+          {post_id ? (post && <PostForm post_type={post_type} post={post} />) : <PostForm post_type={post_type} post={post} />}
+        </div>
+      ) : (
+        <div className=""></div>
+      )}
+    </>
   );
 };
 

@@ -24,6 +24,9 @@ import {
     createOrEditCategory,
     getAllCategories,
     getCategorybyID,
+    getAllCustomFields,
+    createOrEditCustomField,
+    getCustomFieldsbyID,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -157,5 +160,24 @@ import {
   export const useGetCategorybyID = () => {
     return useMutation({
       mutationFn: (category_id: string) => getCategorybyID(category_id),
+    });
+  };
+
+
+  export const usecreateOrEditCustomField = () => {
+    return useMutation({
+      mutationFn: (post: any) => createOrEditCustomField(post),
+    });
+  };
+
+  export const useGetAllCustomFields = () => {
+    return useMutation({
+      mutationFn: (post_type: string) => getAllCustomFields(post_type),
+    });
+  };
+  
+  export const useGetCustomFieldsbyIDApi = () => {
+    return useMutation({
+      mutationFn: (category_id: string) => getCustomFieldsbyID(category_id),
     });
   };

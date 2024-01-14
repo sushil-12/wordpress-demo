@@ -7,7 +7,7 @@ import { PostFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { Editor } from "primereact/editor";
 import MediaPicker from "@/components/shared/MediaPicker";
-import { useCreateOrEditPost, useGetAllCategories } from "@/lib/react-query/queriesAndMutations";
+import { useCreateOrEditPost, useGetAllCategories, useGetAllCustomFields } from "@/lib/react-query/queriesAndMutations";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader } from "lucide-react";
 import { PostModel } from "@/lib/types";
@@ -16,11 +16,11 @@ import { useUserContext } from "@/context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { Tree } from "primereact/tree";
 import CustomField from "@/plugin/myCustomFields/_custom_field";
-import RepeaterCustomField from "@/plugin/myCustomFields/_repeater_custom_field";
 import RepeaterField from "@/plugin/myCustomFields/_repeater_custom_field";
 
+
 interface PostFormSchema {
-    post_type: string | undefined,
+    post_type: string,
     post: PostModel | null,
 }
 const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
@@ -33,8 +33,11 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     const { mutateAsync: getAllCategories, isPending: isCategoryLoading } = useGetAllCategories();
     const [selectedKeys, setSelectedKeys] = useState(post?.categoryObject);
     const [metaKey, setMetaKey] = useState(false);
-    const [customFields, setCustomFields] = useState<{ name: string; value: string }[]>([]);
+    const [customFormFields, setCustomFormFields] = useState<any[]>([]);
+    const [customFields, setCustomFields] = useState<{ name: string; type: string, value: string }[]>([]);
     const [customRepeaterFields, setCustomRepeaterFields] = useState([]);
+    const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
+
 
     async function fetchCategories() {
         if (post_type) {
@@ -42,14 +45,48 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
             setCategories(categoryData.data.categories);
         }
     }
+    async function fetchCustomFields() {
+        if (post_type) {
+            const customFieldsResponse = await getAllCustomFields(post_type);
+            customFieldsResponse?.data?.customField?.fields.length>0 && setCustomFormFields(customFieldsResponse?.data?.customField?.fields)
+        }
+    }
+    const createSpacedString = (inputString: string): string => {
+        const words = inputString.split('_');
+        const spacedString = words.map((word) =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
 
+        return spacedString;
+    };
     useEffect(() => {
+        if (post == null) { fetchCategories() };
+        fetchCustomFields();
         if (post?.postMeta) {
             if (post.categoryObject) { setSelectedKeys(post.categoryObject); }
+            if (post.categories) { setCategories(categories) }
             if (post.postMeta.customFields) { setCustomFields(post.postMeta.customFields); }
             if (post.postMeta.customRepeaterFields) { setCustomRepeaterFields(post.postMeta.customRepeaterFields); }
-            fetchCategories();
         }
+        let customFieldsArray = post?.postMeta.customFields || [];
+        let customRepeaterFieldsArray = post?.postMeta?.customRepeaterFields || [];
+        // Modify customFieldsArray and customRepeaterFieldsArray using map
+        customFieldsArray = customFieldsArray.map((item: any) => {
+            item.variant = 'normal_field';
+            item.label = createSpacedString(item.name);
+            item.field_type = item.type
+            return item;
+        });
+
+        customRepeaterFieldsArray = customRepeaterFieldsArray.map((item: any) => {
+            item.variant = 'repeater_field';
+            item.label = createSpacedString(item.name);
+            item.field_type = item.type
+            return item;
+        });
+
+        const array = [...customFieldsArray, ...customRepeaterFieldsArray];
+        setCustomFormFields(array)
     }, [post?.postMeta, post?.categoryObject, currentPost]);
 
     const handleTreeSelectionChange = (selectedItems: any) => {
@@ -70,7 +107,6 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
             customFields: currentPost?.postMeta.customFields,
         },
     });
-
     async function onSubmit(values: z.infer<typeof PostFormSchema>) {
         const createOrEditPostResponse = await createOrEditPost(values);
         if (!createOrEditPostResponse) {
@@ -91,6 +127,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     return (
         <Form {...form}>
             <div className="">
+
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-1 flex flex-col gap-8 w-full mt-4"
@@ -186,44 +223,32 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
 
                     </div>
                     <div className="flex flex-col w-full gap-8">
-                        <div className="custom_fields flex flex-col w-full gap-4">
-                            <CustomField
-                                label="Custom Title Input Box"
-                                name="customTitle"
-                                type="text"
-                                form={form}
-                                customFields={customFields}
-                                setCustomFields={setCustomFields}
-                                placeholder="Enter title"
-                            />
-                            <CustomField
-                                label="Custom Text Area Box"
-                                name="customTextArea"
-                                type="textarea"
-                                form={form}
-                                customFields={customFields}
-                                setCustomFields={setCustomFields}
-                                placeholder="Enter title"
-                            />
-                            <RepeaterField
-                                label="Repeater Field"
-                                name="repeaterFieldNameOne"
-                                type="text"
-                                form={form}
-                                customRepeaterFields={customRepeaterFields}
-                                setCustomRepeaterFields={setCustomRepeaterFields}
-                                placeholder="Enter value"
-                            />
-                            <RepeaterField
-                                label="Second Repeater Field"
-                                name="repeaterFieldNameTwo"
-                                type="text"
-                                form={form}
-                                customRepeaterFields={customRepeaterFields}
-                                setCustomRepeaterFields={setCustomRepeaterFields}
-                                placeholder="Enter value"
-                            />
-                        </div>
+                        {customFormFields.map((item, index) => (
+                            item.variant !== 'repeater_field' ? (
+                                <CustomField
+                                    key={index}
+                                    label={item?.label}
+                                    name={item?.name}
+                                    type={item?.field_type}
+                                    form={form}
+                                    customFields={customFields}
+                                    setCustomFields={setCustomFields}
+                                    placeholder={item?.placeholder}
+                                />
+                            ) : (
+                                <RepeaterField
+                                    key={index}
+                                    label={item?.label}
+                                    name={item?.name}
+                                    type={item?.field_type}
+                                    form={form}
+                                    customRepeaterFields={customRepeaterFields}
+                                    setCustomRepeaterFields={setCustomRepeaterFields}
+                                    placeholder={item?.placeholder}
+                                />
+                            )
+                        ))}
+
                     </div>
                     <Button type="submit" className="shad-button_primary max-w-fit self-end" disabled={isOperating}>
                         {isOperating ? <Loader /> : !currentPost ? 'Create' : 'Update'}

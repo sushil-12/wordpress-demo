@@ -5,6 +5,7 @@ const { uploadMediaToLibrary, deleteMedia } = require('../controllers/common/Fil
 const { getAllMedia, editMedia, getAllImages } = require('../controllers/common/MediaOperations');
 const { createEditPost, getAllPosts, getPostById, deletePost, quickEditPost } = require('../controllers/protected/PostOperations');
 const { createEditCategory, getAllCategories, getCategoryById } = require('../controllers/protected/CategoryController');
+const { createEditCustomField, getAllCustomField, getCustomFieldById } = require('../controllers/protected/CustomFieldTemplateController');
 
 const router = express.Router();
 
@@ -28,6 +29,10 @@ router.delete('/delete-post/:post_id', deletePost);
 router.post('/create-or-update/categories', createEditCategory);
 router.get('/get-all-categories/:post_type', getAllCategories);
 router.get('/get-category/:category_id', getCategoryById);
+
+router.post('/create-or-update/custom-fields', createEditCustomField);
+router.get('/get-all-custom-fields/:post_type', getAllCustomField);
+router.get('/get-custom-field/:custom_field_id', getCustomFieldById);
 
 
 module.exports = router;

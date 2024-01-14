@@ -22,12 +22,13 @@ const CustomField: React.FC<CustomFieldProps & { customFields: any[]; setCustomF
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCustomFields((prevFields) => {
       const updatedCustomFields = prevFields.map((field) =>
-        field.name === name ? { ...field, value: e.target.value } : field
+        field.name === name ? { ...field, type:type, value: e.target.value } : field
       );
       const fieldIndex = updatedCustomFields.findIndex((field) => field.name === name);
       if (fieldIndex === -1) {
-        updatedCustomFields.push({ name, value: e.target.value });
+        updatedCustomFields.push({ name, type, value: e.target.value });
       }
+      
       form.setValue('customFields', updatedCustomFields)
       return updatedCustomFields;
 

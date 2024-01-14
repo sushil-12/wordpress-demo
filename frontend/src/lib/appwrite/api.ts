@@ -211,3 +211,36 @@ export async function getCategorybyID(category_id:string) {
     throw new PromiseHandler('Error getting this Category', 'Category fetch error', { error });
   }
 }
+
+
+//Categories
+export async function createOrEditCustomField(category:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const categoryData = await authenticatedApiService.createOrEditCustomFieldApi(category);
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error operating this Custom Field', 'Custom Field Operating error', { error });
+  }
+}
+
+export async function getAllCustomFields(post_type:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const categoryData = await authenticatedApiService.getAllCustomFieldsApi(post_type);
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all Category', 'Category Fetch error', { error });
+  }
+}
+
+export async function getCustomFieldsbyID(custom_field_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.getCustomFieldsbyIDApi(custom_field_id);
+
+    return post?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting this Category', 'Category fetch error', { error });
+  }
+}

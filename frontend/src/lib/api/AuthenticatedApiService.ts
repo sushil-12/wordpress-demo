@@ -93,11 +93,21 @@ class AuthenticatedApiService {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.get('/api/get-category/' + category_id, config);
   }
-  
+
+  async createOrEditCustomFieldApi(post: any): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.post('/api/create-or-update/custom-fields', post, config);
+  }
+  async getAllCustomFieldsApi(post_type:string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/get-all-custom-fields/'+ post_type, config);
+  }
+  async getCustomFieldsbyIDApi(custom_field_id: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/get-custom-field/' + custom_field_id, config);
+  }
+
+
 }
-
-
-
-
 
 export default AuthenticatedApiService;

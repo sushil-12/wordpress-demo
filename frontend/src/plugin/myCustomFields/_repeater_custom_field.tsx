@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FormControl } from '@/components/ui/form';
+import { FormControl, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusSquareIcon, Trash2Icon } from 'lucide-react';
@@ -15,43 +15,84 @@ interface RepeaterFieldProps {
 }
 
 const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, placeholder, customRepeaterFields, setCustomRepeaterFields }) => {
-  const [fields, setFields] = useState([{ id: Date.now(), name: name, value: '' }]);
+  const [fields, setFields] = useState([{ id: `${name}_0`, name: name, value: '' }]);
+  const [isFieldSet, setIsField] = useState(false);
 
   useEffect(() => {
-    if (customRepeaterFields.length > 0) {
-      const filteredFields = customRepeaterFields.filter((field: any) => field.name === name);
 
+    if (customRepeaterFields.length > 0) {
+      form.setValue('customRepeaterFields', customRepeaterFields);
+      const filteredFields = customRepeaterFields.filter((field: any) => field.name === name);
+      console.log(filteredFields, 'FIl', type)
       if (filteredFields.length > 0) {
         const newFields = filteredFields.flatMap((field: any) =>
-          field.value.map((value, index) => ({
-            id: Date.now(),
+          field.value.map((value: any, index: number) => ({
+            id: `${field.name}_${index}`,
+            type: type,
             name: field.name,
             value: value,
           }))
         );
-
-        setFields(newFields);
+        console.log(fields.length, isFieldSet, fields)
+        if (fields.length === 1 && !isFieldSet) {
+          setFields(newFields);
+          setIsField(true);
+        }
       }
     }
-  }, [customRepeaterFields, name]);
+  }, [name, customRepeaterFields]);
 
   const handleAddField = () => {
-    setFields((prevFields) => [...prevFields, { id: Date.now(), name: name, value: '' }]);
+    setFields((prevFields) => [
+      ...prevFields,
+      { id: `${name}_${prevFields.length}`, type: type, name: name, value: '' },
+    ]);
   };
 
-  const handleRemoveField = (id: number) => {
+
+  const handleRemoveField = (id: string) => {
     if (fields.length > 1) {
-      setFields((prevFields) => prevFields.filter((field) => field.id !== id));
+      const filteredFields = fields.filter(field => field.id !== id);
+      setFields(filteredFields);
+      const filteredFieldsArray = filteredFields.map((field) => field.value);
+      const filteredFieldsObj = { name: name, type: type, value: filteredFieldsArray };
+      console.log(filteredFieldsObj)
+      setCustomRepeaterFields((prevFields: any) => {
+        const updatedFields = [...prevFields];
+        const existingFieldIndex = updatedFields.findIndex((field) => field.name === filteredFieldsObj.name);
+  
+        if (existingFieldIndex !== -1) {
+          updatedFields[existingFieldIndex].value = filteredFieldsObj.value;
+        } else {
+          updatedFields.push(filteredFieldsObj);
+        }
+        console.log(filteredFieldsObj, updatedFields)
+        form.setValue('customRepeaterFields', updatedFields);
+        return updatedFields;
+      });
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number) => {
-    setFields((prevFields) =>
-      prevFields.map((field) => (field.id === id && field.name === name ? { ...field, value: e.target.value } : field))
-    );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
+    console.log(fields, id, name)
+    setFields((prevFields) => {
+      const updatedFields = prevFields.map((field) => {
+        if (field.id === id && field.name === name) {
+          console.log(`Updating field with id: ${id}, name: ${name}`);
+          console.log('Previous value:', field.value);
+          console.log('New value:', e.target.value);
+          return { ...field, value: e.target.value };
+        } else {
+          return field;
+        }
+      });
+
+      console.log('Updated fields:', updatedFields);
+      return updatedFields;
+    });
 
     const repeaterFieldPayload = prepareRepeaterFieldData();
-
+    console.log(repeaterFieldPayload);
     setCustomRepeaterFields((prevFields: any) => {
       const updatedFields = [...prevFields];
       const existingFieldIndex = updatedFields.findIndex((field) => field.name === repeaterFieldPayload.name);
@@ -66,6 +107,7 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
       return updatedFields;
     });
   };
+  console.log(form.getValues(), form, "sushil")
 
   const prepareRepeaterFieldData = () => {
     const valueArray = fields.map((field) => field.value);
@@ -75,13 +117,14 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
 
   return (
     <div style={{ marginBottom: '16px' }}>
-      <label style={{ display: 'block', marginBottom: '8px' }}>{label}</label>
-      {fields.map((field) => (
-        <div key={field.id + name} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center' }}>
+       <FormLabel>{label}</FormLabel>
+      {fields.map((field, index) => (
+        <div key={`${field.id}_${index.toString()}`} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center' }}>
           <FormControl style={{ marginRight: '8px' }}>
             {type === 'text' ? (
               <Input
                 className="shad-input"
+                required
                 placeholder={placeholder}
                 value={field.value || ''}
                 onChange={(e) => handleChange(e, field.id)}
@@ -89,6 +132,7 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
             ) : (
               <Textarea
                 className="shad-input"
+                required
                 placeholder={placeholder}
                 value={field.value || ''}
                 onChange={(e) => handleChange(e, field.id)}

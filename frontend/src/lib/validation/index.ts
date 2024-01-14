@@ -2,6 +2,7 @@ import * as z from "zod";
 
 const CustomFieldSchema = z.object({
     name: z.string(),
+    type: z.string(),
     value: z.string(),
 });
 const CustomRepeaterFieldSchema = z.object({
@@ -48,12 +49,27 @@ export const PostFormSchema = z.object({
     id: z.string(),
     domain: z.string(),
     post_type: z.string(),
-    title: z.string(),
-    content: z.string(),
+    title: z.string().min(1),
+    content: z.string().min(1),
     featuredImage: z.string(),
     categories: z.array(z.string()),
     customFields: z.array(CustomFieldSchema).optional(),
     customRepeaterFields: z.array(CustomRepeaterFieldSchema).optional(),
+});
+
+export const FieldSchema = z.object({
+    name: z.string(),
+    label: z.string(),
+    variant: z.string(),
+    field_type: z.string(),
+    placeholder: z.string(),
+});
+
+export const CustomFormFieldSchema = z.object({
+    id: z.string(),
+    title: z.string(),
+    post_type: z.string(),
+    customFields: z.array(FieldSchema).optional(),
 });
 
 export const mediaEditFormSchema = z.object({

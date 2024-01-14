@@ -5,6 +5,7 @@ const postMetaSchema = new mongoose.Schema({
   customFields: [
     {
       name: { type: String, required: true },
+      type: { type: String, required: true },
       value: { type: mongoose.Schema.Types.Mixed, required: true },
     },
   ],
@@ -12,6 +13,7 @@ const postMetaSchema = new mongoose.Schema({
     {
       id:{type:String},
       name: { type: String, required: true },
+      type: {type: String},
       value: { type: mongoose.Schema.Types.Mixed, required: true },
     },
   ]

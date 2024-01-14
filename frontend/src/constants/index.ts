@@ -19,6 +19,11 @@ export const domainSidebarLinks: DomainLinks = {
       label: "Dashboard",
     },
     {
+      imgURL: "/assets/icons/home.svg",
+      route: "/manage-custom-fields",
+      label: "Custom Fields",
+    },
+    {
       imgURL: "/assets/icons/wallpaper.svg",
       route: "/posts/technology",
       label: "Technology",
