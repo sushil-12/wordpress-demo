@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { usecreateOrEditCustomField } from '@/lib/react-query/queriesAndMutations';
 import { CustomFormFieldSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Trash2Icon } from 'lucide-react';
 import { Dropdown } from 'primereact/dropdown';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -115,7 +116,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
 
                             {/* Repeater for dynamic fields */}
                             {fields.map((field, index) => (
-                                <div key={field.id} className="dynamic-field flex gap-4">
+                                <div key={field.id} className="dynamic-field flex gap-4 align-middle">
                                     {/* Field 1 in repeater */}
                                     <FormField
                                         control={control}
@@ -199,7 +200,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
                                     />
 
                                     <button type="button" onClick={() => remove(index)}>
-                                        Remove
+                                        <Trash2Icon />
                                     </button>
                                 </div>
                             ))}
