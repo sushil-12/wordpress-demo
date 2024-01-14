@@ -53,7 +53,7 @@ const CustomFieldDatatable: React.FC<CustomFieldDatatableScema> = ({ isCustomFie
                     <PlusSquare /> Add New
                 </Button>
             </div>
-            <Dialog header="Header" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+            <Dialog header="Add/Edit Template" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
                 <CustomFieldForm setVisible={setVisible}  selectedCustomField ={selectedCustomField}/>
             </Dialog>
             {isCustomFieldLoading ? (<SkeletonTable rowCount={5} />) : (
