@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
-import { useGetAllDomains, useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
-import { domainSidebarLinks, logos } from "@/constants";
+import { useGetAllDomains, useGetAllNavItems, useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
+import { logos } from "@/constants";
 import { INavLink } from "@/lib/types";
-import { Settings } from "lucide-react";
+import { ChevronDown, Settings } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
-import { set } from "react-hook-form";
+import * as React from "react";
 
 interface domain {
     name: string;
@@ -17,18 +17,21 @@ interface domain {
 const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
     const navigate = useNavigate();
-    const { post_type } = useParams();
     const { pathname } = useLocation();
-    const { user, currentDomain, setCurrentDomain } = useUserContext();
+    const { user, currentDomain, setCurrentDomain, rerender, setRerender } = useUserContext();
     const { mutateAsync: getAllDomains, isPending: isDomainLoading } = useGetAllDomains();
     const [domain, setDomains] = useState<domain[]>([]);
     const logoPath: string | undefined = logos[currentDomain as keyof typeof logos];
-    const sidebarLinks = domainSidebarLinks[currentDomain];
+    const [sidebarLinks, setSideBarLinks] = useState<INavLink[]>([]); // Corrected type
     const [showSubcategories, setShowSubcategories] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState('');
+    const { mutateAsync: getAllNavItems, isPending: isNavLoading } = useGetAllNavItems();
 
-    const handleToggleSubcategories = () => {
+    const handleToggleSubcategories = (label: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+        setActiveDropdown(label)
         setShowSubcategories(!showSubcategories);
     };
+
     const fetchDomains = async () => {
         try {
             const fetchedDomains = await getAllDomains();
@@ -38,17 +41,28 @@ const LeftSidebar = () => {
         }
     };
 
-    const handleDomainChange= (value:string) => {
-        setCurrentDomain(value)
-        navigate('/');
-    }
+    const getNavItems = async () => {
+        try {
+            const navItems = await getAllNavItems();
+            setSideBarLinks(navItems.data.navigationItems);
+        } catch (error) {
+            console.error('Error fetching nav items:', error);
+        }
+    };
+
+    const handleDomainChange = (value: string) => {
+        setCurrentDomain(value);
+        getNavItems();
+        navigate('/dashboard');
+    };
 
     useEffect(() => {
         if (isSuccess) {
             navigate(0);
         }
+        getNavItems();
         fetchDomains();
-    }, [isSuccess]);
+    }, [isSuccess, rerender]);
 
     return (
         <div className="leftsidebar">
@@ -84,40 +98,59 @@ const LeftSidebar = () => {
                 </Link>
                 <ul className="flex flex-col gap-6">
                     {sidebarLinks?.map((link: INavLink) => {
-                        const isActive = pathname === link.route;
-                        const hasSubcategories = link.subcategory && link.subcategory.length > 0;
+                        const isActive = pathname.includes(link.route);
+                        const hasSubcategories = link.category;
 
                         return (
-                            <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`} key={link?.label}>
-                                <div className="link-container" onClick={hasSubcategories ? handleToggleSubcategories : undefined}>
-                                    <NavLink className="flex gap-4 items-center p-4" to={link?.route}>
-                                        <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{link.label}
-                                    </NavLink>
-                                    {hasSubcategories && (
-                                        <div className={`submenu ${showSubcategories && isActive ? 'show' : ''}`}>
-                                            {link.subcategory?.map((subLink: INavLink) => (
-                                                <NavLink key={subLink?.label} className={`flex gap-4 items-center p-4`} to={subLink?.route}>
-                                                    <img src={subLink?.imgURL} alt={subLink?.label} className={`group-hover:invert-white ${pathname === subLink.route ? 'invert-white' : ''}`} />
-                                                    {subLink.label}
-                                                </NavLink>
-                                            ))}
+                            <React.Fragment key={link.label}>
+                                {link?.category ? (
+                                    <li>
+                                        <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-primary-500 hover:text-white justify-between" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example" onClick={handleToggleSubcategories(link?.label)}>
+                                            <div className="link flex gap-4"><img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{link.label}</div>
+                                            <ChevronDown />
+                                        </button>
+                                        <ul id="dropdown-example" className={`py-2 space-y-2 ${showSubcategories && activeDropdown == link?.label ? '' : 'hidden'}`}>
+                                            <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                                <div className="links">
+                                                    <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
+                                                        <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{link.label}
+                                                    </NavLink>
+                                                </div>
+                                            </li>
+                                            <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                                <div className="links">
+                                                    <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/category/${link?.route}` : link?.route}>
+                                                        <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />Manage category
+                                                    </NavLink>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                ) : (
+                                    <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                        <div className="link-container" >
+                                            <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
+                                                <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{link.label}
+                                            </NavLink>
                                         </div>
-                                    )}
-                                </div>
-                            </li>
-
+                                    </li>
+                                )}
+                            </React.Fragment>
                         );
                     })}
                 </ul>
             </div>
             <div className="user_profile_actions">
+                <NavLink key='settings' className={`flex gap-4 items-center p-4 text-primary-500`} to={'/settings'}>
+                    <Settings className="shad-button_ghost" />Settings
+                </NavLink>
                 <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
                     <img src="/assets/icons/logout.svg" />
                     <p className="small-medium lg:base-medium" >Logout</p>
                 </Button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LeftSidebar;

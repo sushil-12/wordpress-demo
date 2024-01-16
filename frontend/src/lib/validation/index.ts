@@ -7,7 +7,7 @@ const CustomFieldSchema = z.object({
 });
 const CustomRepeaterFieldSchema = z.object({
     name: z.string(),
-    type:z.string(),
+    type: z.string(),
     value: z.array(z.string()),
 });
 export const signUpValidationSchema = z.object({
@@ -69,6 +69,7 @@ export const CustomFormFieldSchema = z.object({
     id: z.string(),
     title: z.string(),
     post_type: z.string(),
+    item_type:z.string(),
     customFields: z.array(FieldSchema).optional(),
 });
 
@@ -83,4 +84,14 @@ export const mediaEditFormSchema = z.object({
     title: z.string(),
 })
 
+export const navItemFormSchema = z.object({
+    id: z.string(),
+    route: z.string(),
+    imgUrl: z.string(),
+    type: z.string(),
+    label: z.string().min(0, { message: "Too Short" }).max(2000, 'Too big less than 50 character please'),
+    enabled: z.boolean(),
+    category: z.boolean(),
+    subcategory: z.string().optional(),
+})
 

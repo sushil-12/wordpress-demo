@@ -27,6 +27,10 @@ import {
     getAllCustomFields,
     createOrEditCustomField,
     getCustomFieldsbyID,
+    createOrEditNavItem,
+    getAllNavItems,
+    getNavItemsbyID,
+    getAllPostsAndPages,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -145,6 +149,12 @@ import {
     });
   };
 
+  export const useGetAllPostsAndPages = () => {
+    return useMutation({
+      mutationFn: (type: string) => getAllPostsAndPages(type),
+    });
+  };
+  
   export const useCreateOrEditCategory = () => {
     return useMutation({
       mutationFn: (post: any) => createOrEditCategory(post),
@@ -179,5 +189,24 @@ import {
   export const useGetCustomFieldsbyIDApi = () => {
     return useMutation({
       mutationFn: (category_id: string) => getCustomFieldsbyID(category_id),
+    });
+  };
+
+
+  export const usecreateOrEditNavItem = () => {
+    return useMutation({
+      mutationFn: (post: any) => createOrEditNavItem(post),
+    });
+  };
+
+  export const useGetAllNavItems = () => {
+    return useMutation({
+      mutationFn: () => getAllNavItems(),
+    });
+  };
+  
+  export const useGetNavItemsbyIDApi = () => {
+    return useMutation({
+      mutationFn: (category_id: string) => getNavItemsbyID(category_id),
     });
   };

@@ -13,11 +13,12 @@ const createEditCustomField = async (req, res) => {
     try {
         const { id } = req.body;
         const domain = req.headers['domain'];
-        const { title, post_type, customFields } = req.body;
+        const { title, post_type, item_type, customFields } = req.body;
 
         const customFieldObject = {
             title,
             post_type,
+            item_type,
             domain,
             fields: customFields.map((field) => ({
                 name: createName(field.label) || '',

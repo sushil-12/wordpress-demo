@@ -13,7 +13,7 @@ import { Loader } from "lucide-react";
 import { PostModel } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Tree } from "primereact/tree";
 import CustomField from "@/plugin/myCustomFields/_custom_field";
 import RepeaterField from "@/plugin/myCustomFields/_repeater_custom_field";
@@ -47,8 +47,15 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     }
     async function fetchCustomFields() {
         if (post_type) {
-            const customFieldsResponse = await getAllCustomFields(post_type);
-            customFieldsResponse?.data?.customField?.fields.length>0 && setCustomFormFields(customFieldsResponse?.data?.customField?.fields)
+            let customFieldsResponse;
+            if (post_type == 'page' && currentPost) {
+                customFieldsResponse = await getAllCustomFields(currentPost.id);
+                customFieldsResponse?.data?.customField?.fields.length > 0 && setCustomFormFields(customFieldsResponse?.data?.customField?.fields)
+            } else {
+                customFieldsResponse = await getAllCustomFields(post_type);
+                customFieldsResponse?.data?.customField?.fields.length > 0 && setCustomFormFields(customFieldsResponse?.data?.customField?.fields)
+            }
+
         }
     }
     const createSpacedString = (inputString: string): string => {

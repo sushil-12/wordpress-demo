@@ -144,6 +144,17 @@ export async function getAllPosts(page: number, limit: number, post_type:any) {
   }
 }
 
+export async function getAllPostsAndPages( type:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const allMedia = await authenticatedApiService.getAllPostsAndPagesApi(type);
+
+    return allMedia?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all Posts and Pages', 'Error while Fetching', { error });
+  }
+}
+
 export async function getPostsByID(post_id:string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
@@ -238,6 +249,38 @@ export async function getCustomFieldsbyID(custom_field_id:string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.getCustomFieldsbyIDApi(custom_field_id);
+
+    return post?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting this Category', 'Category fetch error', { error });
+  }
+}
+
+//Categories
+export async function createOrEditNavItem(category:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const categoryData = await authenticatedApiService.createOrEditNavItemApi(category);
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error operating this Custom Field', 'Custom Field Operating error', { error });
+  }
+}
+
+export async function getAllNavItems() {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const categoryData = await authenticatedApiService.getAllNavItemsApi();
+    return categoryData?.data;
+  } catch (error) {
+    throw new PromiseHandler('Error getting all Category', 'Category Fetch error', { error });
+  }
+}
+
+export async function getNavItemsbyID(custom_field_id:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.getNavItemsbyIDApi(custom_field_id);
 
     return post?.data;
   } catch (error) {

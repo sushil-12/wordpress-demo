@@ -28,7 +28,7 @@ const CustomFieldDatatable = () => {
     };
 
     const postTypeTemplate = (rowData: any) => {
-        return <Tag value={rowData.post_type} className='px-4 py-2'></Tag>;
+        return <Tag value={rowData.item_type} className='px-4 py-2'></Tag>;
     };
 
     const header = <div className="text-lg font-bold flex justify-between">Custom Fields Template </div>;
@@ -54,7 +54,7 @@ const CustomFieldDatatable = () => {
         <div className="card bg-slate-100 shadow-lg rounded-md">
             <div className="border-b border-gray-200 bg-white  py-2 flex justify-between px-4">
                 <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3 p-4"> Manage Custom Fields</h3>
-                <Button className="shad-button_primary place-self-end" size="sm" onClick={() => setVisible(true)} >
+                <Button className="shad-button_primary place-self-end" size="sm" onClick={() => {setVisible(true); setSelectedCustomField({});}} >
                     <PlusSquare /> Add New
                 </Button>
             </div>
@@ -71,7 +71,7 @@ const CustomFieldDatatable = () => {
                     className="w-full p-8"
                 >
                     <Column expander field="label" header="Title" body={titleTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
-                    <Column expander field="post_type" header="Post Type" body={postTypeTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
+                    <Column expander field="item_type" header="Item Type" body={postTypeTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
                     <Column field="customFieldsId" header="Actions" body={actionTemplate} className=""><Skeleton width="100%" height="1.5rem" /> </Column>
                 </DataTable >)}
         </div>

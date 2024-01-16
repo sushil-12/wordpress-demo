@@ -41,7 +41,7 @@ const SignInForm = () => {
         if (isLoggedIn) {
             form.reset();
             toast({ title: "Logged In sucessfuly" })
-            navigate('/');
+            navigate('/dashboard');
         } else {
             const statuscode = session?.response?.data?.statusCode;
             const message = session?.response?.data?.message;

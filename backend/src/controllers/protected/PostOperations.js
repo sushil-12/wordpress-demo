@@ -5,7 +5,15 @@ const { CustomError, ResponseHandler, ErrorHandler } = require("../../utils/resp
 const Media = require("../../models/Media");
 const Category = require("../../models/Category");
 const PostMeta = require("../../models/PostMeta");
+const NavigationItem = require("../../models/NavigationItem");
+const Domain = require("../../models/Domain");
 
+const createSlug = (inputString) => {
+    const lowercaseString = inputString.toLowerCase();
+    const words = lowercaseString.split(' ');
+    const slug = words.join('-');
+    return slug;
+};
 const createEditPost = async (req, res) => {
     try {
         const { id } = req.body;
@@ -116,7 +124,7 @@ const getPostById = async (req, res) => {
         const post = await Post.findById(postId).populate({
             path: 'postMeta',
             model: 'PostMeta',
-          });
+        });
 
         if (!post) {
             throw new CustomError(404, 'Post not found');
@@ -127,12 +135,12 @@ const getPostById = async (req, res) => {
         const categoryObject = categoryIds.reduce((acc, categoryId) => {
             acc[categoryId] = true;
             return acc;
-          }, {});
+        }, {});
         if (featuredImageId && mongoose.Types.ObjectId.isValid(featuredImageId)) {
             const media = await Media.findById(featuredImageId).select('url alt_text').lean();
             media.id = media._id;
             delete media._id;
-            const updatedPost = { ...post.toObject(), id: post._id, featuredImage: media,  categoryObject: categoryObject };
+            const updatedPost = { ...post.toObject(), id: post._id, featuredImage: media, categoryObject: categoryObject };
             ResponseHandler.success(res, { post: updatedPost }, 200);
         } else {
             const updatedPost = { ...post.toObject(), id: post._id, categoryObject: categoryObject };
@@ -170,7 +178,7 @@ const getAllPosts = async (req, res) => {
             .map(post => post.featuredImage);
 
         const images = await Media.find({ _id: { $in: postIds } }).select('url alt_text');
-        
+
         const imagesData = images.map(media => ({
             id: media._id,
             url: media.url,
@@ -187,7 +195,7 @@ const getAllPosts = async (req, res) => {
                     return null;
                 }
             }));
-        
+
             return {
                 ...post._doc,
                 id: post._id,
@@ -197,6 +205,52 @@ const getAllPosts = async (req, res) => {
         }));
         const totalCount = await Post.countDocuments(query);
         ResponseHandler.success(res, { posts: formattedPosts, totalCount, currentPage: parseInt(page) }, 200);
+    } catch (error) {
+        ErrorHandler.handleError(error, res);
+    }
+};
+
+
+const getAllPostTypesAndPages = async (req, res) => {
+    try {
+        const { page = 1, limit = 10, search } = req.query;
+        const domainHeader = req.headers['domain'];
+        const { type } = req.params;
+        const query = {};
+
+        if (search) {
+            query.$or = [
+                { title: { $regex: new RegExp(search, 'i') } },
+                { content: { $regex: new RegExp(search, 'i') } },
+            ];
+        }
+
+        const domain = await Domain.findOne({ name: domainHeader });
+        const domain_id = domain ? domain._id : null;
+        let posts;
+
+        if (type === 'page') {
+            posts = await Post.find()
+                .where('post_type').equals('page')
+                .where('domain').equals(domainHeader)
+                .limit(parseInt(limit))
+                .select('title');
+        } else {
+            posts = await NavigationItem.find()
+                .where('domain_id').equals(domain_id)
+                .where('type').equals('custom_post')
+                .select('label',);
+        }
+
+        // Transform the posts array if needed
+        const transformedPosts = posts.map(item => ({
+            value: type === 'page' ? item._id : createSlug(item.label),  
+            label: item.label || item.title,
+        }));
+
+        const totalCount = await Post.countDocuments(query);
+
+        ResponseHandler.success(res, { posts: transformedPosts, totalCount, currentPage: parseInt(page) }, 200);
     } catch (error) {
         ErrorHandler.handleError(error, res);
     }
@@ -262,5 +316,5 @@ const quickEditPost = async (req, res) => {
 
 
 module.exports = {
-    createEditPost, getPostById, getAllPosts, deletePost, quickEditPost
+    createEditPost, getPostById, getAllPosts, deletePost, quickEditPost, getAllPostTypesAndPages
 };

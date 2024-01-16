@@ -63,6 +63,12 @@ class AuthenticatedApiService {
     return await this.api.get('/api/get-all-post/' + post_type, config);
   }
 
+  async getAllPostsAndPagesApi(type: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/get-all-post-and-pages/' + type, config);
+  }
+  
+
   async getPostByIdApi(post_id: string): Promise<any> {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.get('/api/get-post/' + post_id, config);
@@ -105,6 +111,19 @@ class AuthenticatedApiService {
   async getCustomFieldsbyIDApi(custom_field_id: string): Promise<any> {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.get('/api/get-custom-field/' + custom_field_id, config);
+  }
+  
+  async createOrEditNavItemApi(post: any): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.post('/api/common/create-or-edit/navigation-items', post, config);
+  }
+  async getAllNavItemsApi(): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/common/navigation-items', config);
+  }
+  async getNavItemsbyIDApi(custom_field_id: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/common/navigation-items' + custom_field_id, config);
   }
 
 

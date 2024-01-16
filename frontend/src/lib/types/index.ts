@@ -3,6 +3,8 @@ export type IContextType = {
   isLoading: boolean;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
   isAuthenticated: boolean;
+  rerender:boolean,
+  setRerender: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentDomain: (newDomain: string) => Promise<void>; // Updated type to accept a string
@@ -13,6 +15,8 @@ export type INavLink = {
   imgURL: string;
   route: string;
   label: string;
+  type:string;
+  category:string;
   subcategory?:any;
 };
 

@@ -3,7 +3,7 @@ const { verifyToken } = require('../middleware/authMiddleware');
 const { getProfile } = require('../controllers/protected/UserController');
 const { uploadMediaToLibrary, deleteMedia } = require('../controllers/common/FileUploader');
 const { getAllMedia, editMedia, getAllImages } = require('../controllers/common/MediaOperations');
-const { createEditPost, getAllPosts, getPostById, deletePost, quickEditPost } = require('../controllers/protected/PostOperations');
+const { createEditPost, getAllPosts, getPostById, deletePost, quickEditPost, getAllPostTypesAndPages } = require('../controllers/protected/PostOperations');
 const { createEditCategory, getAllCategories, getCategoryById } = require('../controllers/protected/CategoryController');
 const { createEditCustomField, getAllCustomField, getCustomFieldById } = require('../controllers/protected/CustomFieldTemplateController');
 
@@ -22,6 +22,7 @@ router.delete('/delete/media/:media_id', deleteMedia);
 
 router.post('/create-or-update/post', createEditPost);
 router.get('/get-all-post/:post_type', getAllPosts);
+router.get('/get-all-post-and-pages/:type', getAllPostTypesAndPages);
 router.get('/get-post/:post_id', getPostById);
 router.patch('/quick-edit-post/:post_id', quickEditPost);
 router.delete('/delete-post/:post_id', deletePost);

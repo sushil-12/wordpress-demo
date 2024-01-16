@@ -9,6 +9,8 @@ export const INITIAL_STATE = {
     isLoading: false,
     setUser: () => { },
     isAuthenticated: false,
+    rerender: false,
+    setRerender:()=>{},
     setIsAuthenticated: () => { },
     currentDomain:'he_group', 
     setCurrentDomain: async (newDomain: string) => {},
@@ -23,6 +25,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [currentDomain, setCurrentDomain]= useState(savedDomain);
+    const [rerender, setRerender] = useState(false); // Initialize the state
     const checkAuthUser = async () => {
         try {
             const currentAccount = await getCurrentUser();
@@ -61,6 +64,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         setUser,
         isAuthenticated,
+        rerender,
+        setRerender,
         isLoading,
         currentDomain, 
         setCurrentDomain: async (newDomain: string) => {

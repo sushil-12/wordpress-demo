@@ -19,6 +19,7 @@ import { MediaProvider } from './context/MediaProvider.tsx';
 import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
 import Category from './plugin/post/category/Category.tsx';
 import ManageCustomFields from './plugin/myCustomFields/ManageCustomFields.tsx';
+import PageComponent from './_root/pages/PageComponent.tsx'
 
 
 const App = () => {
@@ -29,15 +30,21 @@ const App = () => {
                     {/* Private Routes start */}
                     <Route element={<RootLayout />} >
                         <Route index element={<Home />} />
+                        <Route path='/dashboard' element={<Home />} />
                         <Route path='/users' element={<UsersList />} />
                         <Route path='/media' element={ <MediaProvider><Media /></MediaProvider>} />
                         <Route path='/settings' element={ <Setting />} />
                         <Route path='/category/:post_type' element={ <Category/>} />
                         {/* START____Will be a dynamic routes for creating Custom Post Types (ROUTE NAME MUST BE SIMILAR TO post_type) */}
                         <Route path='/posts/:post_type' element={<PostComponent />} />
+                        
                         {/* END____Will be a dynamic routes for creating Custom Post Types */}
                         <Route path='/post/:post_type/:post_id?' element={ <PostOperation />} />  
                         <Route path='/manage-custom-fields' element={ <ManageCustomFields />} />  
+
+
+                        <Route path='/pages' element={<PageComponent />} />
+                        <Route path='/pages/:page_id' element={<PostComponent />} />
                        
 
                     </Route>

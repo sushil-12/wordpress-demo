@@ -122,6 +122,9 @@
     background: #7878a3;
   }
 
+  .p-tabmenu .p-tabmenu-nav {
+    border: none !important;
+}
   .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
     background: #EEF2FF;
     border-color: #EEF2FF !important;

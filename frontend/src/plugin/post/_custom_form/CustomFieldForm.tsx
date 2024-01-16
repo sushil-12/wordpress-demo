@@ -2,12 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { usecreateOrEditCustomField } from '@/lib/react-query/queriesAndMutations';
+import { useGetAllPostsAndPages, usecreateOrEditCustomField } from '@/lib/react-query/queriesAndMutations';
 import { CustomFormFieldSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2Icon } from 'lucide-react';
 import { Dropdown } from 'primereact/dropdown';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -17,13 +17,19 @@ interface CustomFieldFormSchema {
 }
 const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selectedCustomField }) => {
     const { mutateAsync: createOrEditCustomField, isPending: isCreating } = usecreateOrEditCustomField();
+    const { mutateAsync: getAllPostsAndPages, isPending: isLoading } = useGetAllPostsAndPages()
     const { control, getValues } = useForm();
-    const {toast}  = useToast();
+    const { toast } = useToast();
+    const [postType, setPostType] = useState([]);
     let { fields, append, remove } = useFieldArray({
         control,
         name: 'fields', // Name of the field array in the form data
     });
 
+    async function getPostTypesAndPages(type:any) {
+        const fetchTypeData = await getAllPostsAndPages(type);
+        setPostType(fetchTypeData.data.posts);
+    }
     useEffect(() => {
         if (Object.keys(selectedCustomField).length === 0) {
             return;
@@ -31,8 +37,11 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
         while (fields.length > 0) {
             remove(0);
         }
+        if(selectedCustomField.item_type !=''){
+           getPostTypesAndPages(selectedCustomField.item_type);
+        }
 
-        selectedCustomField != undefined && selectedCustomField.fields.forEach((field:any) => {
+        selectedCustomField != undefined && selectedCustomField.fields.forEach((field: any) => {
             append(field);
         });
     }, [selectedCustomField.fields, append, remove]);
@@ -46,10 +55,11 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
         { label: 'Text', value: 'text' },
         { label: 'TextArea', value: 'textarea' },
     ];
-    const post_type = [
-        { label: 'Technology', value: 'technology' },
-        { label: 'Invention', value: 'invention' },
+    const item_type = [
+        { label: 'Custom Posts', value: 'custom_post' },
+        { label: 'Page', value: 'page' },
     ];
+    
 
     const form = useForm<z.infer<typeof CustomFormFieldSchema>>({
         resolver: zodResolver(CustomFormFieldSchema),
@@ -57,9 +67,15 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
             id: selectedCustomField._id || '',
             title: selectedCustomField.title || '',
             post_type: selectedCustomField.post_type || '',
+            item_type:selectedCustomField.item_type || '',
             customFields: selectedCustomField.fields || [],
         },
     })
+
+    async function handleChange (type:string)  {
+        await getPostTypesAndPages(type);
+        form.setValue('item_type', type)
+    }
 
     async function onSubmit(values: z.infer<typeof CustomFormFieldSchema>) {
         const repeaterValues = getValues('fields');
@@ -68,8 +84,8 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
         const createOrEditCustomFieldResponse = await createOrEditCustomField(values);
         const message = createOrEditCustomFieldResponse?.code === 200 ? 'Successfully Updated CustomField' : 'Successfully Created CustomField';
         setVisible(false)
-        selectedCustomField={};
-        if(createOrEditCustomFieldResponse){    return toast({ variant: 'default', description: message });}
+        selectedCustomField = {};
+        if (createOrEditCustomFieldResponse) { return toast({ variant: 'default', description: message }); }
         return;
     }
 
@@ -101,6 +117,21 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
 
                                 )}
                             />
+                             <FormField
+                                control={form.control}
+                                name="post_type"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Item Type </FormLabel>
+                                        <FormControl>
+                                            <Dropdown value={form.getValues('item_type')} onChange={(e) => {handleChange(e.value)}} options={item_type} optionLabel="label"
+                                                placeholder="Select Post Type" className="w-full md:w-14rem" />
+                                        </FormControl>
+                                        <FormMessage className="shad-form_message" />
+                                    </FormItem>
+
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="post_type"
@@ -108,7 +139,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
                                     <FormItem>
                                         <FormLabel>Post Type </FormLabel>
                                         <FormControl>
-                                            <Dropdown value={form.getValues('post_type')} onChange={(e) => form.setValue('post_type', e.value)} options={post_type} optionLabel="label"
+                                            <Dropdown value={form.getValues('post_type')} onChange={(e) => form.setValue('post_type', e.value)} options={postType} optionLabel="label"
                                                 placeholder="Select Post Type" className="w-full md:w-14rem" />
                                         </FormControl>
                                         <FormMessage className="shad-form_message" />

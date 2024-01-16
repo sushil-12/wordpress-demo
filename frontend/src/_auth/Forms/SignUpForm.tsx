@@ -48,7 +48,7 @@ const SignUpForm = () => {
      if(isLoggedIn){
       form.reset();
       toast({title: "Logged In sucessfuly" })
-      navigate('/');
+      navigate('/dashboard');
      }else{
       return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
 
