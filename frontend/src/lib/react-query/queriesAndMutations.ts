@@ -31,6 +31,7 @@ import {
     getAllNavItems,
     getNavItemsbyID,
     getAllPostsAndPages,
+    quickEditNavItemsbyID,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -210,3 +211,11 @@ import {
       mutationFn: (category_id: string) => getNavItemsbyID(category_id),
     });
   };
+
+  export const useQuickEditNavItemsbyIDApi = (): UseMutationResult<any, unknown, { category_id: string; categoryData: any }> => {
+  
+    return useMutation({
+      mutationFn: ({ category_id, categoryData }) => quickEditNavItemsbyID(category_id, categoryData),
+    });
+  };
+  

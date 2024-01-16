@@ -11,6 +11,7 @@ const PostComponent = () => {
   const { post_type } = useParams();
   const defaultPostType = post_type || 'technology';
   const [posts, setPost] = useState([]);
+  const [render, setRerender] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({
@@ -32,7 +33,8 @@ const PostComponent = () => {
   };
   useEffect(() => {
     fetchPosts();
-  }, [ setPost, post_type]);
+    console.log("Render", render)
+  }, [ setPost, post_type, render]);
   return (
     <div className="common-container">
       <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
@@ -41,7 +43,7 @@ const PostComponent = () => {
           <PlusSquare /> Add New
         </Button>
       </div>
-      <PostDataTable posts={posts} post_type = {defaultPostType} isPostLoading={isLoading}/>
+      <PostDataTable posts={posts} post_type = {defaultPostType} isPostLoading={isLoading} setRerender={setRerender} />
     </div>
   )
 }

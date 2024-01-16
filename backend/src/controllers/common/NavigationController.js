@@ -145,8 +145,37 @@ const getNavigationItemById = async (req, res) => {
 };
 
 
+const quickEditNavItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { enabled } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new CustomError(400, 'Invalid post ID');
+        }
+
+        const navigationItem = await NavigationItem.findById(id);
+
+        if (!navigationItem) {
+            throw new CustomError(404, 'Post not found');
+        }
+        
+        if (enabled == false) {
+            navigationItem.enabled = false;
+        }else{
+            navigationItem.enabled = true;
+        }
+
+        await navigationItem.save();
+
+        ResponseHandler.success(res, { message: 'Navigation Item updated successfully' }, 200);
+    } catch (error) {
+        ErrorHandler.handleError(error, res);
+    }
+};
+
 module.exports = {
     createEditNavigationItem, getNavigationItemById,
-    getAllNavigationItems
+    getAllNavigationItems, quickEditNavItem
 };
 

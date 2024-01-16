@@ -4,7 +4,9 @@ import { DataTable } from 'primereact/datatable';
 import { Skeleton } from 'primereact/skeleton';
 import { Tag } from 'primereact/tag';
 import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
+import { InputSwitch } from 'primereact/inputswitch';
+import { useQuickEditNavItemsbyIDApi } from '@/lib/react-query/queriesAndMutations';
+import { useState } from 'react';
 
 interface NavDatatableprops {
     navItems: any;
@@ -13,7 +15,21 @@ interface NavDatatableprops {
 }
 
 const NavDatatable: React.FC<NavDatatableprops> = ({ navItems, setSelectedItem, render }) => {
-  
+    const { mutateAsync: quickEditNavItemsbyID, isPending: isEditing } = useQuickEditNavItemsbyIDApi();
+    const [value, setValue] = useState(setSelectedItem.enabled || true)
+    const handleStatusChange =  async (rowData: any, newValue: boolean) => {
+        try {
+            const updatedPost = { ...rowData, enabled: newValue };
+            console.log(value)
+            setValue(newValue)
+            console.log(value)
+
+            const response = await quickEditNavItemsbyID({ category_id: rowData._id, categoryData: updatedPost });
+            console.log(response);
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
     const actionTemplate = (rowData: any) => {
         return (
             <div className='flex'>
@@ -30,6 +46,9 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems, setSelectedItem, 
 
     const statusBodyTemplate = (rowData: any) => {
         return <Tag value={rowData.type} className={`'px-4 py-2' ${render}`}></Tag>;
+    };
+    const statusTemplate = (rowData: any) => {
+        return <InputSwitch checked={rowData.enabled} onChange={(e) => handleStatusChange(rowData, e.value)} />;
     };
 
     return (
@@ -51,6 +70,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems, setSelectedItem, 
             >
                 <Column expander field="label" header="Title" body={titleTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
                 <Column expander field="label" header="Type" body={statusBodyTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
+                <Column expander field="label" header="Status" body={statusTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
                 <Column expander field="label" header="Action" body={actionTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
             </DataTable >
         </div>

@@ -1,6 +1,5 @@
 const { default: mongoose } = require("mongoose");
 
-
 const subcategorySchema = new mongoose.Schema({
     label: {
         type: String,
@@ -28,7 +27,7 @@ const navigationItemSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        default: () => 'default' // Use a function for the default value
+        default: () => 'default' 
     },
     route: {
         type: String,

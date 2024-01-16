@@ -15,7 +15,7 @@ const Setting = () => {
   const {setRerender : setAppRender, rerender} = useUserContext();
   const { mutateAsync: getAllNavItems, isPending: isLoading } = useGetAllNavItems();
   const items = [
-    { label: 'Navigation Items', icon: 'pi pi-home' },
+    { label: 'Sidebar Items', icon: 'pi pi-home' },
     { label: 'Test One', icon: 'pi pi-chart-line' },
     { label: 'Test Two', icon: 'pi pi-list' },
     { label: 'Test Three', icon: 'pi pi-inbox' }

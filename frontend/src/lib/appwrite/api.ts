@@ -287,3 +287,15 @@ export async function getNavItemsbyID(custom_field_id:string) {
     throw new PromiseHandler('Error getting this Category', 'Category fetch error', { error });
   }
 }
+
+
+export async function quickEditNavItemsbyID(category_id:string, categoryData:any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.quickEditNavItemsbyIDApi(category_id, categoryData);
+
+    return post?.data;
+  } catch (error:any) {
+    throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
+  }
+}

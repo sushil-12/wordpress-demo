@@ -4,12 +4,13 @@ import { useToast } from '@/components/ui/use-toast';
 import { useGetAllPosts } from '@/lib/react-query/queriesAndMutations';
 import { PlusSquare, Router } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const PageComponent = () => {
   const post_type = 'page';
   const defaultPostType = post_type;
+  const [render, setRerender] = useState(true);
   const [posts, setPost] = useState([]);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const PageComponent = () => {
           <PlusSquare /> Add New
         </Button>
       </div>
-      <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} />
+      <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} setRerender={setRerender} />
     </div>
   )
 }

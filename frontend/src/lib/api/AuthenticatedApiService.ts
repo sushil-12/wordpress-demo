@@ -125,7 +125,11 @@ class AuthenticatedApiService {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.get('/api/common/navigation-items' + custom_field_id, config);
   }
-
+  
+  async quickEditNavItemsbyIDApi(post_id: string, postData: any): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.patch('/api/common/navigation-item-quick-edit/' + post_id, postData, config);
+  }
 
 }
 
