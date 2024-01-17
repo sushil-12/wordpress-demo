@@ -107,7 +107,7 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
       return updatedFields;
     });
   };
-  console.log(form.getValues(), form, "sushil")
+  console.log(form.getValues(), form, "demo")
 
   const prepareRepeaterFieldData = () => {
     const valueArray = fields.map((field) => field.value);
