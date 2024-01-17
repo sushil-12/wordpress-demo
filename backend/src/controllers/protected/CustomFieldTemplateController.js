@@ -9,11 +9,20 @@ const createName = (inputString) => {
     const slug = words.join('_');
     return slug;
 };
+
+
 const createEditCustomField = async (req, res) => {
     try {
         const { id } = req.body;
         const domain = req.headers['domain'];
         const { title, post_type, item_type, customFields } = req.body;
+
+        // Check if the post_type is already in use
+        const existingCustomField = await CustomField.findOne({ post_type, domain });
+
+        if (existingCustomField && (!id || existingCustomField._id.toString() !== id)) {
+            throw new CustomError(400, 'We already have custom fields for this post type!');
+        }
 
         const customFieldObject = {
             title,
@@ -24,7 +33,7 @@ const createEditCustomField = async (req, res) => {
                 name: createName(field.label) || '',
                 label: field.label || '',
                 variant: field.variant || '',
-                field_type: field.field_type != '' ? field.field_type : null,
+                field_type: field.field_type !== '' ? field.field_type : null,
                 placeholder: field.placeholder || '',
             })),
         };
@@ -56,12 +65,13 @@ const createEditCustomField = async (req, res) => {
 };
 
 
+
 const getAllCustomField = async (req, res) => {
     try {
         const postType = req.params.post_type;
         let allCustomField;
         if (postType !== undefined && postType !== 'all') {
-            
+
             allCustomField = await CustomField.findOne({ post_type: postType }).sort({ createdAt: -1 });
         } else {
             allCustomField = await CustomField.find().sort({ createdAt: -1 });

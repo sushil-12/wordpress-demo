@@ -47,9 +47,9 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems, setSelectedItem, 
     const statusBodyTemplate = (rowData: any) => {
         return <Tag value={rowData.type} className={`'px-4 py-2' ${render}`}></Tag>;
     };
-    const statusTemplate = (rowData: any) => {
-        return <InputSwitch checked={rowData.enabled} onChange={(e) => handleStatusChange(rowData, e.value)} />;
-    };
+    // const statusTemplate = (rowData: any) => {
+    //     return <InputSwitch checked={rowData.enabled} onChange={(e) => handleStatusChange(rowData, e.value)} />;
+    // };
 
     return (
         <div className="card bg-slate-100 shadow-lg rounded-md">
@@ -70,7 +70,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems, setSelectedItem, 
             >
                 <Column expander field="label" header="Title" body={titleTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
                 <Column expander field="label" header="Type" body={statusBodyTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
-                <Column expander field="label" header="Status" body={statusTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
+                {/* <Column expander field="label" header="Status" body={statusTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column> */}
                 <Column expander field="label" header="Action" body={actionTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
             </DataTable >
         </div>

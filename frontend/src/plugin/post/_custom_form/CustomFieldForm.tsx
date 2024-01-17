@@ -82,6 +82,10 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
         values.customFields = repeaterValues
 
         const createOrEditCustomFieldResponse = await createOrEditCustomField(values);
+        if(createOrEditCustomFieldResponse.status == "error" ){
+            setVisible(false)
+            return toast({ variant: 'destructive', description: createOrEditCustomFieldResponse.message });
+        }
         const message = createOrEditCustomFieldResponse?.code === 200 ? 'Successfully Updated CustomField' : 'Successfully Created CustomField';
         setVisible(false)
         selectedCustomField = {};

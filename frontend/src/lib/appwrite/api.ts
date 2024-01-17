@@ -90,7 +90,7 @@ export async function getAllImages(): Promise<any> {
 }
 
 
-export async function editMedia(media:any) {
+export async function editMedia(media: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.editMediaApi(media);
@@ -101,7 +101,7 @@ export async function editMedia(media:any) {
   }
 }
 
-export async function deleteMedia(media_id:string) {
+export async function deleteMedia(media_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.deleteMediaApi(media_id);
@@ -122,7 +122,7 @@ export async function getAllDomains() {
   }
 }
 
-export async function createOrEditPost(post:any) {
+export async function createOrEditPost(post: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.createOrEditPost(post);
@@ -133,7 +133,7 @@ export async function createOrEditPost(post:any) {
   }
 }
 
-export async function getAllPosts(page: number, limit: number, post_type:any) {
+export async function getAllPosts(page: number, limit: number, post_type: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.getAllPostApi(page, limit, post_type);
@@ -144,7 +144,7 @@ export async function getAllPosts(page: number, limit: number, post_type:any) {
   }
 }
 
-export async function getAllPostsAndPages( type:any) {
+export async function getAllPostsAndPages(type: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.getAllPostsAndPagesApi(type);
@@ -155,7 +155,7 @@ export async function getAllPostsAndPages( type:any) {
   }
 }
 
-export async function getPostsByID(post_id:string) {
+export async function getPostsByID(post_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.getPostByIdApi(post_id);
@@ -167,20 +167,20 @@ export async function getPostsByID(post_id:string) {
 }
 
 
-export async function quickEditPostById(post_id:string, postData:any) {
+export async function quickEditPostById(post_id: string, postData: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.quickEditPostByIdApi(post_id, postData);
 
     return post?.data;
-  } catch (error:any) {
+  } catch (error: any) {
     throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
   }
 }
 
 
 
-export async function deletePostById(post_id:string) {
+export async function deletePostById(post_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.deletePostByIdApi(post_id);
@@ -192,7 +192,7 @@ export async function deletePostById(post_id:string) {
 }
 
 //Categories
-export async function createOrEditCategory(category:any) {
+export async function createOrEditCategory(category: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const categoryData = await authenticatedApiService.createOrEditCategoryApi(category);
@@ -202,7 +202,7 @@ export async function createOrEditCategory(category:any) {
   }
 }
 
-export async function getAllCategories(post_type:string) {
+export async function getAllCategories(post_type: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const categoryData = await authenticatedApiService.getAllCategoriesApi(post_type);
@@ -212,7 +212,7 @@ export async function getAllCategories(post_type:string) {
   }
 }
 
-export async function getCategorybyID(category_id:string) {
+export async function getCategorybyID(category_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.getCategorybyIDApi(category_id);
@@ -225,17 +225,18 @@ export async function getCategorybyID(category_id:string) {
 
 
 //Categories
-export async function createOrEditCustomField(category:any) {
+export async function createOrEditCustomField(category: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const categoryData = await authenticatedApiService.createOrEditCustomFieldApi(category);
     return categoryData?.data;
-  } catch (error) {
-    throw new PromiseHandler('Error operating this Custom Field', 'Custom Field Operating error', { error });
+  } catch (error: any) {
+    return error?.response?.data;
+   
   }
 }
 
-export async function getAllCustomFields(post_type:string) {
+export async function getAllCustomFields(post_type: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const categoryData = await authenticatedApiService.getAllCustomFieldsApi(post_type);
@@ -245,7 +246,7 @@ export async function getAllCustomFields(post_type:string) {
   }
 }
 
-export async function getCustomFieldsbyID(custom_field_id:string) {
+export async function getCustomFieldsbyID(custom_field_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.getCustomFieldsbyIDApi(custom_field_id);
@@ -257,13 +258,13 @@ export async function getCustomFieldsbyID(custom_field_id:string) {
 }
 
 //Categories
-export async function createOrEditNavItem(category:any) {
+export async function createOrEditNavItem(category: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const categoryData = await authenticatedApiService.createOrEditNavItemApi(category);
     return categoryData?.data;
   } catch (error) {
-    throw new PromiseHandler('Error operating this Custom Field', 'Custom Field Operating error', { error });
+    throw new PromiseHandler('Error operating this Nav Item', 'Nav Item Operating error', { error });
   }
 }
 
@@ -277,7 +278,7 @@ export async function getAllNavItems() {
   }
 }
 
-export async function getNavItemsbyID(custom_field_id:string) {
+export async function getNavItemsbyID(custom_field_id: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.getNavItemsbyIDApi(custom_field_id);
@@ -289,13 +290,13 @@ export async function getNavItemsbyID(custom_field_id:string) {
 }
 
 
-export async function quickEditNavItemsbyID(category_id:string, categoryData:any) {
+export async function quickEditNavItemsbyID(category_id: string, categoryData: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const post = await authenticatedApiService.quickEditNavItemsbyIDApi(category_id, categoryData);
 
     return post?.data;
-  } catch (error:any) {
+  } catch (error: any) {
     throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
   }
 }

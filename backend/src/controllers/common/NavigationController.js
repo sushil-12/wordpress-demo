@@ -51,7 +51,12 @@ const createEditNavigationItem = async (req, res) => {
         navigationItem.type = type || navigationItem.type;
         navigationItem.enabled = enabled || navigationItem.enabled;
         navigationItem.imgURL = imgUrl || navigationItem.imgURL;
-        navigationItem.category = category ? category : navigationItem.category;
+        if(category == true){
+            navigationItem.category = true ;
+        }else{
+            navigationItem.category = false ;
+        }
+       
 
 
         let updatedNavigationItem = await navigationItem.save();

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const customFieldsSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    post_type: { type: String, required: true },
+    post_type: { type: String, required: true, unique: true  },
     item_type: { type: String, required: true },
     domain: { type: String, required: true },
     fields: [

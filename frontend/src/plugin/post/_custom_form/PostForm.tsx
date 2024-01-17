@@ -204,27 +204,29 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                                 />
 
                             </div>
-                            <div className="categories w-full">
-                                <FormField
-                                    name="categories"
-                                    render={() => (
-                                        <FormItem>
-                                            <FormLabel>Select Categories</FormLabel>
-                                            <FormControl>
-                                                <Tree
-                                                    value={categories}
-                                                    metaKeySelection={metaKey}
-                                                    selectionMode="multiple"
-                                                    selectionKeys={selectedKeys}
-                                                    onSelectionChange={(e: any) => handleTreeSelectionChange(e.value)}
-                                                    className="w-full md:w-30rem"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+                            {categories.length != 0 || post_type !== 'page' &&
+                                (<div className="categories w-full">
+                                    <FormField
+                                        name="categories"
+                                        render={() => (
+                                            <FormItem>
+                                                <FormLabel>Select Categories</FormLabel>
+                                                <FormControl>
+                                                    <Tree
+                                                        value={categories}
+                                                        metaKeySelection={metaKey}
+                                                        selectionMode="multiple"
+                                                        selectionKeys={selectedKeys}
+                                                        onSelectionChange={(e: any) => handleTreeSelectionChange(e.value)}
+                                                        className="w-full md:w-30rem"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>)
+                            }
                         </div>
 
 
