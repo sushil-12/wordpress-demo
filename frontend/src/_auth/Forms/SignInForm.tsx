@@ -6,12 +6,15 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { signInValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast"
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthProvider";
 import { z } from "zod";
-
+import { Card } from "primereact/card";
+import { InputText } from "primereact/inputtext";
+import { KeyRound, Mail } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const SignInForm = () => {
 
@@ -19,6 +22,8 @@ const SignInForm = () => {
     const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
     const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
     const navigate = useNavigate();
+
+   
     const form = useForm<z.infer<typeof signInValidationSchema>>({
         resolver: zodResolver(signInValidationSchema),
         defaultValues: {
@@ -53,18 +58,14 @@ const SignInForm = () => {
     return (
         <Form {...form}>
             <div className="">
-                <div className="sm:w-420 flex-col">
-                    <img src="/assets/images/logo.png" className="h-20" />
-                    <h2 className="h4-bold base-regular tracking-wide md:h3-bold pt-5 text-sm sm-pt-12">
-                        Login to your Account
-                    </h2>
-                    <p className="text-light-3 small-medium md:base-regular mt-2">
-                        Welcome Back! Please enter your details
-                    </p>
+                <div className="sm:w-420 flex align-middle text-center justify-center mb-4">
+                    <img src="/assets/images/login-logo.png" className="h-auto" />
                 </div>
+                <Card className="md:w-30rem card" title= "Login" pt={{  title: { className: 'text-main-bg-900 title font-bold text-xl' }, }} >
+
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-1 flex flex-col gap-5 w-full mt-4"
+                    className="space-y-1 flex flex-col gap-5 w-full mt-4 form_container"
                 >
                     <FormField
                         control={form.control}
@@ -73,11 +74,12 @@ const SignInForm = () => {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        className="shad-input"
-                                        placeholder="Enter Email"
-                                        {...field}
-                                    />
+                                    <div className="p-inputgroup flex-1">
+                                        <span className="p-inputgroup-addon bg-white">
+                                            <Mail />
+                                        </span>
+                                        <InputText className="b" placeholder="Your Email Address" {...field} />
+                                    </div>
                                 </FormControl>
                                 <FormMessage className="shad-form_message"/>
                             </FormItem>
@@ -91,18 +93,23 @@ const SignInForm = () => {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        className="shad-input"
-                                        type="password"
-                                        placeholder="Enter Password"
-                                        {...field}
-                                    />
+                                    <div className="p-inputgroup flex-1">
+                                        <span className="p-inputgroup-addon bg-white">
+                                            <KeyRound />
+                                        </span>
+                                        <InputText type="password" className="" placeholder="Your Password" {...field} />
+                                    </div>
                                 </FormControl>
+                               
                                 <FormMessage className="shad-form_message"/>
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className="shad-button_primary" disabled={isSigningIn || isUserLoading}>
+                     <div className="flex align-items-center align-middle">
+                        <Checkbox />
+                        <label htmlFor="ingredient1" className="ml-2">Stay signed in for a week</label>
+                    </div>
+                    <Button type="submit" className="bg-main-bg-900 text-white" disabled={isSigningIn || isUserLoading}>
                         {isSigningIn && isUserLoading ? (
                             <div className="flex-center gap-2">
                                 <Loader />
@@ -112,15 +119,15 @@ const SignInForm = () => {
                         )}
                     </Button>
                 </form>
-                {/* <p className="text-small-regular text-dark-2 text-center mt-2">
-                    Don't have an account?{" "}
+                <p className="text-small-regular text-dark-2 text-right mt-2">
                     <Link
-                        to="/sign-up"
-                        className="text-primary-500 text-small-semibold ml-1"
+                        to="/forgot-password"
+                        className="text-main-bg-900 text-small-semibold ml-1"
                     >
-                        Sign Up
+                        Forgot password?
                     </Link>
-                </p> */}
+                </p>
+                </Card>
             </div>
         </Form>
     );

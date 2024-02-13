@@ -21,6 +21,20 @@
   body {
     @apply bg-light-1 text-dark-1 min-h-screen font-inter;
   }
+  .inter-regular-14 {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 0;
+  }
+  /* body{
+    font-family: 'Inter', sans-serif !important;
+  } */
+  .title{
+    font-family: "Roboto", sans-serif !important;
+  }
 }
 
 @layer utilities {
