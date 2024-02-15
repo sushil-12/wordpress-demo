@@ -45,7 +45,7 @@ const SignInForm = () => {
     resolver: zodResolver(signInValidationSchema),
     defaultValues: {
       form_type: state,
-      email: "admin@example.com",
+      email: "hegroup-admin@yopmail.com",
       password: "adminPassword",
       staySignedIn: true,
       verification_code:'',
@@ -99,7 +99,7 @@ const SignInForm = () => {
     <Form {...form}>
       <div className="">
         <div className="flex align-middle text-center justify-center mb-10">
-          <img src="/assets/images/login-logo.png" className="h-auto" />
+          <img src="/assets/icons/he-group.svg" className="h-auto" />
         </div>
         <Card
           className=""
@@ -128,7 +128,7 @@ const SignInForm = () => {
                       <FormControl>
                         <div className="p-inputgroup flex-1 inter-regular-14 form_labels">
                           <span className="p-inputgroup-addon bg-white">
-                            <img src="/assets/icons/mail-icon.png" />
+                            <img src="/assets/icons/mail.svg" />
                           </span>
                           <InputText
                             className="b"
@@ -152,7 +152,7 @@ const SignInForm = () => {
                       <FormControl>
                         <div className="p-inputgroup flex-1 inter-regular-14 form_labels">
                           <span className="p-inputgroup-addon bg-white">
-                            <img src="/assets/icons/key-password.png" />
+                            <img src="/assets/icons/key-password.svg" />
                           </span>
                           <InputText
                             size="sm"
@@ -238,7 +238,7 @@ const SignInForm = () => {
                       <FormControl>
                         <div className="p-inputgroup flex-1 inter-regular-14 form_labels">
                           <span className="p-inputgroup-addon bg-white">
-                            <img src="/assets/icons/mail-icon.png" />
+                            <img src="/assets/icons/mail.svg" />
                           </span>
                           <InputText
                             className="b"
@@ -292,7 +292,7 @@ const SignInForm = () => {
                       <FormControl>
                         <div className="p-inputgroup flex-1 inter-regular-14 form_labels">
                           <span className="p-inputgroup-addon bg-white">
-                            <img src="/assets/icons/mail-icon.png" />
+                            <img src="/assets/icons/mail.svg" />
                           </span>
                           <InputText
                             className="b"
