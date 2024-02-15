@@ -20,7 +20,7 @@ import { useState } from "react";
 const SignInForm = () => {
 
     const { toast } = useToast();
-    const [state, setState] = useState<FormState>('4');
+    const [state, setState] = useState<FormState>('verify_account_form');
     const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
     const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
     const navigate = useNavigate();
