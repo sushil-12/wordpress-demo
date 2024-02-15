@@ -20,6 +20,7 @@ export const signUpValidationSchema = z.object({
 export const signInValidationSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
+    staySignedIn:z.boolean()
 })
 export const ProfileValidation = z.object({
     file: z.custom<File[]>(),

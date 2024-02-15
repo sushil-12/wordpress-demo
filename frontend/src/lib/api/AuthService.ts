@@ -7,8 +7,8 @@ class AuthService {
     this.api = api;
   }
 
-  async login(identifier: string, password: string): Promise<any> {
-    let data = identifier.includes('@') ? {email:identifier, password} :  {username:identifier, password};
+  async login(identifier: string, password: string, staySignedIn:boolean): Promise<any> {
+    let data = identifier.includes('@') ? {email:identifier, password, staySignedIn} :  {username:identifier, password, staySignedIn};
     sessionStorage.setItem('domain', 'he_group')
     return this.api.post('/auth/login',data);
   }

@@ -16,9 +16,9 @@ export async function createUserAccount(user: INewUser) {
 }
 
 // ============================== SIGN IN
-export async function signInAccount(user: { email: string; password: string }) {
+export async function signInAccount(user: { email: string; password: string , staySignedIn:boolean }) {
   try {
-    const session = await Apiservices.authService.login(user.email, user.password);
+    const session = await Apiservices.authService.login(user.email, user.password, user.staySignedIn);
     session ? sessionStorage.setItem("token", session?.data?.data?.token) : '';
     return session;
   } catch (error: any) {

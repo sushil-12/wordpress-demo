@@ -22,7 +22,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     AuthValidator.validateLogin(req.body);
-    const { username, password, email } = req.body;
+    const { username, password, email, staySignedIn, createOtp } = req.body;
     const user = username ? await User.findOne({ username }) : await User.findOne({email});
     if (!user) {
       throw new CustomError(404, 'User not found');
@@ -33,8 +33,11 @@ const login = async (req, res) => {
     if (!passwordMatch) {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    
+    
+    const token_expiry = staySignedIn !==undefined || staySignedIn==true ? '7d' : '24h';
+    const email_sent = true;
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: token_expiry });
     if(user.role.name == "admin"){
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
