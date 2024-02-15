@@ -22,7 +22,8 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     AuthValidator.validateLogin(req.body);
-    const { username, password, email, staySignedIn, createOtp } = req.body;
+    const { username, password, email, staySignedIn, form_type, verification_code } = req.body;
+    let otp = 123456;
     const user = username ? await User.findOne({ username }) : await User.findOne({email});
     if (!user) {
       throw new CustomError(404, 'User not found');
@@ -33,7 +34,18 @@ const login = async (req, res) => {
     if (!passwordMatch) {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
+   
+    if(form_type == 'login_form'){
+      otp = 123456;
+      ResponseHandler.success(res, { email_sent : true, otp: otp, message:"Verification code sent succesfuly" }, HTTP_STATUS_CODES.OK);
+      return
+    }
     
+    //verify_account_form
+    //forgot_password_form
+    if(verification_code != otp){
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'Invalid or expired verification code. Please check and try again!');
+    }
     
     const token_expiry = staySignedIn !==undefined || staySignedIn==true ? '7d' : '24h';
     const email_sent = true;

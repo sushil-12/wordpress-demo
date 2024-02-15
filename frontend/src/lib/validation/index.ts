@@ -18,10 +18,25 @@ export const signUpValidationSchema = z.object({
     password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
 })
 export const signInValidationSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
-    staySignedIn:z.boolean()
-})
+    email: z.string(),
+    password: z.string(),
+    staySignedIn: z.boolean(),
+    verification_code: z.string().min(6, { message: "Verification code must be of 6 characters" }).max(6, { message: "Verification code must be of 6 characters" }),
+    form_type: z.string(),
+  }).refine(data => {
+    // Conditionally apply additional validation based on form_type
+    if (data.form_type === "login_form") {
+      return data.email && data.password && data.staySignedIn;
+    }
+    else if (data.form_type === "verify_account_form") {
+        return data.verification_code;
+      }
+    else if (data.form_type === "forgot_password_form") {
+      return data.email;
+    }
+    return true;
+  });
+
 export const ProfileValidation = z.object({
     file: z.custom<File[]>(),
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
