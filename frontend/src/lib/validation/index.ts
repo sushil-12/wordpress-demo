@@ -21,7 +21,7 @@ export const signInValidationSchema = z.object({
     email: z.string(),
     password: z.string(),
     staySignedIn: z.boolean(),
-    verification_code: z.string().min(6, { message: "Verification code must be of 6 characters" }).max(6, { message: "Verification code must be of 6 characters" }),
+    verification_code: z.string(),
     form_type: z.string(),
   }).refine(data => {
     // Conditionally apply additional validation based on form_type

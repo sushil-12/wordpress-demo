@@ -47,17 +47,18 @@ const SignInForm = () => {
       form_type: state,
       email: "admin@example.com",
       password: "adminPassword",
-      staySignedIn: false,
-      verification_code: '',
+      staySignedIn: true,
+      verification_code:'',
     },
   });
-  console.log(isUserLoading, "iseUserLoading");
+  console.log(isUserLoading, "iseUserLoading", form.formState);
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signInValidationSchema>) {
+    console.log(values)
     const session = await signInAccount({
       email: values.email,
       password: values.password,
-      staySignedIn: values.staySignedIn,
+    staySignedIn: values.staySignedIn,
       form_type: state,
       verification_code:values.verification_code,
     });
