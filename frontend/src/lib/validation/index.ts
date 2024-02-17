@@ -20,13 +20,20 @@ export const signUpValidationSchema = z.object({
 export const signInValidationSchema = z.object({
     email: z.string(),
     password: z.string(),
-    staySignedIn: z.boolean(),
+    staySignedIn: z.string(),
     verification_code: z.string(),
     form_type: z.string(),
   }).refine(data => {
     // Conditionally apply additional validation based on form_type
     if (data.form_type === "login_form") {
-      return data.email && data.password && data.staySignedIn;
+     return (
+      data.email.length > 0 && 
+      data.password.length > 0 && 
+      data.staySignedIn.length > 0 &&
+      data.email.length <= 255 && // Maximum length for email
+      data.password.length >= 8 && // Minimum length for password
+      data.password.length <= 50 // Maximum length for password
+    );
     }
     else if (data.form_type === "verify_account_form") {
         return data.verification_code;

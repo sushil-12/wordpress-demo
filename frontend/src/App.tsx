@@ -53,6 +53,8 @@ const App = () => {
                     {/* Public Routes start */}
                     <Route element={<AuthLayout />} >
                         <Route path='/login' element={<SignInForm />} />
+                        <Route path='/forgot-password' element={<SignInForm />} />
+                        <Route path='/verify-account' element={<SignInForm />} />
                         {/* <Route path='/sign-up' element={<SignUpForm />} /> */}
                     </Route>
                     {/* Public Routes End */}

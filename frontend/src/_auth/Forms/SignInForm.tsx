@@ -11,7 +11,7 @@ import {
 import { useForm } from "react-hook-form";
 import { signInValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthProvider";
@@ -19,15 +19,25 @@ import { z } from "zod";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignInForm = () => {
+  const location = useLocation();
+  const { pathname } = location;
+  const form_state = (pathname === '/verify-account') ? 'verify_account_form' : (pathname === '/forgot-password') ? 'forgot_password_form' : 'login_form';
+
   const { toast } = useToast();
   const [state, setState] = useState<FormState>("login_form");
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
-  const { mutateAsync: signInAccount, isPending: isSigningIn } =
-    useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(state !== 'verify_account_form'){
+      setState(form_state)
+    }
+    console.log(pathname, state)
+  }, [state, pathname])
   // Define type for the state
   type FormState =
     | "login_form"
@@ -47,8 +57,8 @@ const SignInForm = () => {
       form_type: state,
       email: "hegroup-admin@yopmail.com",
       password: "adminPassword",
-      staySignedIn: true,
-      verification_code:'',
+      staySignedIn: 'yes',
+      verification_code: '',
     },
   });
   console.log(isUserLoading, "iseUserLoading", form.formState);
@@ -58,9 +68,9 @@ const SignInForm = () => {
     const session = await signInAccount({
       email: values.email,
       password: values.password,
-    staySignedIn: values.staySignedIn,
+      staySignedIn: values.staySignedIn,
       form_type: state,
-      verification_code:values.verification_code,
+      verification_code: values.verification_code,
     });
 
     if (!session) {
@@ -71,12 +81,13 @@ const SignInForm = () => {
       });
     }
     console.log(state);
-    if(state == 'login_form'){
-        const response_data =  session?.data?.data;
-        if(response_data.email_sent){
-            setState('verify_account_form');
-            return toast({ title: "Verification code succesfuly" });
-        }
+    if (state == 'login_form') {
+      const response_data = session?.data?.data;
+      if (response_data.email_sent) {
+        navigate('/verify-account')
+        setState('verify_account_form');
+        return toast({ title: "Verification code succesfuly" });
+      }
     }
     const isLoggedIn = await checkAuthUser();
     if (isLoggedIn) {
@@ -104,7 +115,7 @@ const SignInForm = () => {
         <Card
           className=""
           pt={{
-            root: { className: "login_cards" },
+            root: { className: "login_cards rounded-xl" },
             title: {
               className: "text-main-bg-900 card_headings inter-regular-32",
             },
@@ -116,7 +127,7 @@ const SignInForm = () => {
               className="space-y-1 flex flex-col  w-full mt-4 form_container"
             >
               <div className="flex flex-col gap-5">
-                <h1 className="text-main-bg-900 card_headings inter-regular-32 mb-5">{`${titles[state]}`}</h1>
+                <h1 className="text-main-bg-900 card_headings  inter-regular-32 mb-5">{`${titles[state]}`}</h1>
                 <FormField
                   control={form.control}
                   name="email"
@@ -170,13 +181,12 @@ const SignInForm = () => {
                 />
               </div>
               <p className="text-small-regular text-dark-2 text-right mt-3">
-                <Link
-                  to="/forgot-password"
-                  className="text-main-bg-900 inter-regular-14"
+                <Button
+                  onClick={() => { setState('forgot_password_form'); navigate('/forgot-password') }}
+                  className="text-main-bg-900 inter-regular-14 p-0"
                 >
-                  {" "}
-                  Forgot password?{" "}
-                </Link>
+                  Forgot password?
+                </Button>
               </p>
               <FormField
                 control={form.control}
@@ -188,11 +198,15 @@ const SignInForm = () => {
                         <Checkbox
                           inputId="staySignedIn"
                           className="form_check"
-                          checked={form.getValues("staySignedIn")}
-                          onChange={(e) =>
-                            field.onChange(!form.getValues("staySignedIn"))
-                          }
+                          checked={form.getValues("staySignedIn") === 'yes'}
+                          onChange={(e) => {
+                            const newValue = form.getValues("staySignedIn") === 'yes' ? 'no' : 'yes';
+                            form.setValue("staySignedIn", newValue);
+                            field.onChange(newValue);
+                            console.log(form, form.getValues("staySignedIn") === 'yes')
+                          }}
                         />
+
                         <label
                           htmlFor="staySignedIn"
                           className="ml-2 inter-regular-14 text-main-bg-900 "
@@ -285,8 +299,8 @@ const SignInForm = () => {
                     <FormItem>
                       <label className="form_labels inter-regular-14">
                         <div className="flex justify-between">
-                            <span className="self-center">Verification Code</span>
-                            <span className="flex gap-1"><span className="self-center"><img src="/assets/icons/timer.png"/></span><span className="inter-regular-14"> 01:36</span></span>
+                          <span className="self-center">Verification Code</span>
+                          <span className="flex gap-1"><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> 01:36</span></span>
                         </div>
                       </label>
                       <FormControl>

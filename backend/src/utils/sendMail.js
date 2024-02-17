@@ -1,39 +1,36 @@
-const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
-require('dotenv').config();
+const MailComposer = require('nodemailer/lib/mail-composer');
+const credentials = require('./cred.json');
+const tokens = require('./token.json');
 
-const OAuth2 = google.auth.OAuth2;
+const getGmailService = () => {
+  const { client_secret, client_id, redirect_uris } = credentials.web;
+  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+  oAuth2Client.setCredentials(tokens);
+  const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+  return gmail;
+};
 
-// Set up OAuth2 credentials
-const oauth2Client = new OAuth2(
-    process.env.OUTH_CLIENT_ID,
-    process.env.CLIENT_SECRET,
-    process.env.REDIRECT_URL,
-);
-// Function to send email
-async function sendMail(emailOptions) {
-  // Set up Nodemailer transporter
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      type: 'OAuth2',
-      user: process.env.EMAIL_FROM,
-      clientId: oauth2Client._clientId,
-      clientSecret: oauth2Client._clientSecret,
-      refreshToken: process.env.REFRESH_TOKEN,
-      accessToken: process.env.ACCESS_TOKEN,
+const encodeMessage = (message) => {
+  return Buffer.from(message).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
+const createMail = async (options) => {
+  const mailComposer = new MailComposer(options);
+  const message = await mailComposer.compile().build();
+  return encodeMessage(message);
+};
+
+const sendMail = async (options) => {
+  const gmail = getGmailService();
+  const rawMessage = await createMail(options);
+  const { data: { id } = {} } = await gmail.users.messages.send({
+    userId: 'me',
+    resource: {
+      raw: rawMessage,
     },
   });
+  return id;
+};
 
-  try {
-    // Send email
-    const info = await transporter.sendMail(emailOptions);
-    console.log('Email sent:', info.response);
-    return info.response;
-  } catch (error) {
-    console.error('Error occurred:', error);
-    throw error;
-  }
-}
-// Export the sendMail function
 module.exports = sendMail;

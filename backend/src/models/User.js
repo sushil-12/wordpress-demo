@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String },
   role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
   permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permission' }],
+  otp: { type: String },
+  resetToken: { type: String },
+  otpExpiry: { type: Date },
+  staySignedIn: { type: Boolean, default: false }, // Whether the user has opted to stay signed in for 7 days
+  signInTimestamp: { type: Date } // Timestamp when the user signed in
 });
 
 const User = mongoose.model('User', userSchema);

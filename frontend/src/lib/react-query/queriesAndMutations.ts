@@ -50,7 +50,7 @@ import {
   
   export const useSignInAccount = () => {
     return useMutation({
-      mutationFn: (user: { email: string; password: string , staySignedIn:boolean, form_type: string, verification_code:string}) =>
+      mutationFn: (user: { email: string; password: string , staySignedIn: string, form_type: string, verification_code:string}) =>
         signInAccount(user),
     });
   };

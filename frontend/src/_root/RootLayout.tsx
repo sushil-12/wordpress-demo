@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 
 const RootLayout = () => {
-  console.log("HERE in ROOTLAYOU");
   const { currentDomain } = useUserContext();
   const [outletKey, setOutletKey] = useState(0);
  
