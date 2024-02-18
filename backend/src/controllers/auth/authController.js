@@ -39,8 +39,10 @@ const login = async (req, res) => {
     let otp;
     AuthValidator.validateLogin(req.body);
     const { username, password, email, staySignedIn, form_type, verification_code } = req.body;
+    staySignedIn =='yes' ? true: false;
     const user = username ? await User.findOne({ username }) : await User.findOne({ email });
-    let require_verification = true; let sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    let require_verification = true;
+    let sign_in_stamp = new Date();
     if (!user) {
       throw new CustomError(404, 'User not found');
     }
@@ -52,9 +54,10 @@ const login = async (req, res) => {
     }
     if (user.signInTimestamp && new Date() < user.signInTimestamp && user.staySignedIn) {
       require_verification = false;
-      sign_in_stamp = user.signInTimestamp;
+      sign_in_stamp = user.signInTimestamp || sign_in_stamp;
     }
     
+    console.log(require_verification);
     if(form_type == 'forgot_password_form'){
       try {
         const templateFile = fs.readFileSync('./src/email-templates/reset-password.hbs', 'utf8');
@@ -92,13 +95,15 @@ const login = async (req, res) => {
       if (staySignedIn || !require_verification) {
         user.staySignedIn = staySignedIn;
         user.signInTimestamp = sign_in_stamp // Set OTP expiry to 7 days later
+        user.otp = otp;
+        user.otpExpiry = new Date(Date.now() + 2 * 60 * 1000);
         await user.save();
       } else {
         user.otp = otp;
         user.otpExpiry = new Date(Date.now() + 2 * 60 * 1000); // Set OTP expiry to 2 minutes later
         await user.save()
       }
-
+      console.log(staySignedIn, sign_in_stamp, staySignedIn || !require_verification, )
       if (require_verification) {
         try {
           const templateFile = fs.readFileSync('./src/email-templates/send-verification-code.hbs', 'utf8');
@@ -112,13 +117,13 @@ const login = async (req, res) => {
           };
 
           // Send email
-          sendMail(mailOptions)
-            .then(() => {
+          // sendMail(mailOptions)
+          //   .then(() => {
               ResponseHandler.success(res, { email_sent: true, otp: otp, message: "Verification code sent successfully" }, HTTP_STATUS_CODES.OK);
-            })
-            .catch((error) => {
-              ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-            });
+          //   })
+          //   .catch((error) => {
+          //     ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+          //   });
         } catch (error) {
           ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         }
