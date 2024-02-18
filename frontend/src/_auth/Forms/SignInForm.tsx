@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { signInValidationSchema } from "@/lib/validation";
+import { forgotPassword, loginInValidationSchema, signInValidationSchema, verifyAccount } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -28,31 +28,53 @@ const SignInForm = () => {
 
   const { toast } = useToast();
   const [state, setState] = useState<FormState>("login_form");
+  const [timeLeft, setTimeLeft] = useState(120);
+  const [running, setRunning] = useState(false);
+  const [timerFinished, setTimerFinished] = useState(false);
+
+
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(state !== 'verify_account_form'){
+    if (state !== 'verify_account_form') {
       setState(form_state)
     }
-    console.log(pathname, state)
-  }, [state, pathname])
+    let interval:any;
+    if (running && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prevTimeLeft => prevTimeLeft - 1);
+      }, 1000);
+    }
+    if (timeLeft === 0) {
+      clearInterval(interval);
+      setTimerFinished(true);
+    }
+    return () => clearInterval(interval);
+  }, [state, pathname, running, timeLeft])
   // Define type for the state
   type FormState =
     | "login_form"
     | "verify_account_form"
     | "forgot_password_form";
 
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    console.log(minutes, seconds)
   // Define titles for each state
   const titles: Record<FormState, string> = {
     login_form: "Login",
     verify_account_form: "Verify Account",
     forgot_password_form: "Forgot Password",
   };
-
+  const validationSchema = {
+    login_form: loginInValidationSchema,
+    verify_account_form: verifyAccount,
+    forgot_password_form: forgotPassword,
+  };
   const form = useForm<z.infer<typeof signInValidationSchema>>({
-    resolver: zodResolver(signInValidationSchema),
+    resolver: zodResolver(validationSchema[state]),
     defaultValues: {
       form_type: state,
       email: "hegroup-admin@yopmail.com",
@@ -80,13 +102,27 @@ const SignInForm = () => {
         description: "Something went wrong",
       });
     }
-    console.log(state);
+    if(session?.response?.data?.status == 'error'){
+      form.setError(session?.response?.data?.message?.field_error, {message: session?.response?.data?.message?.message}, { shouldFocus: true })
+      return;
+    }
+    
     if (state == 'login_form') {
       const response_data = session?.data?.data;
       if (response_data.email_sent) {
         navigate('/verify-account')
+        setRunning(true)
+        console.log(running, "Running")
         setState('verify_account_form');
         return toast({ title: "Verification code succesfuly" });
+      }
+    }
+    if (state == 'forgot_password_form') {
+      const response_data = session?.data?.data;
+      if (response_data.reset_link_sent) {
+        return toast({ title: "Reset link sent succesfuly" });
+      } else {
+        return toast({ variant: "destructive", title: "Something went wrong!" });
       }
     }
     const isLoggedIn = await checkAuthUser();
@@ -98,6 +134,7 @@ const SignInForm = () => {
       const statuscode = session?.response?.data?.statusCode;
       const message = session?.response?.data?.message;
       const title = session?.response?.data?.status;
+      
       return toast({
         variant: "destructive",
         title: title,
@@ -300,7 +337,7 @@ const SignInForm = () => {
                       <label className="form_labels inter-regular-14">
                         <div className="flex justify-between">
                           <span className="self-center">Verification Code</span>
-                          <span className="flex gap-1"><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> 01:36</span></span>
+                          <span className="flex gap-1">{!timerFinished ? (<><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</span></>): (<Link to="/login" onClick={()=>setState('login_form')} className="underline text-main-bg-900">Resend Code</Link>)}</span>
                         </div>
                       </label>
                       <FormControl>
@@ -329,7 +366,7 @@ const SignInForm = () => {
                       <Loader />
                     </div>
                   ) : (
-                    "Submit"
+                    "Submit" 
                   )}
                 </Button>
               </div>

@@ -17,32 +17,52 @@ export const signUpValidationSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
 })
+
 export const signInValidationSchema = z.object({
     email: z.string(),
     password: z.string(),
     staySignedIn: z.string(),
     verification_code: z.string(),
     form_type: z.string(),
-  }).refine(data => {
-    // Conditionally apply additional validation based on form_type
-    if (data.form_type === "login_form") {
-     return (
-      data.email.length > 0 && 
-      data.password.length > 0 && 
-      data.staySignedIn.length > 0 &&
-      data.email.length <= 255 && // Maximum length for email
-      data.password.length >= 8 && // Minimum length for password
-      data.password.length <= 50 // Maximum length for password
-    );
-    }
-    else if (data.form_type === "verify_account_form") {
-        return data.verification_code;
-      }
-    else if (data.form_type === "forgot_password_form") {
-      return data.email;
-    }
-    return true;
-  });
+})
+export const loginInValidationSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
+    staySignedIn: z.string(),
+    verification_code: z.string(),
+    form_type: z.string(),
+})
+
+export const verifyAccount = z.object({
+    email: z.string(),
+    password: z.string(),
+    staySignedIn: z.string(),
+    verification_code: z.string().min(6, { message: "Verification Code must be of minimum 6 characters" }),
+    form_type: z.string(),
+})
+
+export const forgotPassword = z.object({
+    email: z.string().email(),
+    password: z.string(),
+    staySignedIn: z.string(),
+    verification_code: z.string(),
+    form_type: z.string(),
+})
+
+export const resetPasswordValidationSchema = z.object({
+    password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
+    confirm_password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
+    reset_token: z.string(),
+    form_type: z.string(),
+}).superRefine(({ confirm_password, password }, ctx) => {
+    if (confirm_password !== password) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirm_password"],
+        message: "The passwords did not match"
+      });
+    };
+});
 
 export const ProfileValidation = z.object({
     file: z.custom<File[]>(),
@@ -92,7 +112,7 @@ export const CustomFormFieldSchema = z.object({
     id: z.string(),
     title: z.string(),
     post_type: z.string(),
-    item_type:z.string(),
+    item_type: z.string(),
     customFields: z.array(FieldSchema).optional(),
 });
 

@@ -69,6 +69,14 @@
     max-width: 320px;
     min-width: 320px;
   }
+  .reset_card .form_container {
+    max-width: 379px !important;
+    min-width: 379px !important;
+  }
+  .reset_password form {
+    max-width: 320px;
+    min-width: 320px;
+  }
   .login_cards .action_button {
     margin-top: 12px !important;
   }
@@ -399,6 +407,9 @@
 
   .shad-form_message {
     @apply text-error !important;
+    font-size: 14px;
+    font-family: 'Inter' !important;
+    line-height: 14px;
   }
 
   .shad-input {

@@ -5,6 +5,7 @@ import './globals.css';
 import 'primeicons/primeicons.css';
 import { Home } from './_root/pages';
 import SignInForm from './_auth/Forms/SignInForm';
+import ResetPasswordForm from './_auth/Forms/ResetPasswordForm';
 
 // import SignUpForm from './_auth/Forms/SignUpForm';
 import AuthLayout from './_auth/AuthLayout';
@@ -55,6 +56,7 @@ const App = () => {
                         <Route path='/login' element={<SignInForm />} />
                         <Route path='/forgot-password' element={<SignInForm />} />
                         <Route path='/verify-account' element={<SignInForm />} />
+                        <Route path='/reset-password/:token' element={<ResetPasswordForm />} />
                         {/* <Route path='/sign-up' element={<SignUpForm />} /> */}
                     </Route>
                     {/* Public Routes End */}

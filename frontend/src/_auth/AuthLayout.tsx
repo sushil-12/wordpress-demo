@@ -4,7 +4,7 @@ const AuthLayout = () => {
     const isAuthenticated = token !== null && token !== '';
     return (
         <>
-            {isAuthenticated ? (<Navigate to="/forgot-password" />)
+            {isAuthenticated ? (<Navigate to="/" />)
                 :
                 (<>
                     <section className='flex flex-1 justify-center items-center bg-main-bg-900' >

@@ -22,10 +22,20 @@ export async function signInAccount(user: { email: string; password: string , st
     session ? sessionStorage.setItem("token", session?.data?.data?.token) : '';
     return session;
   } catch (error: any) {
+    return error;
     throw new PromiseHandler(error?.response?.data?.message, 'Login Failed', { user, error });
   }
 }
 
+// Reset passworx
+export async function resetPassword(user: { password: string;  form_type: string, reset_token:string}) {
+  try {
+    const session = await Apiservices.authService.resetPassword( user.password, user.form_type, user.reset_token);
+    return session;
+  } catch (error: any) {
+    throw new PromiseHandler(error?.response?.data?.message, 'Reset Password Failed', { user, error });
+  }
+}
 // ============================== GET ACCOUNT
 export async function getAccount() {
   try {

@@ -4,12 +4,18 @@ import TopBar from "@/components/shared/TopBar";
 import { useUserContext } from "@/context/AuthProvider";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
+import { useNavigate } from "react-router";
 
 const RootLayout = () => {
   const { currentDomain } = useUserContext();
   const [outletKey, setOutletKey] = useState(0);
- 
+  const navigate = useNavigate();
   useEffect(() => {
+    const cookieFallback = sessionStorage.getItem("token");
+    if (cookieFallback === "[]" ||cookieFallback === null ||cookieFallback === undefined  ) {
+      navigate('/login')
+      return
+    }
     setOutletKey((prevKey) => prevKey + 1);
   }, [currentDomain]);
   

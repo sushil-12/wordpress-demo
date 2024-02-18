@@ -7,13 +7,17 @@ class AuthService {
     this.api = api;
   }
 
-  async login(identifier: string, password: string, staySignedIn:string, form_type:string, verification_code:string): Promise<any> {
-    let data = identifier.includes('@') ? {email:identifier, password, staySignedIn, form_type ,verification_code } :  {username:identifier, password, staySignedIn, form_type, verification_code };
+  async login(identifier: string, password: string, staySignedIn: string, form_type: string, verification_code: string): Promise<any> {
+    let data = identifier.includes('@') ? { email: identifier, password, staySignedIn, form_type, verification_code } : { username: identifier, password, staySignedIn, form_type, verification_code };
     sessionStorage.setItem('domain', 'he_group')
-    return this.api.post('/auth/login',data);
+    return this.api.post('/auth/login', data);
+  }
+  async resetPassword(password: string, form_type: string, reset_token: string): Promise<any> {
+    let data = { password, form_type , reset_token};
+    return this.api.post('/auth/reset-password', data);
   }
 
-  async register(user:object): Promise<any> {
+  async register(user: object): Promise<any> {
     return this.api.post('/auth/register', user);
   }
 

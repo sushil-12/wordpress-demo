@@ -32,6 +32,7 @@ import {
     getNavItemsbyID,
     getAllPostsAndPages,
     quickEditNavItemsbyID,
+    resetPassword,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -55,6 +56,12 @@ import {
     });
   };
   
+  export const useResetPasswordAccount = () => {
+    return useMutation({
+      mutationFn: (user: {   password:string, form_type: string, reset_token:string}) =>
+        resetPassword(user),
+    });
+  };
   export const useSignOutAccount = () => {
     return useMutation({
       mutationFn: signOutAccount,
