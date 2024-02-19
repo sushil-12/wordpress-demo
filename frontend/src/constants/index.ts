@@ -1,5 +1,5 @@
 export const logos = {
-  'he_group': '/assets/images/hegroup.png',
+  'he_group': '/assets/icons/logo-dashboard.svg',
   'x_wear': '/assets/images/xwear.png',
   'the_logician': '/assets/images/logician.png'
 };
@@ -28,6 +28,16 @@ export const domainSidebarLinks: DomainLinks = {
       route: "/posts/technology",
       label: "Technology",
       subcategory: [
+        {
+          imgURL: "/assets/icons/filter.svg",
+          route: "/category/technology",
+          label: "Manage category",
+        },
+        {
+          imgURL: "/assets/icons/filter.svg",
+          route: "/category/technology",
+          label: "Manage category",
+        },
         {
           imgURL: "/assets/icons/filter.svg",
           route: "/category/technology",

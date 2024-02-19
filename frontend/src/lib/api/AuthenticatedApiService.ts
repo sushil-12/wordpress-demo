@@ -6,8 +6,8 @@ class AuthenticatedApiService {
   private domain: string | null;
 
   constructor() {
-    this.token = sessionStorage.getItem("token");
-    this.domain = sessionStorage.getItem("domain");
+    this.token = localStorage.getItem("token");
+    this.domain = localStorage.getItem("domain");
     this.api = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
     });

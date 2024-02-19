@@ -1,7 +1,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
 const AuthLayout = () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const isAuthenticated = token !== null && token !== '';
+    console.log("ISAUTH", token, isAuthenticated)
     return (
         <>
             {isAuthenticated ? (<Navigate to="/" />)

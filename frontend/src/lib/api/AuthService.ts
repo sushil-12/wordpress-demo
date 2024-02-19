@@ -9,7 +9,7 @@ class AuthService {
 
   async login(identifier: string, password: string, staySignedIn: string, form_type: string, verification_code: string): Promise<any> {
     let data = identifier.includes('@') ? { email: identifier, password, staySignedIn, form_type, verification_code } : { username: identifier, password, staySignedIn, form_type, verification_code };
-    sessionStorage.setItem('domain', 'he_group')
+    localStorage.setItem('domain', 'he_group')
     return this.api.post('/auth/login', data);
   }
   async resetPassword(password: string, form_type: string, reset_token: string): Promise<any> {

@@ -41,7 +41,7 @@ const SignInForm = () => {
     if (state !== 'verify_account_form') {
       setState(form_state)
     }
-    let interval:any;
+    let interval: any;
     if (running && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prevTimeLeft => prevTimeLeft - 1);
@@ -59,9 +59,9 @@ const SignInForm = () => {
     | "verify_account_form"
     | "forgot_password_form";
 
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    console.log(minutes, seconds)
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  console.log(minutes, seconds)
   // Define titles for each state
   const titles: Record<FormState, string> = {
     login_form: "Login",
@@ -102,11 +102,11 @@ const SignInForm = () => {
         description: "Something went wrong",
       });
     }
-    if(session?.response?.data?.status == 'error'){
-      form.setError(session?.response?.data?.message?.field_error, {message: session?.response?.data?.message?.message}, { shouldFocus: true })
+    if (session?.response?.data?.status == 'error') {
+      form.setError(session?.response?.data?.message?.field_error, { message: session?.response?.data?.message?.message }, { shouldFocus: true })
       return;
     }
-    
+
     if (state == 'login_form') {
       const response_data = session?.data?.data;
       if (response_data.email_sent) {
@@ -134,7 +134,7 @@ const SignInForm = () => {
       const statuscode = session?.response?.data?.statusCode;
       const message = session?.response?.data?.message;
       const title = session?.response?.data?.status;
-      
+
       return toast({
         variant: "destructive",
         title: title,
@@ -218,12 +218,13 @@ const SignInForm = () => {
                 />
               </div>
               <p className="text-small-regular text-dark-2 text-right mt-3">
-                <Button
-                  onClick={() => { setState('forgot_password_form'); navigate('/forgot-password') }}
+                <Link
+                  to='/forgot-password'
+                  onClick={() => { setState('forgot_password_form'); }}
                   className="text-main-bg-900 inter-regular-14 p-0"
                 >
                   Forgot password?
-                </Button>
+                </Link>
               </p>
               <FormField
                 control={form.control}
@@ -337,7 +338,7 @@ const SignInForm = () => {
                       <label className="form_labels inter-regular-14">
                         <div className="flex justify-between">
                           <span className="self-center">Verification Code</span>
-                          <span className="flex gap-1">{!timerFinished ? (<><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</span></>): (<Link to="/login" onClick={()=>setState('login_form')} className="underline text-main-bg-900">Resend Code</Link>)}</span>
+                          <span className="flex gap-1">{!timerFinished ? (<><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</span></>) : (<Link to="/login" onClick={() => setState('login_form')} className="underline text-main-bg-900">Resend Code</Link>)}</span>
                         </div>
                       </label>
                       <FormControl>
@@ -366,7 +367,7 @@ const SignInForm = () => {
                       <Loader />
                     </div>
                   ) : (
-                    "Submit" 
+                    "Submit"
                   )}
                 </Button>
               </div>

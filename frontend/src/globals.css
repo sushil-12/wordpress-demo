@@ -129,6 +129,24 @@
   .p-card .p-card-body {
     padding: 0px !important;
   }
+  .logo-container{
+    height: 85px;
+  }
+  .left-sidebar-link{
+    min-height: 60px;
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 100%;
+    @apply text-secondary-link
+  }
+  .rotated{
+    transform: rotate(-180deg);
+    transform-style: ease-in;
+  }
+  .dropdown-arrow {
+    transition: transform 0.3s ease-in-out; /* Add a transition for smooth rotation */
+}
 }
 @layer utilities {
 
@@ -219,6 +237,21 @@
   .flex-start {
     @apply flex justify-start items-center;
   }
+
+  /* .leftsidebar::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 2px !important;
+  }
+
+  .leftsidebar::-webkit-scrollbar-track {
+    background: #09090a !important;
+  }
+
+  .leftsidebar::-webkit-scrollbar-thumb {
+    background: #5c5c7b !important;
+    border-radius: 50px !important;
+  } */
 
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
@@ -338,7 +371,7 @@
   /* Bottom bar */
   .bottom-bar {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-light-1 px-5 py-4 md:hidden;
+    @apply hidden;
   }
 
   /* File uploader */
@@ -369,8 +402,7 @@
 
   /* Left sidebar */
   .leftsidebar {
-    @apply hidden md:flex px-6 py-4 flex-col justify-between min-w-[270px] bg-light-1;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    @apply md:flex flex-col justify-between min-w-[240px] overflow-scroll custom-scrollbar;;
   }
 
   .leftsidebar-link {

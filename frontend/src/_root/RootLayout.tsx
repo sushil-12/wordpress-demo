@@ -11,7 +11,7 @@ const RootLayout = () => {
   const [outletKey, setOutletKey] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
-    const cookieFallback = sessionStorage.getItem("token");
+    const cookieFallback = localStorage.getItem("token");
     if (cookieFallback === "[]" ||cookieFallback === null ||cookieFallback === undefined  ) {
       navigate('/login')
       return
@@ -21,13 +21,13 @@ const RootLayout = () => {
   
   return (
     <div className="w-full md:flex">
-      <TopBar />
+      {/* <TopBar /> */}
       <LeftSidebar />
 
       <section className="flex flex-1 h-full">
         <Outlet key={outletKey} />
       </section>
-      <BottomBar />
+      {/* <BottomBar /> */}
     </div>
   );
 };

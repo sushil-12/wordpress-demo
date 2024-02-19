@@ -24,6 +24,8 @@ module.exports = {
         'primary-500': '#000C79',
         'primary-600': '#5D5FEF',
         'secondary-500': '#FFB620',
+        'secondary-link': '#4F5B67',
+        'secondary-border':'#EDEDED',
         'off-white': '#D0DFFF',
         'error': '#BB2124',
         'dark-1': '#000000',

@@ -20,7 +20,7 @@ export const INITIAL_STATE = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
-    const savedDomain:any = sessionStorage.hasOwnProperty('domain') ? sessionStorage.getItem('domain') :'he_group';
+    const savedDomain:any = localStorage.hasOwnProperty('domain') ? localStorage.getItem('domain') :'he_group';
     const [user, setUser] = useState<IUser>(INITIAL_USER);
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -53,9 +53,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
     useEffect (()=>{
-        const cookieFallback = sessionStorage.getItem("token");
+        const cookieFallback = localStorage.getItem("token");
         if (cookieFallback === "[]" ||cookieFallback === null ||cookieFallback === undefined  ) {
-           
+           navigate('/login')
           return
         }
         checkAuthUser()
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         currentDomain, 
         setCurrentDomain: async (newDomain: string) => {
             setCurrentDomain(newDomain);
-            sessionStorage.setItem('domain', newDomain)
+            localStorage.setItem('domain', newDomain)
         },
         setIsAuthenticated,
         checkAuthUser
