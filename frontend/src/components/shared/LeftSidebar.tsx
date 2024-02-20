@@ -13,6 +13,9 @@ interface domain {
     link: string;
     title: string;
 }
+interface DropdownVisibilityState {
+    [key: string]: boolean;
+  }
 
 const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
@@ -26,16 +29,20 @@ const LeftSidebar = () => {
     const [showSubcategories, setShowSubcategories] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState('');
     const { mutateAsync: getAllNavItems, isPending: isNavLoading } = useGetAllNavItems();
+    const [dropdownVisibility, setDropdownVisibility] = useState<DropdownVisibilityState>({});
 
     const handleToggleSubcategories = (label: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         setActiveDropdown(label)
         setShowSubcategories(!showSubcategories);
     };
 
-    function toggleDropdown() {
-        const arrow = document.querySelector('.dropdown-arrow');
-        if (arrow) arrow.classList.toggle('rotated');
-    }
+    const toggleDropdown = (label:any) => {
+        // Use the label to identify the specific dropdown
+        setDropdownVisibility((prevVisibility) => ({
+          ...prevVisibility,
+          [label]: !prevVisibility[label],
+        }));
+      };
 
     const fetchDomains = async () => {
         try {
@@ -96,6 +103,7 @@ const LeftSidebar = () => {
                             @{user.username}
                         </p>
                     </div>
+
                 </Link> */}
                 <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                     <span className="sr-only">Open sidebar</span>
@@ -119,12 +127,12 @@ const LeftSidebar = () => {
                                     <React.Fragment key={link.label}>
                                         {link?.category ? (
                                             <li className="left-sidebar-link border-y hover:bg-gray-100 ">
-                                                <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={toggleDropdown}>
+                                                <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`}   onClick={() => toggleDropdown(link.label || '')}>
                                                     <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap me-[100px] my-[22px]">{link?.label}</span>
                                                     <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow relative right-5" alt="" />
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className="hidden py-2 space-y-2">
+                                                <ul id={`${link?.label}-dropdown`} className={`py-2 space-y-2 ${dropdownVisibility[link?.label|| ''] ? 'block' : 'hidden'}`}>
                                                     <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                         <div className="links">
                                                             <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
