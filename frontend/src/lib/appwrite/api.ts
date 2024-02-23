@@ -61,7 +61,7 @@ export async function getCurrentUser() {
 // ============================== SIGN OUT
 export async function signOutAccount() {
   try {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
   } catch (error) {
     throw new PromiseHandler('Error during user sign-out', 'SIGN_OUT_ERROR', { error });
   }

@@ -16,6 +16,7 @@ const UseTokenExpiration = () => {
       const token = localStorage.getItem('token') || '';
     
       if (token === '') {
+        console.log("UseTokenExpiration LAYOUT")
         // navigate('/login');
         return;
       }
@@ -30,11 +31,13 @@ const UseTokenExpiration = () => {
             title: "Session Expired",
             description: "Logging You out! Please login again"
           });
-          sessionStorage.removeItem('token');
+          localStorage.removeItem('token');
+          console.log("UseTokenExpiration LAYOUT")
           navigate('/login');
         }
       } catch (error) {
-        sessionStorage.removeItem('token');
+        localStorage.removeItem('token');
+        console.log("UseTokenExpiration LAYOUT")
         navigate('/login');
       }
     };

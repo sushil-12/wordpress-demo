@@ -13,6 +13,7 @@ const RootLayout = () => {
   useEffect(() => {
     const cookieFallback = localStorage.getItem("token");
     if (cookieFallback === "[]" ||cookieFallback === null ||cookieFallback === undefined  ) {
+      console.log("ROOT LAYOUT")
       navigate('/login')
       return
     }
