@@ -1,97 +1,100 @@
 export const logos = {
-  'he_group': '/assets/icons/logo-dashboard.svg',
+  'he_group': '/assets/images/logo-dashboard.svg',
   'x_wear': '/assets/images/xwear.png',
   'the_logician': '/assets/images/logician.png'
 };
-type DomainLinks = {
-  [domain: string]: {
-    imgURL: string;
-    route: string;
-    label: string;
-    subcategory?:any,
-  }[];
+
+export const websites = {
+  'he_group': '/assets/images/hegroup.svg',
+  'x_wear': '/assets/images/xwear.svg',
+  'the_logician': '/assets/images/logician.svg',
+}
+
+
+type SubCategoryLink = {
+  imgURL: string;
+  route: string;
+  label: string;
 };
+
+type DomainLink = {
+  imgURL: string;
+  route: string;
+  label: string;
+  subcategory?: SubCategoryLink[];
+};
+
+type DomainLinks = {
+  [domain: string]: DomainLink[] | {
+    [subdomain: string]: DomainLink[];
+  };
+};
+export const websiteMenus = [
+  {
+    imgURL: "/assets/icons/media.svg",
+    route: "/media",
+    label: "Media",
+  },
+  {
+    imgURL: "/assets/icons/pages.svg",
+    route: "/pages",
+    label: "Pages",
+  },
+  {
+    imgURL: "/assets/icons/posts.svg",
+    route: "/posts",
+    label: "Posts",
+  },
+  {
+    imgURL: "/assets/icons/plugins.svg",
+    route: "/plugins",
+    label: "Plugins",
+  },
+];
 export const domainSidebarLinks: DomainLinks = {
-  'he_group': [
+  comman: [
     {
-      imgURL: "/assets/icons/home.svg",
+      imgURL: "/assets/icons/dashboard.svg",
       route: "/",
       label: "Dashboard",
     },
     {
-      imgURL: "/assets/icons/home.svg",
-      route: "/manage-custom-fields",
-      label: "Custom Fields",
-    },
-    {
-      imgURL: "/assets/icons/wallpaper.svg",
-      route: "/posts/technology",
-      label: "Technology",
-      subcategory: [
+      imgURL: "/assets/icons/personal.svg",
+      route: "/personal-statistics",
+      label: "Personal Statistic",
+      subcategory:[
         {
-          imgURL: "/assets/icons/filter.svg",
-          route: "/category/technology",
-          label: "Manage category",
-        },
-        {
-          imgURL: "/assets/icons/filter.svg",
-          route: "/category/technology",
-          label: "Manage category",
-        },
-        {
-          imgURL: "/assets/icons/filter.svg",
-          route: "/category/technology",
-          label: "Manage category",
-        },
-      ],
-    },
-    {
-      imgURL: "/assets/icons/wallpaper.svg",
-      route: "/posts/invention",
-      label: "Invention",
-      subcategory: [
-        {
-          imgURL: "/assets/icons/filter.svg",
-          route: "/category/invention",
-          label: "Manage invention",
-        },
+          imgURL: "/assets/icons/personal.svg",
+          route: "/personal-statistics",
+          label: "Personal Statistic",
+        }
       ]
     },
     {
-      imgURL: "/assets/icons/wallpaper.svg",
-      route: "/media",
-      label: "Media",
-    },
-    {
-      imgURL: "/assets/icons/people.svg",
-      route: "/users",
-      label: "Users",
-    },
-  ],
-  'x_wear': [
-    {
-      imgURL: "/assets/icons/home.svg",
-      route: "/",
-      label: "Dashboard",
-    },
-    {
-      imgURL: "/assets/icons/wallpaper.svg",
-      route: "/media",
-      label: "Media",
+      imgURL: "/assets/icons/Briefcase.svg",
+      route: "/buisness-statistics",
+      label: "Business Statistic",
+      subcategory:[
+        {
+          imgURL: "/assets/icons/Briefcase.svg",
+          route: "/buisness-statistics",
+          label: "Business Statistic",
+        }
+      ]
     },
   ],
-  'the_logician': [
-    {
-      imgURL: "/assets/icons/home.svg",
-      route: "/",
-      label: "Logician Dashboard",
-    },
-    {
-      imgURL: "/assets/icons/wallpaper.svg",
-      route: "/media",
-      label: "Media",
-    },
-  ],
+  
+  websites: {
+    he_group: [
+      ...websiteMenus,
+    ],
+    x_wear: [
+      ...websiteMenus,
+    ],
+    the_logician: [
+      ...websiteMenus,
+    ],
+  },
 };
 
 export const domainbottombarLinks: DomainLinks = {

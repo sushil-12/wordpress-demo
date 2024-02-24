@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useGetAllDomains, useGetAllNavItems, useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
-import { logos } from "@/constants";
+import { domainSidebarLinks, logos, websites } from "@/constants";
 import { INavLink } from "@/lib/types";
-import { ChevronDown, MenuIcon, Settings } from "lucide-react";
+import { MenuIcon, Settings } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
 import * as React from "react";
+import { formatString } from "@/lib/utils";
 
 interface domain {
     name: string;
@@ -15,65 +16,72 @@ interface domain {
 }
 interface DropdownVisibilityState {
     [key: string]: boolean;
-  }
+}
 
 const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { user, currentDomain, setCurrentDomain, rerender, setRerender } = useUserContext();
-    const { mutateAsync: getAllDomains, isPending: isDomainLoading } = useGetAllDomains();
-    const [domain, setDomains] = useState<domain[]>([]);
+    // const { mutateAsync: getAllDomains, isPending: isDomainLoading } = useGetAllDomains();
+    // const [domain, setDomains] = useState<domain[]>([]);
     const logoPath: string | undefined = logos[currentDomain as keyof typeof logos];
-    const [sidebarLinks, setSideBarLinks] = useState<INavLink[]>([]); // Corrected type
-    const [showSubcategories, setShowSubcategories] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState('');
-    const { mutateAsync: getAllNavItems, isPending: isNavLoading } = useGetAllNavItems();
+    // const [sidebarLinks, setSideBarLinks] = useState<INavLink[]>([]); // Corrected type
+    // const [showSubcategories, setShowSubcategories] = useState(false);
+    // const [activeDropdown, setActiveDropdown] = useState('');
+    // const { mutateAsync: getAllNavItems, isPending: isNavLoading } = useGetAllNavItems();
     const [dropdownVisibility, setDropdownVisibility] = useState<DropdownVisibilityState>({});
+    const [activeSubmenu, setActiveSubmenu] = useState('');
 
-    const handleToggleSubcategories = (label: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        setActiveDropdown(label)
-        setShowSubcategories(!showSubcategories);
+    const toggleActiveSubmenu = (submenuKey: string) => {
+        setCurrentDomain(submenuKey)
+        setActiveSubmenu(submenuKey);
+        console.log("activeSubmenu", activeSubmenu, 'cdf', submenuKey)
     };
 
-    const toggleDropdown = (label:any) => {
+    // const handleToggleSubcategories = (label: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    //     setActiveDropdown(label)
+    //     setShowSubcategories(!showSubcategories);
+    // };
+
+    const toggleDropdown = (label: any) => {
         // Use the label to identify the specific dropdown
         setDropdownVisibility((prevVisibility) => ({
-          ...prevVisibility,
-          [label]: !prevVisibility[label],
+            ...prevVisibility,
+            [label]: !prevVisibility[label],
         }));
-      };
-
-    const fetchDomains = async () => {
-        try {
-            const fetchedDomains = await getAllDomains();
-            setDomains(fetchedDomains.data);
-        } catch (error) {
-            console.error('Error fetching domains:', error);
-        }
     };
 
-    const getNavItems = async () => {
-        try {
-            const navItems = await getAllNavItems();
-            setSideBarLinks(navItems.data.navigationItems);
-        } catch (error) {
-            console.error('Error fetching nav items:', error);
-        }
-    };
+    // const fetchDomains = async () => {
+    //     try {
+    //         const fetchedDomains = await getAllDomains();
+    //         setDomains(fetchedDomains.data);
+    //     } catch (error) {
+    //         console.error('Error fetching domains:', error);
+    //     }
+    // };
 
-    const handleDomainChange = (value: string) => {
-        setCurrentDomain(value);
-        getNavItems();
-        navigate('/dashboard');
-    };
+    // const getNavItems = async () => {
+    //     try {
+    //         const navItems = await getAllNavItems();
+    //         setSideBarLinks(navItems.data.navigationItems);
+    //     } catch (error) {
+    //         console.error('Error fetching nav items:', error);
+    //     }
+    // };
+
+    // const handleDomainChange = (value: string) => {
+    //     setCurrentDomain(value);
+    //     getNavItems();
+    //     navigate('/dashboard');
+    // };
 
     useEffect(() => {
         if (isSuccess) {
             navigate(0);
         }
-        getNavItems();
-        fetchDomains();
+        // getNavItems();
+        // fetchDomains();
     }, [isSuccess, rerender]);
 
     return (
@@ -117,45 +125,36 @@ const LeftSidebar = () => {
                                     <img src={logoPath} alt="Logo" width={108} height={34} />
                                 </Link>
                             </li>
-                            {sidebarLinks?.map((link: INavLink) => {
+                            {domainSidebarLinks.comman?.map((link: INavLink) => {
                                 const isActive = pathname.includes(link.route);
-                                const hasSubcategories = link.category;
 
                                 return (
                                     <React.Fragment key={link.label}>
-                                        {link?.category ? (
-                                            <li className="left-sidebar-link border-y hover:bg-gray-100 ">
-                                                <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`}   onClick={() => toggleDropdown(link.label || '')}>
+                                        {link?.subcategory ? (
+                                            <li className="left-sidebar-link border-y">
+                                                <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' />
-                                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap me-[100px] my-[22px]">{link?.label}</span>
-                                                    <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow relative right-5" alt="" />
+                                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
+                                                    <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow mr-5" alt="" />
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className={`py-2 space-y-2 ${dropdownVisibility[link?.label|| ''] ? 'block' : 'hidden'}`}>
-                                                    <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
-                                                        <div className="links">
-                                                            <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
-                                                                <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{link.label}
-                                                            </NavLink>
-                                                        </div>
-                                                    </li>
-                                                    <li className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
-                                                        <div className="links">
-                                                            <NavLink className="flex gap-4 items-center p-4" to={link?.type == 'custom_post' ? `/category/${link?.route}` : link?.route}>
-                                                                <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />Manage category
-                                                            </NavLink>
-                                                        </div>
-                                                    </li>
-
+                                                <ul id={`${link?.label}-dropdown`} className={`py-2 space-y-2 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
+                                                    {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
+                                                        <li key={subcategoryLink.label} className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                                            <div className="links">
+                                                                <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
+                                                                    <img src={subcategoryLink.imgURL} alt={subcategoryLink.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{subcategoryLink.label}
+                                                                </NavLink>
+                                                            </div>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </li>
                                         ) : (
-
-                                            <li className={`left-sidebar-link border-y hover:bg-gray-100 ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                            <li className={`left-sidebar-link border-y hover:bg-gray-100 ${isActive ? 'bg-secondary-gray' : ''}`}>
                                                 <div className="link-container" >
                                                     <NavLink className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
                                                         <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1' : ''}`} />
                                                         <span className="ms-3  my-[22px]">{link.label}</span>
-
                                                     </NavLink>
                                                 </div>
                                             </li>
@@ -163,7 +162,74 @@ const LeftSidebar = () => {
                                     </React.Fragment>
                                 );
                             })}
-                            
+
+                            <button type="button" className="flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
+                                <img src={'/assets/icons/websites.svg'} alt={'websites'} className='pl-6 pr-1' />
+                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{'Websites'}</span>
+                                <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow mr-5" alt="" />
+                            </button>
+                            {/* Dropdown menu for "Websites" */}
+                            <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] ? 'block' : 'hidden'}`}>
+
+                                {Object.entries(domainSidebarLinks.websites || {}).map(([submenuKey, submenuItems]) => (
+                                    <React.Fragment key={submenuKey}>
+                                        {/* Button to toggle submenu dropdown */}
+
+                                        <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
+                                            <button type="button" className="flex items-center w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
+                                                <img src={websites[submenuKey]} alt={submenuKey} className='pl-6 pr-1' />
+                                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(submenuKey)}</span>
+                                                <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow me-14" alt="" />
+                                            </button>
+
+                                        </li>
+                                        {/* Submenu dropdown */}
+                                        <ul id={`${submenuKey}-dropdown`} className={` ${activeSubmenu === submenuKey ? 'block' : 'hidden'}`}>
+                                            {/* Render submenu items */}
+                                            {submenuItems.map((link: INavLink) => {
+                                                const isWebActive = pathname.includes(link.route); // Assuming pathname is defined somewhere
+                                                return (
+                                                    <React.Fragment key={link.label}>
+                                                        {link.subcategory ? (
+                                                            <li className="left-sidebar-web-link hover:bg-gray-100 ">
+                                                                <button type="button" className="flex items-center w-full" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
+                                                                    <img src={link.imgURL} alt={link.label} className='pl-6 pr-1' />
+                                                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(link.label)}</span>
+                                                                    {/* <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow mr-5" alt="" /> */}
+                                                                </button>
+
+                                                                {/* <ul id={`${link.label}-dropdown`} className={`${dropdownVisibility[link.label] ? 'block' : 'hidden'}`}>
+                                                                    {link.subcategory?.map((subcategoryLink: INavLink) => (
+                                                                        <li key={subcategoryLink.label} className="leftsidebar-link group">
+                                                                            <div className="links">
+                                                                                <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
+                                                                                    <img src={subcategoryLink.imgURL} alt={subcategoryLink.label} className="group-hover:invert-white" />
+                                                                                    {subcategoryLink.label}
+                                                                                </NavLink>
+                                                                            </div>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul> */}
+                                                            </li>
+                                                        ) : (
+                                                            <li key={link.label} className={`leftsidebar-link ${isWebActive ? 'bg-light-blue text-primary-500' : ''}`}>
+                                                                <div className="links">
+                                                                    <NavLink className="flex gap-4 items-center p-4" to={`${link.route}`}>
+                                                                        <img src={link.imgURL} alt={link.label} className="group-hover:invert-primary-500" />
+                                                                        {link.label}
+                                                                    </NavLink>
+                                                                </div>
+                                                            </li>
+                                                        )}
+                                                    </React.Fragment>
+                                                );
+                                            })}
+                                        </ul>
+
+                                    </React.Fragment>
+                                ))}
+                            </ul>
+
                             <div className="user_profile_actions">
                                 <NavLink key='settings' className={`flex gap-4 items-center p-4 text-primary-500`} to={'/settings'}>
                                     <Settings className="shad-button_ghost" />Settings

@@ -60,7 +60,7 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
       setCustomRepeaterFields((prevFields: any) => {
         const updatedFields = [...prevFields];
         const existingFieldIndex = updatedFields.findIndex((field) => field.name === filteredFieldsObj.name);
-  
+
         if (existingFieldIndex !== -1) {
           updatedFields[existingFieldIndex].value = filteredFieldsObj.value;
         } else {
@@ -117,7 +117,7 @@ const RepeaterField: React.FC<RepeaterFieldProps> = ({ label, name, type, form, 
 
   return (
     <div style={{ marginBottom: '16px' }}>
-       <FormLabel>{label}</FormLabel>
+      <FormLabel>{label}</FormLabel>
       {fields.map((field, index) => (
         <div key={`${field.id}_${index.toString()}`} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center' }}>
           <FormControl style={{ marginRight: '8px' }}>

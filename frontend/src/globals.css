@@ -22,15 +22,34 @@
   body {
     @apply bg-light-1 text-dark-1 min-h-screen font-inter;
   }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #DEE0EE;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    background-color: #DEE0EE;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #000C79;
+  }
+
   /* Regular */
   .inter-regular-14 {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;  
+    font-weight: 400;
     font-size: 14px;
     font-style: normal;
     font-variation-settings: "slnt" 0;
   }
+
   /* Medium */
   .inter-regular-32 {
     font-family: "Inter", sans-serif !important;
@@ -40,18 +59,23 @@
     font-style: normal !important;
     font-variation-settings: "slnt" 0 !important;
   }
-  .card_headings{
+
+  .card_headings {
     line-height: 0px;
     letter-spacing: 0px;
   }
+
   .form_labels {
     line-height: 22px;
     letter-spacing: 0px;
   }
-  .p-inputgroup{
+
+  .p-inputgroup {
     height: 42px !important;
   }
-  .form_check, .p-checkbox-box{
+
+  .form_check,
+  .p-checkbox-box {
     height: 16px !important;
     width: 16px !important;
     border-radius: 2px !important;
@@ -65,18 +89,22 @@
     max-width: 520px;
     padding: 40px;
   }
+
   .login_cards .form_container {
     max-width: 320px;
     min-width: 320px;
   }
+
   .reset_card .form_container {
     max-width: 379px !important;
     min-width: 379px !important;
   }
+
   .reset_password form {
     max-width: 320px;
     min-width: 320px;
   }
+
   .login_cards .action_button {
     margin-top: 12px !important;
   }
@@ -98,41 +126,50 @@
 
   .p-inputgroup .p-inputtext {
     border-left: none !important;
-    padding: 10px 8px 10px 4px  !important;
+    padding: 10px 8px 10px 4px !important;
   }
-  .p-inputgroup-addon{
+
+  .p-inputgroup-addon {
     padding: 10px 0px 10px 8px !important;
     min-width: max-content !important;
   }
 }
 
 @layer primereact {
-  .p-inputtext, .p-inputgroup-addon {
-      font-family: "Inter", sans-serif !important;
-      font-optical-sizing: auto !important;
-      font-weight: 400 !important;  
-      font-size: 14px !important;
-      font-style: normal !important;
-      font-variation-settings: "slnt" 0 !important;
+
+  .p-inputtext,
+  .p-inputgroup-addon {
+    font-family: "Inter", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-variation-settings: "slnt" 0 !important;
   }
+
   .p-inputtext:enabled:focus {
     outline: none !important;
     outline-offset: 0;
     box-shadow: none !important;
   }
-  .p-inputgroup:focus-within > .p-inputgroup-addon {
+
+  .p-inputgroup:focus-within>.p-inputgroup-addon {
     border: 1px solid #000C79;
   }
-  .login_cards .p-card-content{
+
+  .login_cards .p-card-content {
     padding: 0px !important;
   }
+
   .p-card .p-card-body {
     padding: 0px !important;
   }
-  .logo-container{
+
+  .logo-container {
     height: 85px;
   }
-  .left-sidebar-link{
+
+  .left-sidebar-link {
     min-height: 60px;
     font-family: 'Inter';
     font-size: 16px;
@@ -140,25 +177,39 @@
     line-height: 100%;
     @apply text-secondary-link
   }
-  .rotated{
+
+  .left-sidebar-web-link {
+    min-height: 37px;
+    font-family: 'Inter';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 100%;
+    @apply text-secondary-link
+  }
+
+  .rotated {
     transform: rotate(-180deg);
     transform-style: ease-in;
   }
+
   .dropdown-arrow {
-    transition: transform 0.3s ease-in-out; /* Add a transition for smooth rotation */
+    transition: transform 0.3s ease-in-out;
+    /* Add a transition for smooth rotation */
+  }
 }
-}
+
 @layer utilities {
 
-    /* Medium */
-    .inter-regular-32 {
-      font-family: "Inter", sans-serif !important;
-      font-optical-sizing: auto !important;
-      font-weight: 500 !important;
-      font-size: 32px !important;
-      font-style: normal !important;
-      font-variation-settings: "slnt" 0 !important;
-    }
+  /* Medium */
+  .inter-regular-32 {
+    font-family: "Inter", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-weight: 500 !important;
+    font-size: 32px !important;
+    font-style: normal !important;
+    font-variation-settings: "slnt" 0 !important;
+  }
+
   /* TYPOGRAPHY */
   .h1-bold {
     @apply text-[24px] font-bold leading-[140%] tracking-tighter;
@@ -291,7 +342,7 @@
   }
 
   .common-container {
-    @apply flex flex-col flex-1 gap-10 overflow-auto py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
+    @apply flex flex-col flex-1 gap-10 overflow-auto py-10 px-5 md:px-8 lg:p-14;
   }
 
   /* All Users */
@@ -305,7 +356,7 @@
 
   /* Explore */
   .explore-container {
-    @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+    @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14;
   }
 
   .explore-inner_container {
@@ -318,7 +369,7 @@
 
   /* Home */
   .home-container {
-    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
+    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14;
   }
 
   .home-posts {
@@ -326,12 +377,12 @@
   }
 
   .home-creators {
-    @apply hidden xl:flex flex-col w-72 2xl:w-465 px-6 py-10 gap-10 overflow-scroll custom-scrollbar;
+    @apply hidden xl:flex flex-col w-72 2xl:w-465 px-6 py-10 gap-10 overflow-scroll;
   }
 
   /* Post Details */
   .post_details-container {
-    @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center;
+    @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 items-center;
   }
 
   .post_details-card {
@@ -352,7 +403,7 @@
 
   /* Profile */
   .profile-container {
-    @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+    @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14;
   }
 
   .profile-inner_container {
@@ -365,7 +416,7 @@
 
   /* Saved */
   .saved-container {
-    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14;
   }
 
   /* Bottom bar */
@@ -402,11 +453,12 @@
 
   /* Left sidebar */
   .leftsidebar {
-    @apply md:flex flex-col justify-between min-w-[240px] overflow-scroll custom-scrollbar;;
+    @apply md:flex flex-col justify-between min-w-[248px] overflow-scroll;
+    ;
   }
 
   .leftsidebar-link {
-    @apply rounded-lg base-medium hover:bg-primary-500 hover:text-slate-50 transition;
+    @apply base-medium hover:bg-light-blue hover:text-primary-500 transition;
   }
 
   /* Post Card */

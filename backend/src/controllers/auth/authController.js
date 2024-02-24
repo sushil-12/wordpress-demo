@@ -143,7 +143,7 @@ const login = async (req, res) => {
               ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
             });
         } catch (error) {
-          ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+          ErrorHandler.handleError(error, res);
         }
         return;
       }

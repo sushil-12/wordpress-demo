@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { navItemFormSchema } from "@/lib/validation";
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
@@ -13,11 +13,14 @@ import { SelectButton } from "primereact/selectbutton";
 import { createSlug } from "@/lib/utils";
 import { usecreateOrEditNavItem } from "@/lib/react-query/queriesAndMutations";
 
-const NavItemForm: React.FC<{ item: any, setRerender:any }> = ({ item, setRerender }) => {
+const NavItemForm: React.FC<{ item: any, setRerender: any }> = ({ item, setRerender }) => {
     const items = [
         { name: 'Custom Post', value: 'custom_post' },
         { name: 'default', value: 'default' }
     ];
+
+
+
     const [type, setType] = useState(null);
     const { mutateAsync: createOrEditNavItem, isPending: isLoading } = usecreateOrEditNavItem();
     const form = useForm<z.infer<typeof navItemFormSchema>>({
@@ -30,12 +33,16 @@ const NavItemForm: React.FC<{ item: any, setRerender:any }> = ({ item, setRerend
             enabled: item?.enabled || true,
             type: item?.type || 'default',
             category: item?.category || false,
-            subcategory: item?.subcategory || ''
+            subcategory: [{ name: "", route: "", imgUrl: "" }]
         },
     });
 
+    const { register, control, handleSubmit, formState: { errors }, setValue } = useForm();
+    console.log(form)
+    const { fields, append, remove } = useFieldArray({ control, name: "submenus" });
+
     useEffect(() => {
-        if (item) { console.log(item); form.setValue('id', item._id); form.setValue('route', item.route); form.setValue('label', item.label); form.setValue('imgUrl', item.imgURL); form.setValue('type', item.type); form.setValue('category', item.category); setType(item.type); console.log(form.getValues()) } else{form.reset()};
+        if (item) { console.log(item); form.setValue('id', item._id); form.setValue('route', item.route); form.setValue('label', item.label); form.setValue('imgUrl', item.imgURL); form.setValue('type', item.type); form.setValue('category', item.category); setType(item.type); console.log(form.getValues()) } else { form.reset() };
     }, [item]);
     const { toast } = useToast()
 
@@ -44,7 +51,7 @@ const NavItemForm: React.FC<{ item: any, setRerender:any }> = ({ item, setRerend
         if (createOrEditNavItemResponse?.code === 200 || createOrEditNavItemResponse?.code === 201) {
             const message = createOrEditNavItemResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
             form.reset();
-            setRerender((prev:boolean)=> !prev);
+            setRerender((prev: boolean) => !prev);
             return toast({ variant: 'default', description: message });
         } else {
             return toast({ variant: 'default', description: 'Something went wrong' });
@@ -89,7 +96,7 @@ const NavItemForm: React.FC<{ item: any, setRerender:any }> = ({ item, setRerend
                         </FormItem>
                     )}
                     />
-                    {type!= 'default' &&
+                    {type != 'default' &&
                         <FormField control={form.control} name="category" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Enable Category</FormLabel>
@@ -101,7 +108,59 @@ const NavItemForm: React.FC<{ item: any, setRerender:any }> = ({ item, setRerend
                                 </FormControl>
                                 <FormMessage className="shad-form_message" />
                             </FormItem>
-                        )} />}
+                        )} />
+                    }
+                    <div>
+                        {fields.map((field, index) => (
+                            <div key={field.id}>
+                                <FormField
+                                    name={`subcategory[${index}].name`}
+                                    render={({ field }) => (
+                                        <div>
+                                            <FormLabel>Subcategory Name</FormLabel>
+                                            <Input
+                                                placeholder="Add name"
+                                                {...field}
+                                            />
+                                            <FormMessage />
+                                        </div>
+                                    )}
+                                />
+                                <FormField
+                                    name={`subcategory[${index}].route`}
+                                    render={({ field }) => (
+                                        <div>
+                                            <FormLabel>Subcategory Route</FormLabel>
+                                            <Input
+                                                placeholder="Add Route"
+                                                {...field}
+                                            />
+                                            <FormMessage />
+                                        </div>
+                                    )}
+                                />
+                                <FormField
+                                    name={`subcategory[${index}].imgUrl`}
+                                    render={({ field }) => (
+                                        <div>
+                                            <FormLabel>Subcategory Image Url</FormLabel>
+                                            <Input
+                                                placeholder="Add Url"
+                                                {...field}
+                                            />
+                                            <FormMessage />
+                                        </div>
+                                    )}
+                                />
+                                <Button type="button" onClick={() => remove(index)}>
+                                    Remove Subcategory
+                                </Button>
+                            </div>
+                        ))}
+                        <Button type="button" onClick={() => append({})}>
+                            Add Subcategory
+                        </Button>
+                    </div>
 
                     <Button type="submit" className="shad-button_primary w-max place-self-end ">
                         Add

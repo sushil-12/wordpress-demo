@@ -127,14 +127,26 @@ export const mediaEditFormSchema = z.object({
     title: z.string(),
 })
 
+const subNavItemSchema = z.object({
+    name:  z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
+        message: 'Too big, less than 50 characters please',
+        path: ['label'],
+    }),
+    route: z.string(),
+    imgUrl: z.string(),
+});
+
 export const navItemFormSchema = z.object({
     id: z.string(),
     route: z.string(),
     imgUrl: z.string(),
     type: z.string(),
-    label: z.string().min(0, { message: "Too Short" }).max(2000, 'Too big less than 50 character please'),
+    label: z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
+        message: 'Too big, less than 50 characters please',
+        path: ['label'],
+    }),
     enabled: z.boolean(),
     category: z.boolean(),
-    subcategory: z.string().optional(),
-})
+    subcategory: z.array(subNavItemSchema),
+});
 

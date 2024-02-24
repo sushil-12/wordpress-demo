@@ -7,6 +7,7 @@ import { Paginator } from 'primereact/paginator';
 import { useToast } from '@/components/ui/use-toast';
 import { useUserContext } from '@/context/AuthProvider';
 import MediaGridSkeletonDemo from '@/components/skeletons/MediaGridSkeletonDemo';
+import { useParams } from 'react-router-dom';
 
 export default function Media() {
   const { media: contextMedia, setMedia } = useMedia();
