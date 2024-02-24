@@ -4,10 +4,9 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { useForm } from "react-hook-form";
 import { resetPasswordValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useResetPasswordAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthProvider";
+import { useResetPasswordAccount } from "@/lib/react-query/queriesAndMutations";
 import { z } from "zod";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
@@ -17,8 +16,7 @@ const ResetPasswordForm = () => {
     const { toast } = useToast();
     let { token } = useParams();
     const [success, setSuccess] = useState(false)
-    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
-    const { mutateAsync: resetPassword, isPending: isSigningIn } = useResetPasswordAccount();
+    const { mutateAsync: resetPassword, isPending: isResetting } = useResetPasswordAccount();
     const navigate = useNavigate();
 
 
@@ -88,7 +86,7 @@ const ResetPasswordForm = () => {
                                     className="bg-main-bg-900 inter-regular-14 text-white mt-3 action_button h-10"
                                     onClick={() => navigate('/login')}
                                 >
-                                    {isSigningIn && isUserLoading ? (
+                                    {isResetting && isResetting ? (
                                         <div className="flex-center gap-2">
                                             <Loader />
                                         </div>
@@ -124,7 +122,7 @@ const ResetPasswordForm = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <label className="form_labels inter-regular-14">
-                                                Password
+                                                New Password
                                             </label>
                                             <FormControl>
                                                 <div className="p-inputgroup flex-1 inter-regular-14 form_labels">
@@ -177,9 +175,9 @@ const ResetPasswordForm = () => {
                             <Button
                                 type="submit"
                                 className="bg-main-bg-900 inter-regular-14 text-white mt-3 action_button h-10"
-                                disabled={isSigningIn || isUserLoading}
+                                disabled={isResetting || isResetting}
                             >
-                                {isSigningIn && isUserLoading ? (
+                                {isResetting && isResetting ? (
                                     <div className="flex-center gap-2">
                                         <Loader />
                                     </div>

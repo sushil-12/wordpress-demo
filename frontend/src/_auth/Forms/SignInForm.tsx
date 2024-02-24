@@ -11,7 +11,7 @@ import {
 import { useForm } from "react-hook-form";
 import { forgotPassword, loginInValidationSchema, signInValidationSchema, verifyAccount } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthProvider";
@@ -50,6 +50,12 @@ const SignInForm = () => {
     if (timeLeft === 0) {
       clearInterval(interval);
       setTimerFinished(true);
+      form.setValue('form_type', 'login_form');
+      form.setValue('verification_code','xxxxxx'); 
+      console.log(form)
+      form.setError('verification_code', {
+        message: `Verification code expired. Please generate new.`
+      },);
     }
     return () => clearInterval(interval);
   }, [state, pathname, running, timeLeft])
@@ -73,6 +79,7 @@ const SignInForm = () => {
     verify_account_form: verifyAccount,
     forgot_password_form: forgotPassword,
   };
+ 
   const form = useForm<z.infer<typeof signInValidationSchema>>({
     resolver: zodResolver(validationSchema[state]),
     defaultValues: {
@@ -84,14 +91,15 @@ const SignInForm = () => {
     },
   });
   console.log(isUserLoading, "iseUserLoading", form.formState);
+  
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signInValidationSchema>) {
-    console.log(values)
+    
     const session = await signInAccount({
       email: values.email,
       password: values.password,
       staySignedIn: values.staySignedIn,
-      form_type: state,
+      form_type: values.form_type,
       verification_code: values.verification_code,
     });
 
@@ -107,13 +115,17 @@ const SignInForm = () => {
       return;
     }
 
-    if (state == 'login_form') {
+    if (state == 'login_form' || form.getValues('form_type') == 'login_form') {
       const response_data = session?.data?.data;
       if (response_data.email_sent) {
         navigate('/verify-account')
         setRunning(true)
-        console.log(running, "Running")
+        form.clearErrors('verification_code');
+        form.setValue('verification_code','')
         setState('verify_account_form');
+        form.setValue('form_type', 'verify_account_form')
+        setTimeLeft(120)
+        setTimerFinished(false)
         return toast({ title: "Verification code succesfuly" });
       }
     }
@@ -180,7 +192,7 @@ const SignInForm = () => {
                           </span>
                           <InputText
                             className="b"
-                            placeholder="john.doe@gmail.com"
+                            placeholder="Your Email Address"
                             {...field}
                           />
                         </div>
@@ -206,7 +218,7 @@ const SignInForm = () => {
                             size="sm"
                             type="password"
                             className=""
-                            placeholder="password"
+                            placeholder="Your Password "
                             {...field}
                           />
                         </div>
@@ -220,7 +232,7 @@ const SignInForm = () => {
               <p className="text-small-regular text-dark-2 text-right mt-3">
                 <Link
                   to='/forgot-password'
-                  onClick={() => { setState('forgot_password_form'); }}
+                  onClick={() => { setState('forgot_password_form'); form.setValue('form_type', 'forgot_password_form') }}
                   className="text-main-bg-900 inter-regular-14 p-0"
                 >
                   Forgot password?
@@ -249,7 +261,7 @@ const SignInForm = () => {
                           htmlFor="staySignedIn"
                           className="ml-2 inter-regular-14 text-main-bg-900 "
                         >
-                          Stay signed in for a week
+                         Stay singed in for a week
                         </label>
                       </div>
                     </FormControl>
@@ -262,8 +274,8 @@ const SignInForm = () => {
                 className="bg-main-bg-900 inter-regular-14 text-white mt-3 action_button h-10"
                 disabled={isSigningIn || isUserLoading}
               >
-                {isSigningIn && isUserLoading ? (
-                  <div className="flex-center gap-2">
+                {isSigningIn ? (
+                  <div className="flex-center gap-4">
                     <Loader />
                   </div>
                 ) : (
@@ -294,7 +306,7 @@ const SignInForm = () => {
                           </span>
                           <InputText
                             className="b"
-                            placeholder="john.doe@gmail.com"
+                            placeholder="Your Email Address"
                             {...field}
                           />
                         </div>
@@ -308,8 +320,8 @@ const SignInForm = () => {
                   className="bg-main-bg-900 inter-regular-14 text-white h-10 "
                   disabled={isSigningIn || isUserLoading}
                 >
-                  {isSigningIn && isUserLoading ? (
-                    <div className="flex-center gap-2">
+                  {isSigningIn ? (
+                    <div className="flex-center gap-4">
                       <Loader />
                     </div>
                   ) : (
@@ -338,7 +350,7 @@ const SignInForm = () => {
                       <label className="form_labels inter-regular-14">
                         <div className="flex justify-between">
                           <span className="self-center">Verification Code</span>
-                          <span className="flex gap-1">{!timerFinished ? (<><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</span></>) : (<Link to="/login" onClick={() => setState('login_form')} className="underline text-main-bg-900">Resend Code</Link>)}</span>
+                          <span className="flex gap-1">{!timerFinished ? (<><span className="self-center"><img src="/assets/icons/timer.png" /></span><span className="inter-regular-14"> {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</span></>) : (<><span className="self-center"><img src="/assets/icons/clock-expired.svg" /></span><span className="inter-regular-14"> {`00:00`}</span></>)}</span>
                         </div>
                       </label>
                       <FormControl>
@@ -347,6 +359,7 @@ const SignInForm = () => {
                             <img src="/assets/icons/mail.svg" />
                           </span>
                           <InputText
+                            maxLength={6}
                             className="b"
                             placeholder="Enter verfication code "
                             {...field}
@@ -357,19 +370,36 @@ const SignInForm = () => {
                     </FormItem>
                   )}
                 />
-                <Button
+                {!timerFinished ? (<Button
                   type="submit"
                   className="bg-main-bg-900 inter-regular-14 text-white h-10 "
-                  disabled={isSigningIn || isUserLoading}
+                  disabled={isSigningIn}
                 >
-                  {isSigningIn && isUserLoading ? (
-                    <div className="flex-center gap-2">
+                  {isSigningIn ? (
+                    <div className="flex-center gap-4 h-10">
                       <Loader />
                     </div>
                   ) : (
                     "Submit"
                   )}
-                </Button>
+                </Button>) : (
+                  <Button
+                    type="submit"
+                    // onClick={(e) => {e.preventDefault();e.target.click}}
+                    className="bg-main-bg-900 inter-regular-14 text-white h-10 "
+                    disabled={isSigningIn}
+                  >
+                    {isSigningIn ? (
+                      <div className="flex-center gap-4 h-10">
+                        <Loader />
+                      </div>
+                    ) : (
+                      "Generate Code"
+                    )}
+                  </Button>
+                )}
+
+
               </div>
             </form>
           )}

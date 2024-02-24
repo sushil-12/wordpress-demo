@@ -46,7 +46,6 @@ const login = async (req, res) => {
     if (!user) {
       ResponseHandler.error(res, HTTP_STATUS_CODES.UNAUTHORIZED, { field_error: 'email', message: "User with this email not exists!" }, HTTP_STATUS_CODES.UNAUTHORIZED);
       return;
-      throw new CustomError(404, 'User not found');
     }
 
     if (form_type == 'forgot_password_form') {
@@ -54,6 +53,7 @@ const login = async (req, res) => {
         const templateFile = fs.readFileSync('./src/email-templates/reset-password.hbs', 'utf8');
         const resetToken = generateRandomString(32);
         user.resetToken = resetToken;
+        user.resetTokenExpiry = new Date(Date.now() + 1 * 60 * 60 * 1000)
         await user.save();
         const resetLink = `${process.env.RESET_PASSWORD_URL}/${resetToken}`;
         const template = handlebars.compile(templateFile);
@@ -88,23 +88,32 @@ const login = async (req, res) => {
       return;
       // throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
     }
-    if(user.signInTimestamp && new Date() < user.signInTimestamp){
+    if (user.signInTimestamp && new Date() < user.signInTimestamp) {
       require_verification = false;
     }
+    
     if (user.signInTimestamp && new Date() < user.signInTimestamp && user.staySignedIn) {
       require_verification = false;
       sign_in_stamp = user.signInTimestamp || sign_in_stamp;
     }
+    if(!user.staySignedIn){ require_verification= true;}
 
-   
+    if (form_type == 'verify_account_form') {
+      if (staySignedIn == true && !user.staySignedIn || user.staySignedIn == false) {
+        sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      }
+      if (verification_code !== user.otp || new Date() > user.otpExpiry) {
+        ResponseHandler.error(res, HTTP_STATUS_CODES.UNAUTHORIZED, { field_error: 'verification_code', message: "Invalid or expired verification code. Please check and try again!" }, HTTP_STATUS_CODES.UNAUTHORIZED); return;
+      }
+    }
+
     if (form_type === 'login_form') {
       otp = generateRandomString(6);
-      if(staySignedIn == true && !user.staySignedIn || user.staySignedIn == false ){
-        sign_in_stamp =  new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      if (staySignedIn == true && !user.staySignedIn || user.staySignedIn == false) {
+        sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
       }
       if (staySignedIn || !require_verification) {
-        user.staySignedIn = staySignedIn;
-        user.signInTimestamp = sign_in_stamp // Set OTP expiry to 7 days later
+        
         user.otp = otp;
         user.otpExpiry = new Date(Date.now() + 2 * 60 * 1000);
         await user.save();
@@ -128,7 +137,7 @@ const login = async (req, res) => {
           // Send email
           sendMail(mailOptions)
             .then(() => {
-          ResponseHandler.success(res, { email_sent: true, otp: otp, message: "Verification code sent successfully" }, HTTP_STATUS_CODES.OK);
+              ResponseHandler.success(res, { email_sent: true, otp: otp, message: "Verification code sent successfully" }, HTTP_STATUS_CODES.OK);
             })
             .catch((error) => {
               ResponseHandler.error(res, { email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
@@ -140,14 +149,9 @@ const login = async (req, res) => {
       }
     }
 
-
-    if (require_verification) {
-      if (verification_code !== user.otp || new Date() > user.otpExpiry) {
-        ResponseHandler.error(res, HTTP_STATUS_CODES.UNAUTHORIZED, { field_error: 'verification_code', message: "Invalid or expired verification code. Please check and try again!" }, HTTP_STATUS_CODES.UNAUTHORIZED); return;
-      }
-    }
-
     const token_expiry = '24h';
+    user.staySignedIn = staySignedIn;
+    user.signInTimestamp = sign_in_stamp
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: token_expiry });
     if (user.role.name == "admin") {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
@@ -165,11 +169,16 @@ const resetPassword = async (req, res) => {
     if (!user) {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'Reset Link might be expired or not exists!');
     }
+    if (user.resetTokenExpiry < new Date()) {
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'Reset Link might be expired or not exists!');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
+    user.staySignedIn=false;
+    user.signInTimestamp= new Date();
 
     await user.save();
-    //user.resetToken = undefined;
+    user.resetToken = undefined;
     await user.save();
     ResponseHandler.success(res, { password_reset: true, message: "Password reset successfully" }, HTTP_STATUS_CODES.OK);
   } catch (error) {

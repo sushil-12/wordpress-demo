@@ -50,8 +50,8 @@ export const forgotPassword = z.object({
 })
 
 export const resetPasswordValidationSchema = z.object({
-    password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
-    confirm_password: z.string().min(8, { message: "password must be of minimum 8 characters" }),
+    password: z.string().min(8, { message: "New Password must be of minimum 8 characters" }),
+    confirm_password: z.string().min(8, { message: "Confirm Password must be of minimum 8 characters" }),
     reset_token: z.string(),
     form_type: z.string(),
 }).superRefine(({ confirm_password, password }, ctx) => {
