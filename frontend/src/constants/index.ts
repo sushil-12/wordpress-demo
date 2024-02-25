@@ -1,7 +1,8 @@
+import sidebarData from '../../../backend/src/constants/sidebar.json';
 export const logos = {
   'he_group': '/assets/images/logo-dashboard.svg',
-  'x_wear': '/assets/images/xwear.png',
-  'the_logician': '/assets/images/logician.png'
+  'x_wear': '/assets/images/logo-dashboard.svg',
+  'the_logician': '/assets/images/logo-dashboard.svg'
 };
 
 export const websites = {
@@ -51,51 +52,9 @@ export const websiteMenus = [
     label: "Plugins",
   },
 ];
-export const domainSidebarLinks: DomainLinks = {
-  comman: [
-    {
-      imgURL: "/assets/icons/dashboard.svg",
-      route: "/",
-      label: "Dashboard",
-    },
-    {
-      imgURL: "/assets/icons/personal.svg",
-      route: "/personal-statistics",
-      label: "Personal Statistic",
-      subcategory:[
-        {
-          imgURL: "/assets/icons/personal.svg",
-          route: "/personal-statistics",
-          label: "Personal Statistic",
-        }
-      ]
-    },
-    {
-      imgURL: "/assets/icons/Briefcase.svg",
-      route: "/buisness-statistics",
-      label: "Business Statistic",
-      subcategory:[
-        {
-          imgURL: "/assets/icons/Briefcase.svg",
-          route: "/buisness-statistics",
-          label: "Business Statistic",
-        }
-      ]
-    },
-  ],
-  
-  websites: {
-    he_group: [
-      ...websiteMenus,
-    ],
-    x_wear: [
-      ...websiteMenus,
-    ],
-    the_logician: [
-      ...websiteMenus,
-    ],
-  },
-};
+export const domainSidebarLinks: DomainLinks = sidebarData;
+
+// Lets do it after
 
 export const domainbottombarLinks: DomainLinks = {
   'he_group': [

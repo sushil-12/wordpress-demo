@@ -7,9 +7,13 @@ import { Card } from 'primereact/card';
 import { CategoryProvider } from './CategoryContext';
 import { useParams } from 'react-router-dom';
 import SkeletonTable from '@/components/skeletons/SkeletonTable';
+import { useUserContext } from '@/context/AuthProvider';
 
 const Category = () => {
-  const { post_type } = useParams();
+  const { post_type, domain } = useParams();
+  const {setCurrentDomain} = useUserContext();
+  //@ts-ignore
+  setCurrentDomain(domain)
   const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
   const [categories, setCategories] = useState(null);
   const [key, setKey] = useState(0); // Add key state

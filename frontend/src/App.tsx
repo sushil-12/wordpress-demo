@@ -33,19 +33,19 @@ const App = () => {
                         <Route index element={<Home />} />
                         <Route path='/dashboard' element={<Home />} />
                         <Route path='/users' element={<UsersList />} />
-                        <Route path='/media' element={ <MediaProvider><Media /></MediaProvider>} />
+                        <Route path='/:domain/media' element={ <MediaProvider><Media /></MediaProvider>} />
                         <Route path='/settings' element={ <Setting />} />
-                        <Route path='/category/:post_type' element={ <Category/>} />
+                        <Route path='/:domain/category/posts/:post_type' element={ <Category/>} />
                         {/* START____Will be a dynamic routes for creating Custom Post Types (ROUTE NAME MUST BE SIMILAR TO post_type) */}
-                        <Route path='/posts/:post_type' element={<PostComponent />} />
+                        <Route path='/:domain/posts/:post_type?' element={<PostComponent />} />
                         
                         {/* END____Will be a dynamic routes for creating Custom Post Types */}
-                        <Route path='/post/:post_type/:post_id?' element={ <PostOperation />} />  
-                        <Route path='/manage-custom-fields' element={ <ManageCustomFields />} />  
+                        <Route path='/:domain/post/:post_type/:post_id?' element={ <PostOperation />} />  
+                        <Route path='/:domain/manage-custom-fields' element={ <ManageCustomFields />} />  
 
 
-                        <Route path='/pages' element={<PageComponent />} />
-                        <Route path='/pages/:page_id' element={<PostComponent />} />
+                        <Route path='/:domain/pages' element={<PageComponent />} />
+                        <Route path='/:domain/pages/:page_id' element={<PostComponent />} />
                        
 
                     </Route>

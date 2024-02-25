@@ -10,10 +10,13 @@ import MediaGridSkeletonDemo from '@/components/skeletons/MediaGridSkeletonDemo'
 import { useParams } from 'react-router-dom';
 
 export default function Media() {
+  const {domain} = useParams()
   const { media: contextMedia, setMedia } = useMedia();
   const [localMedia, setLocalMedia] = useState(contextMedia);
   const { toast } = useToast();
-  const { currentDomain } = useUserContext();
+  const { currentDomain, setCurrentDomain } = useUserContext();
+  //@ts-ignore
+  setCurrentDomain(domain)
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 50,

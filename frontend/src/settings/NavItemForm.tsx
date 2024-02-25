@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { navItemFormSchema } from "@/lib/validation";
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
@@ -12,34 +12,46 @@ import { InputSwitch } from "primereact/inputswitch";
 import { SelectButton } from "primereact/selectbutton";
 import { createSlug } from "@/lib/utils";
 import { usecreateOrEditNavItem } from "@/lib/react-query/queriesAndMutations";
+import { domainSidebarLinks, websiteMenus } from "@/constants";
+import { Dropdown } from "primereact/dropdown";
+import { saveDatatoSidebar } from "@/lib/appwrite/api";
+
+type Website =
+    | "the_logician"
+    | "he_group"
+    | "x_wear";
 
 const NavItemForm: React.FC<{ item: any, setRerender: any }> = ({ item, setRerender }) => {
+
     const items = [
         { name: 'Custom Post', value: 'custom_post' },
         { name: 'default', value: 'default' }
     ];
+    const domain = [
+        { name: 'The Logician', value: 'the_logician' },
+        { name: 'He Group', value: 'he_group' },
+        { name: 'X-Wear', value: 'x_wear' },
+    ]
 
+    const [type, setType] = useState('custom_post');
+    const [website, setWebsite] = useState<Website>('the_logician');
+    const [selectedMenuAfter, setSelectedMenuAfter] = useState(null);
 
-
-    const [type, setType] = useState(null);
-    const { mutateAsync: createOrEditNavItem, isPending: isLoading } = usecreateOrEditNavItem();
     const form = useForm<z.infer<typeof navItemFormSchema>>({
         resolver: zodResolver(navItemFormSchema),
         defaultValues: {
             id: item?._id || '',
+            domain: item?.domain || '',
             route: item?.route || '',
             label: item?.label || '',
             imgUrl: item?.imgURL || '',
             enabled: item?.enabled || true,
+            place_after: item?.place_after || 'end',
             type: item?.type || 'default',
             category: item?.category || false,
-            subcategory: [{ name: "", route: "", imgUrl: "" }]
+            // subcategory: [{ name: "", route: "", imgUrl: "" }]
         },
     });
-
-    const { register, control, handleSubmit, formState: { errors }, setValue } = useForm();
-    console.log(form)
-    const { fields, append, remove } = useFieldArray({ control, name: "submenus" });
 
     useEffect(() => {
         if (item) { console.log(item); form.setValue('id', item._id); form.setValue('route', item.route); form.setValue('label', item.label); form.setValue('imgUrl', item.imgURL); form.setValue('type', item.type); form.setValue('category', item.category); setType(item.type); console.log(form.getValues()) } else { form.reset() };
@@ -47,7 +59,19 @@ const NavItemForm: React.FC<{ item: any, setRerender: any }> = ({ item, setReren
     const { toast } = useToast()
 
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
-        const createOrEditNavItemResponse = await createOrEditNavItem(values);
+        // @ts-ignore
+        let currentWebsiteSchema = domainSidebarLinks.websites[website];
+        let route_link = values.type === 'custom_post' ? `posts/${values.route}` : values.route;
+        let newobject = { imgURL: values.imgUrl, route: values.route, label: values.label };
+        // @ts-ignore
+        const index = currentWebsiteSchema.findIndex(item => item.label === values.place_after);
+        if (index !== -1) {
+            currentWebsiteSchema.splice(index + 1, 0, newobject);
+        }
+        // @ts-ignore
+        domainSidebarLinks.websites[website] = currentWebsiteSchema;
+        const createOrEditNavItemResponse = await saveDatatoSidebar(domainSidebarLinks);
+
         if (createOrEditNavItemResponse?.code === 200 || createOrEditNavItemResponse?.code === 201) {
             const message = createOrEditNavItemResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
             form.reset();
@@ -88,6 +112,36 @@ const NavItemForm: React.FC<{ item: any, setRerender: any }> = ({ item, setReren
 
                     )}
                     />
+                    <FormField control={form.control} name="domain" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Select Website</FormLabel>
+                            <FormControl>
+                                <SelectButton
+                                    value={website} onChange={(e) => { setWebsite(e.value); form.setValue('domain', e.value); console.log(form.getValues(), form) }}
+                                    optionLabel="name"
+                                    options={domain}
+                                />
+                            </FormControl>
+                            <FormMessage className="shad-form_message" />
+                        </FormItem>
+
+                    )}
+                    />
+
+                    <FormField control={form.control} name="place_after" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Select After</FormLabel>
+                            <FormControl>
+                                {/* @ts-ignore  */}
+                                <Dropdown value={selectedMenuAfter} onChange={(e) => { setSelectedMenuAfter(e.value); form.setValue('place_after', e.value.label); }} optionLabel="label" options={domainSidebarLinks.websites[website]}
+                                    placeholder="Place After" className="w-full md:w-14rem" />
+                            </FormControl>
+                            <FormMessage className="shad-form_message" />
+                        </FormItem>
+
+                    )}
+                    />
+
                     <FormField control={form.control} name="imgUrl" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Image Url</FormLabel>
@@ -110,57 +164,6 @@ const NavItemForm: React.FC<{ item: any, setRerender: any }> = ({ item, setReren
                             </FormItem>
                         )} />
                     }
-                    <div>
-                        {fields.map((field, index) => (
-                            <div key={field.id}>
-                                <FormField
-                                    name={`subcategory[${index}].name`}
-                                    render={({ field }) => (
-                                        <div>
-                                            <FormLabel>Subcategory Name</FormLabel>
-                                            <Input
-                                                placeholder="Add name"
-                                                {...field}
-                                            />
-                                            <FormMessage />
-                                        </div>
-                                    )}
-                                />
-                                <FormField
-                                    name={`subcategory[${index}].route`}
-                                    render={({ field }) => (
-                                        <div>
-                                            <FormLabel>Subcategory Route</FormLabel>
-                                            <Input
-                                                placeholder="Add Route"
-                                                {...field}
-                                            />
-                                            <FormMessage />
-                                        </div>
-                                    )}
-                                />
-                                <FormField
-                                    name={`subcategory[${index}].imgUrl`}
-                                    render={({ field }) => (
-                                        <div>
-                                            <FormLabel>Subcategory Image Url</FormLabel>
-                                            <Input
-                                                placeholder="Add Url"
-                                                {...field}
-                                            />
-                                            <FormMessage />
-                                        </div>
-                                    )}
-                                />
-                                <Button type="button" onClick={() => remove(index)}>
-                                    Remove Subcategory
-                                </Button>
-                            </div>
-                        ))}
-                        <Button type="button" onClick={() => append({})}>
-                            Add Subcategory
-                        </Button>
-                    </div>
 
                     <Button type="submit" className="shad-button_primary w-max place-self-end ">
                         Add

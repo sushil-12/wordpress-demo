@@ -5,9 +5,13 @@ import { formatString } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { PostModel } from "@/lib/types";
 import { usegetPostbyID } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthProvider";
 
 const PostOperation = () => {
-  const { post_type, post_id } = useParams();
+  const { post_type, post_id, domain } = useParams();
+  const {setCurrentDomain} = useUserContext();
+  // @ts-ignore
+  setCurrentDomain(domain)
   const [post, setPost] = useState<PostModel | null>(null);
   const { mutateAsync: getPostByID, isPending: isLoading } = usegetPostbyID();
 

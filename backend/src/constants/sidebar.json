@@ -1,0 +1,117 @@
+{
+  "comman": [
+    {
+      "imgURL": "/assets/icons/dashboard.svg",
+      "route": "/",
+      "label": "Dashboard"
+    },
+    {
+      "imgURL": "/assets/icons/personal.svg",
+      "route": "/personal-statistics",
+      "label": "Personal Statistic",
+      "subcategory": [
+        {
+          "imgURL": "/assets/icons/personal.svg",
+          "route": "/personal-statistics",
+          "label": "Personal Statistic"
+        }
+      ]
+    },
+    {
+      "imgURL": "/assets/icons/Briefcase.svg",
+      "route": "/buisness-statistics",
+      "label": "Business Statistic",
+      "subcategory": [
+        {
+          "imgURL": "/assets/icons/Briefcase.svg",
+          "route": "/buisness-statistics",
+          "label": "Business Statistic"
+        }
+      ]
+    }
+  ],
+  "websites": {
+    "the_logician": [
+      {
+        "imgURL": "/assets/icons/media.svg",
+        "route": "/media",
+        "label": "Media"
+      },
+      {
+        "imgURL": "/assets/icons/pages.svg",
+        "route": "/pages",
+        "label": "Pages"
+      },
+      {
+        "imgURL": "/assets/icons/posts.svg",
+        "route": "/posts",
+        "label": "Posts"
+      },
+      {
+        "imgURL": "/assets/icons/categories.svg",
+        "route": "/posts/categories",
+        "label": "Categories"
+      },
+      {
+        "imgURL": "/assets/icons/interviews.svg",
+        "route": "/posts/interviews",
+        "label": "Interviews"
+      },
+      {
+        "imgURL": "/assets/icons/reviews.svg",
+        "route": "/posts/reviews",
+        "label": "Reviews",
+        "category": true
+      },
+      {
+        "imgURL": "/assets/icons/plugins.svg",
+        "route": "/plugins",
+        "label": "Plugins"
+      }
+    ],
+    "he_group": [
+      {
+        "imgURL": "/assets/icons/media.svg",
+        "route": "/media",
+        "label": "Media"
+      },
+      {
+        "imgURL": "/assets/icons/pages.svg",
+        "route": "/pages",
+        "label": "Pages"
+      },
+      {
+        "imgURL": "/assets/icons/posts.svg",
+        "route": "/posts",
+        "label": "Posts"
+      },
+      {
+        "imgURL": "/assets/icons/plugins.svg",
+        "route": "/plugins",
+        "label": "Plugins"
+      }
+    ],
+    "x_wear": [
+      {
+        "imgURL": "/assets/icons/media.svg",
+        "route": "/media",
+        "label": "Media"
+      },
+      {
+        "imgURL": "/assets/icons/pages.svg",
+        "route": "/pages",
+        "label": "Pages"
+      },
+      {
+        "imgURL": "/assets/icons/posts.svg",
+        "route": "/posts",
+        "label": "Posts"
+      },
+      {
+        "imgURL": "/assets/icons/plugins.svg",
+        "route": "/plugins",
+        "label": "Plugins"
+      }
+    ]
+  }
+}

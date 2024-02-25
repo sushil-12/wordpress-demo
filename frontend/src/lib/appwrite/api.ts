@@ -310,3 +310,14 @@ export async function quickEditNavItemsbyID(category_id: string, categoryData: a
     throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
   }
 }
+
+export async function saveDatatoSidebar(jsonData: any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.saveDatatoSidebarApi( jsonData);
+
+    return post?.data;
+  } catch (error: any) {
+    throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
+  }
+}

@@ -9,9 +9,15 @@ import { Edit2, PlusSquare } from 'lucide-react';
 import { useGetAllCustomFields, useGetCustomFieldsbyIDApi } from '@/lib/react-query/queriesAndMutations';
 import { Dialog } from 'primereact/dialog';
 import CustomFieldForm from '@/plugin/post/_custom_form/CustomFieldForm';
+import { useUserContext } from '@/context/AuthProvider';
+import { useParams } from 'react-router-dom';
 
 
 const CustomFieldDatatable = () => {
+    const {domain} = useParams();
+    const {setCurrentDomain} = useUserContext();
+    // @ts-ignore
+    setCurrentDomain(domain)
     const [visible, setVisible] = useState(false);
     const [customFields, setCustomFields] = useState([]);
     const [selectedCustomField, setSelectedCustomField] = useState({});

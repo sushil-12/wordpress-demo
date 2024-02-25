@@ -40,6 +40,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
 
 
     async function fetchCategories() {
+        
         if (post_type) {
             const categoryData = await getAllCategories(post_type);
             setCategories(categoryData.data.categories);
@@ -67,7 +68,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
         return spacedString;
     };
     useEffect(() => {
-        if (post == null) { fetchCategories() };
+       fetchCategories() ;
         fetchCustomFields();
         if (post?.postMeta) {
             if (post.categoryObject) { setSelectedKeys(post.categoryObject); }
@@ -124,7 +125,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
             setCurrentPost(updatedPost);
             form.setValue('id', updatedPost?.id);
             const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
-            navigate('/posts/' + post_type)
+            navigate('/'+currentDomain +'/posts/' + post_type)
             return toast({ variant: 'default', description: message });
         } else {
             return toast({ variant: 'default', description: 'Something went wrong' });
@@ -204,7 +205,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
                                 />
 
                             </div>
-                            {categories.length != 0 || post_type !== 'page' &&
+                            {categories.length != 0 && post_type !== 'page' &&
                                 (<div className="categories w-full">
                                     <FormField
                                         name="categories"

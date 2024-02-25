@@ -139,14 +139,16 @@ const subNavItemSchema = z.object({
 export const navItemFormSchema = z.object({
     id: z.string(),
     route: z.string(),
+    domain: z.string(),
     imgUrl: z.string(),
     type: z.string(),
+    place_after: z.string(),
     label: z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
         message: 'Too big, less than 50 characters please',
         path: ['label'],
     }),
     enabled: z.boolean(),
     category: z.boolean(),
-    subcategory: z.array(subNavItemSchema),
+    // subcategory: z.array(subNavItemSchema),
 });
 

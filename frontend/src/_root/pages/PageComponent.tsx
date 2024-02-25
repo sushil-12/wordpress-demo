@@ -1,14 +1,19 @@
 import PostDataTable from '@/components/datatable/PostDataTable';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useUserContext } from '@/context/AuthProvider';
 import { useGetAllPosts } from '@/lib/react-query/queriesAndMutations';
 import { PlusSquare, Router } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const PageComponent = () => {
   const post_type = 'page';
+  const { domain } = useParams();
+  const { setCurrentDomain, currentDomain } = useUserContext();
+  // @ts-ignore
+  setCurrentDomain(domain)
   const defaultPostType = post_type;
   const [render, setRerender] = useState(true);
   const [posts, setPost] = useState([]);
@@ -38,7 +43,7 @@ const PageComponent = () => {
     <div className="common-container">
       <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
         <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> <Router />{(post_type?.toUpperCase())}S</h3>
-        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post/${post_type}`)}>
+        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`${currentDomain}/post/${post_type}`)}>
           <PlusSquare /> Add New
         </Button>
       </div>

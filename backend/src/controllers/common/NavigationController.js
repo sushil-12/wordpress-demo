@@ -15,9 +15,11 @@ const getDomainNameById = async (domainId) => {
     }
 };
 
+
 const createEditNavigationItem = async (req, res) => {
     try {
         const { id } = req.body;
+        const domainHeader = req.headers['domain'];
         const domain = await Domain.findOne({ name: domainHeader });
         const domain_id = domain ? domain._id : null;
 

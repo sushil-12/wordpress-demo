@@ -12,6 +12,7 @@ import { Badge } from '../ui/badge';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import { useToast } from '../ui/use-toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { useUserContext } from '@/context/AuthProvider';
 
 interface PostDataTableProps {
     posts: PostModel[];
@@ -23,6 +24,7 @@ interface PostDataTableProps {
 const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, post_type, setRerender }) => {
 
     const navigate = useNavigate();
+    const {currentDomain} = useUserContext();
     const { toast } = useToast();
     const { mutateAsync: quickEditPostById, isPending: isLoading } = useQuickEditPostById();
     const { mutateAsync: deletePostById, isPending: isDeleting } = usedeltePostbyID();
@@ -73,7 +75,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const actionTemplate = (rowData: PostModel) => {
         return (
             <div className='flex gap-4'>
-                <Button className="rounded-full bg-none p-1 text-dark shadow-sm hover:text-primary-500  " size="sm" onClick={() => navigate(`/post/${post_type}/${rowData?.id}`)}>
+                <Button className="rounded-full bg-none p-1 text-dark shadow-sm hover:text-primary-500  " size="sm" onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>
                     <Edit2 className='h-5' />
                 </Button>
                 <Button className="p-1 rounded-full text-danger shadow-sm hover:text-danger focus-visible:outline " size="sm" onClick={() => confirmDelete(rowData.id)}>

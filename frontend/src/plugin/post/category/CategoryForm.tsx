@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { TreeSelect, TreeSelectChangeEvent } from 'primereact/treeselect';
 import { createSlug } from '@/lib/utils';
 import { useCategory } from './CategoryContext';
+import { useUserContext } from '@/context/AuthProvider';
 
 interface CategoryProps {
     post_type: any;
@@ -21,6 +22,7 @@ interface CategoryProps {
 
 const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     const { toast } = useToast();
+    const {currentDomain} = useUserContext();
     const navigate = useNavigate();
     const { mutateAsync: createOrEditCategory, isPending: isOperating } = useCreateOrEditCategory();
     const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategory();
@@ -28,9 +30,9 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
 
     const [selectedNodeKeys, setSelectedNodeKeys] = useState<any>('');
-    function filterOutSelectedCategory(categories:any, selectedCategoryId:any) {
+    function filterOutSelectedCategory(categories: any, selectedCategoryId: any) {
         if (selectedCategoryId) {
-            return categories.filter((category:any) => category.key !== selectedCategoryId);
+            return categories.filter((category: any) => category.key !== selectedCategoryId);
         }
         return categories;
     }
@@ -46,7 +48,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
             slug: selectedCategory?.slug || '',
             description: selectedCategory?.description || '',
         });
-    
+
         async function fetchCategories() {
             const categoryData = await getAllCategories(post_type);
             setCategories(categoryData.data.categories);
@@ -58,7 +60,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
         resolver: zodResolver(categoryFormSchema),
         defaultValues: {
             id: currentCategory?.id || '',
-            name:currentCategory?.name||'',
+            name: currentCategory?.name || '',
             postType: post_type,
             parentCategory: currentCategory?.parentCategory || '',
             slug: currentCategory?.slug || '',
@@ -77,7 +79,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
             setSelectedCategory(updatedPost);
             form.setValue('id', updatedPost?.id);
             const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Category' : 'Successfully Created Category';
-            navigate('/category/' + post_type)
+            navigate('/' + currentDomain + '/category/' + post_type)
             return toast({ variant: 'default', description: message });
         } else {
             return toast({ variant: 'default', description: 'Something went wrong' });
@@ -146,7 +148,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
                                                     setSelectedNodeKeys(e.value || '');
                                                     field.onChange(e.value);
                                                 }}
-                                                options={filterOutSelectedCategory(categories,  selectedCategory?.id)}
+                                                options={filterOutSelectedCategory(categories, selectedCategory?.id)}
                                                 metaKeySelection={false}
                                                 className="md:w-20rem w-full"
                                                 selectionMode="single"

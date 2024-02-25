@@ -184,7 +184,14 @@
     font-size: 12px;
     font-weight: 500;
     line-height: 100%;
+    background: #F8F8F8;
+    border-bottom: 1px solid #E4E4E4;
     @apply text-secondary-link
+  }
+  .left-sidebar-web-link > .links{
+    padding-left: 24px;
+    padding-top: 10px; 
+    padding-bottom: 10px;
   }
 
   .rotated {

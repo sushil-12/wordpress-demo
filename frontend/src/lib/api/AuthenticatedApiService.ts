@@ -131,6 +131,10 @@ class AuthenticatedApiService {
     return await this.api.patch('/api/common/navigation-item-quick-edit/' + post_id, postData, config);
   }
 
+  async saveDatatoSidebarApi(jsonData: any): Promise<any> {
+    return await this.api.post('/writefile', jsonData);
+  }
+
 }
 
 export default AuthenticatedApiService;

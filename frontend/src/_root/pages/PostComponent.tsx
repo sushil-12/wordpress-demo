@@ -1,6 +1,7 @@
 import PostDataTable from '@/components/datatable/PostDataTable';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useUserContext } from '@/context/AuthProvider';
 import { useGetAllPosts } from '@/lib/react-query/queriesAndMutations';
 import { PlusSquare, Router } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -8,8 +9,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 const PostComponent = () => {
-  const { post_type } = useParams();
-  const defaultPostType = post_type || 'technology';
+  const { post_type, domain } = useParams();
+  const {setCurrentDomain, currentDomain} = useUserContext();
+  // @ts-ignore
+  setCurrentDomain(domain)
+  const defaultPostType = post_type || 'default';
   const [posts, setPost] = useState([]);
   const [render, setRerender] = useState(true);
   const { toast } = useToast();
@@ -33,13 +37,13 @@ const PostComponent = () => {
   };
   useEffect(() => {
     fetchPosts();
-    console.log("Render", render)
+    console.log("Render", render, post_type)
   }, [ setPost, post_type, render]);
   return (
     <div className="common-container">
       <div className="border-b border-gray-200 bg-white  py-2 flex justify-between">
-        <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> <Router />{(post_type?.toUpperCase())}</h3>
-        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/post/${post_type}`)}>
+        <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3"> <Router />{(defaultPostType?.toUpperCase())}</h3>
+        <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/${currentDomain}/post/${post_type}`)}>
           <PlusSquare /> Add New
         </Button>
       </div>

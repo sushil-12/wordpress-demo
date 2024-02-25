@@ -6,10 +6,12 @@ import { Settings } from "lucide-react";
 import { Card } from "primereact/card";
 import { TabMenu } from 'primereact/tabmenu';
 import { useEffect, useState } from "react";
+import { domainSidebarLinks, logos, websites } from "@/constants";
+
 
 const Setting = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [navItems, setNavItems] = useState([]);
+  const [navItems, setNavItems] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [render, setRerender] = useState(true);
   const {setRerender : setAppRender, rerender} = useUserContext();
@@ -23,7 +25,7 @@ const Setting = () => {
 
   async function getNavItems(){
     const navItems = await getAllNavItems();
-    setNavItems(navItems.data.navigationItems);
+    setNavItems(domainSidebarLinks);
   } 
   useEffect(() => {
     getNavItems();
