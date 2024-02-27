@@ -142,9 +142,15 @@
     font-family: "Inter", sans-serif !important;
     font-optical-sizing: auto !important;
     font-weight: 400 !important;
-    font-size: 14px !important;
+    font-size: 14px !important ;
     font-style: normal !important;
     font-variation-settings: "slnt" 0 !important;
+  }
+  .p-inputtext:enabled:focus{
+    border: 1px solid #d1d5db !important;
+  }
+  .p-inputgroup:focus-within>.p-inputgroup-addon{
+    border: 1px solid #d1d5db !important;
   }
 
   .p-inputtext:enabled:focus {

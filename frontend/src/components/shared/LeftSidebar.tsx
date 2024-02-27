@@ -7,7 +7,7 @@ import { INavLink } from "@/lib/types";
 import { MenuIcon, Settings } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
 import * as React from "react";
-import { formatString } from "@/lib/utils";
+import { createSlug, formatString } from "@/lib/utils";
 
 interface DropdownVisibilityState {
     [key: string]: boolean;
@@ -25,7 +25,10 @@ const LeftSidebar = () => {
 
     const toggleActiveSubmenu = (submenuKey: string) => {
         setActiveSubmenu(submenuKey);
-        console.log("activeSubmenu", activeSubmenu, 'cdf', submenuKey)
+        const dropdownArrows = document.getElementsByClassName(`${createSlug(submenuKey)}-dropdown-arrow`);
+        for (let i = 0; i < dropdownArrows.length; i++) {
+            dropdownArrows[i].classList.toggle('rotated');
+        }
     };
 
     const toggleDropdown = (label: any) => {
@@ -36,10 +39,10 @@ const LeftSidebar = () => {
         }));
 
         // Toggle the rotated class for the dropdown arrow
-        console.log(`${label}-dropdown-arrow`)
-        const dropdownArrow = document.getElementById(`${label}-dropdown-arrow`);
-        if (dropdownArrow) {
-            dropdownArrow.classList.toggle('rotated');
+        console.log(`${createSlug(label)}-dropdown-arrow`)
+        const dropdownArrows = document.getElementsByClassName(`${createSlug(label)}-dropdown-arrow`);
+        for (let i = 0; i < dropdownArrows.length; i++) {
+            dropdownArrows[i].classList.toggle('rotated');
         }
     };
 
@@ -48,8 +51,16 @@ const LeftSidebar = () => {
         if (isSuccess) {
             navigate(0);
         }
-        // getNavItems();
-        // fetchDomains();
+        const websiteKeys = Object.keys(websites);
+        let matchedKey = null;
+        websiteKeys.some(key => {
+            if (pathname.includes(key)) {
+                matchedKey = key;
+                return true; // Stop iteration
+            }
+        });
+        if(matchedKey!=null){ setActiveSubmenu(matchedKey)}
+           
     }, [isSuccess, rerender]);
 
     return (
@@ -69,7 +80,8 @@ const LeftSidebar = () => {
                             </li>
                             {/* @ts-ignore */}
                             {domainSidebarLinks.comman?.map((link: INavLink) => {
-                                const isActive = pathname.includes(link.route);
+                                const regex = new RegExp(`^${link.route}(\/.*)?$`);
+                                const isActive = regex.test(pathname);
 
                                 return (
                                     <React.Fragment key={link.label}>
@@ -78,7 +90,7 @@ const LeftSidebar = () => {
                                                 <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
-                                                    <img src="/assets/icons/down-arrow.svg" className={`${link?.label}-dropdown-arrow mr-5`} alt="" />
+                                                    <img src="/assets/icons/down-arrow.svg" className={`${createSlug(link?.label)}-dropdown-arrow mr-5`} alt="" />
                                                 </button>
                                                 <ul id={`${link?.label}-dropdown`} className={`py-2 space-y-2 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
                                                     {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
@@ -109,10 +121,10 @@ const LeftSidebar = () => {
                             <button type="button" className="flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
                                 <img src={'/assets/icons/websites.svg'} alt={'websites'} className='pl-6 pr-1' />
                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{'Websites'}</span>
-                                <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow mr-5`} alt="" />
+                                <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow ${activeSubmenu!='' && 'rotated'} mr-5`} alt="" />
                             </button>
                             {/* Dropdown menu for "Websites" */}
-                            <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] ? 'block' : 'hidden'}`}>
+                            <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] || activeSubmenu!='' ? 'block' : 'hidden'}`}>
 
                                 {Object.entries(domainSidebarLinks.websites || {}).map(([submenuKey, submenuItems]) => (
                                     <React.Fragment key={submenuKey}>
@@ -123,7 +135,7 @@ const LeftSidebar = () => {
                                                 {/* @ts-ignore */}
                                                 <img src={websites[submenuKey]} alt={submenuKey} className='pl-6 pr-1' />
                                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(submenuKey)}</span>
-                                                <img src="/assets/icons/down-arrow.svg" className={`${submenuKey}-dropdown-arrow me-14`} alt="" />
+                                                <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow me-14`} alt="" />
                                             </button>
 
                                         </li>
@@ -140,7 +152,7 @@ const LeftSidebar = () => {
                                                                 <button type="button" className="flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
                                                                     <img src={link.imgURL} alt={link.label} className='pl-6 pr-1' />
                                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap gap-4 ">{formatString(link.label)}</span>
-                                                                    <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow mr-5" alt="" />
+                                                                    <img src="/assets/icons/down-arrow.svg" className={`dropdown-arrow mr-5 ` } alt="" />
                                                                 </button>
 
                                                                 <ul id={`${link?.label}-dropdown`} className={` ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>

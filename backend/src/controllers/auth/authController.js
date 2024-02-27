@@ -91,12 +91,12 @@ const login = async (req, res) => {
     if (user.signInTimestamp && new Date() < user.signInTimestamp) {
       require_verification = false;
     }
-    
+
     if (user.signInTimestamp && new Date() < user.signInTimestamp && user.staySignedIn) {
       require_verification = false;
       sign_in_stamp = user.signInTimestamp || sign_in_stamp;
     }
-    if(!user.staySignedIn){ require_verification= true;}
+    if (!user.staySignedIn) { require_verification = true; }
 
     if (form_type == 'verify_account_form') {
       if (staySignedIn == true && !user.staySignedIn || user.staySignedIn == false) {
@@ -113,7 +113,7 @@ const login = async (req, res) => {
         sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
       }
       if (staySignedIn || !require_verification) {
-        
+
         user.otp = otp;
         user.otpExpiry = new Date(Date.now() + 2 * 60 * 1000);
         await user.save();
@@ -152,6 +152,7 @@ const login = async (req, res) => {
     const token_expiry = '24h';
     user.staySignedIn = staySignedIn;
     user.signInTimestamp = sign_in_stamp
+    user.save();
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: token_expiry });
     if (user.role.name == "admin") {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, HTTP_STATUS_MESSAGES.UNAUTHORIZED);
@@ -174,8 +175,8 @@ const resetPassword = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-    user.staySignedIn=false;
-    user.signInTimestamp= new Date();
+    user.staySignedIn = false;
+    user.signInTimestamp = new Date();
 
     await user.save();
     user.resetToken = undefined;

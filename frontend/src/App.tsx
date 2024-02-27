@@ -21,6 +21,7 @@ import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
 import Category from './plugin/post/category/Category.tsx';
 import ManageCustomFields from './plugin/myCustomFields/ManageCustomFields.tsx';
 import PageComponent from './_root/pages/PageComponent.tsx'
+import PluginComponent from './plugin/PluginComponent.tsx'
 
 
 const App = () => {
@@ -46,6 +47,9 @@ const App = () => {
 
                         <Route path='/:domain/pages' element={<PageComponent />} />
                         <Route path='/:domain/pages/:page_id' element={<PostComponent />} />
+
+                        <Route path='/:domain/plugins' element={<PluginComponent />} />
+                        <Route path='/:domain/plugins/:plugin' element={<PluginComponent />} />
                        
 
                     </Route>
