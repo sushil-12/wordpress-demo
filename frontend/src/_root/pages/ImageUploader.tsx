@@ -90,7 +90,7 @@ const ImageUploader: React.FC = () => {
         <input {...getInputProps()} />
         <div className="flex flex-col justify-center items-center pt-[82px] pb-[72px]">
           <img src="/assets/icons/image-uploader.svg" className='pb-[23px]' alt="" />
-          <p className="text-primary-500">
+          <p className="text-primary-500 text-[28px] font-semibold leading-[120%] tracking-[0%]">
             Drop files here
           </p>
         </div>
