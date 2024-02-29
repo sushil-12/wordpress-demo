@@ -19,32 +19,32 @@ const ImageUploader: React.FC = () => {
     try {
       const id = `${Date.now()}-${file.name}`;
       const tempUrl = URL.createObjectURL(file);
-  
+
       // Create a temporary image with loading state
       const tempImage: MediaItem = {
         id,
         tempUrl,
-        title: isLoading?'true':'false',
+        title: isLoading ? 'true' : 'false',
         caption: '',
-        description:  '',
-        alt_text:  '',
+        description: '',
+        alt_text: '',
         filename: '',
         cloudinary_id: '',
         url: '',
-        size:'',
+        size: '',
         storage_type: '',
         author: '',
         category: '',
         tags: '',
-        domain:'he_group',
-        createdAt:''
+        domain: 'he_group',
+        createdAt: ''
       };
-  
+
       // Add the temporary image to the beginning of the array
       setMedia((prevImages) => [tempImage, ...prevImages]);
-  
+
       const response = await uploadMediaFile(file);
-  
+
       // Once uploaded, replace the temporary image with the actual uploaded image
       const uploadedImage: MediaItem = {
         id: response.data._id,
@@ -64,7 +64,7 @@ const ImageUploader: React.FC = () => {
         domain: response.data.domain || [],
         createdAt: response.data.createdAt || '',
       };
-  
+
       // Replace the temporary image with the actual uploaded image
       setMedia((prevImages) => prevImages.map(img => (img.id === id ? uploadedImage : img)));
     } catch (error) {
@@ -85,20 +85,24 @@ const ImageUploader: React.FC = () => {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className=" w-full  flex">
       <div {...getRootProps()} className={dropzoneStyle(isDragActive)}>
         <input {...getInputProps()} />
-        <p className="text-gray-500">
-          Drag & drop images here, or click to select. You can upload multiple images.
-        </p>
+        <div className="flex flex-col justify-center items-center pt-[82px] pb-[72px]">
+          <img src="/assets/icons/image-uploader.svg" className='pb-[23px]' alt="" />
+          <p className="text-primary-500">
+            Drop files here
+          </p>
+        </div>
+
       </div>
     </div>
   );
 };
 
 const dropzoneStyle = (isDragActive: boolean): string => `
-  border-2 border-dashed ${isDragActive ? 'border-green-500' : 'border-gray-300'
-  } rounded p-4 text-center cursor-pointer transition duration-300 ease-in-out
+  bg-light-blue  w-full  border-primary-500 dropzone justify-center w-full items-center  h-[290px] ${isDragActive ? 'border-green-500' : 'border-gray-300'
+  } rounded text-center cursor-pointer transition duration-300 ease-in-out
 `;
 
 export default ImageUploader;

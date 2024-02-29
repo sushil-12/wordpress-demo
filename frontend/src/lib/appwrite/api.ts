@@ -36,6 +36,14 @@ export async function resetPassword(user: { password: string;  form_type: string
     throw new PromiseHandler(error?.response?.data?.message, 'Reset Password Failed', { user, error });
   }
 }
+export async function editProfile(user: { name: string;  id: string, bio:string}) {
+  try {
+    const session = await Apiservices.authService.editProfile( user.name, user.id, user.bio);
+    return session;
+  } catch (error: any) {
+    throw new PromiseHandler(error?.response?.data?.message, 'Edit Profile Failed', { user, error });
+  }
+}
 // ============================== GET ACCOUNT
 export async function getAccount() {
   try {

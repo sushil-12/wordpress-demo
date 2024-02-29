@@ -21,6 +21,7 @@ import PostOperation from './plugin/post/_custom_post/PostOperation.tsx';
 import Category from './plugin/post/category/Category.tsx';
 import ManageCustomFields from './plugin/myCustomFields/ManageCustomFields.tsx';
 import PageComponent from './_root/pages/PageComponent.tsx'
+import Profile from './_root/pages/Profile.tsx';
 import PluginComponent from './plugin/PluginComponent.tsx'
 
 
@@ -30,7 +31,7 @@ const App = () => {
             <main className='flex h-screen'>
                 <Routes>
                     {/* Private Routes start */}
-                    <Route element={<RootLayout />} >
+                    <Route element={<RootLayout />}  >
                         <Route index element={<Home />} />
                         <Route path='/dashboard' element={<Home />} />
                         <Route path='/users' element={<UsersList />} />
@@ -50,13 +51,15 @@ const App = () => {
 
                         <Route path='/:domain/plugins' element={<PluginComponent />} />
                         <Route path='/:domain/plugins/:plugin' element={<PluginComponent />} />
+
+                        <Route path='/profile/:id' element={<Profile />} />
                        
 
                     </Route>
                     {/* Private Routes */}
 
                     {/* Public Routes start */}
-                    <Route element={<AuthLayout />} >
+                    <Route element={<AuthLayout />}  >
                         <Route path='/login' element={<SignInForm />} />
                         <Route path='/forgot-password' element={<SignInForm />} />
                         <Route path='/verify-account' element={<SignInForm />} />

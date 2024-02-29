@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   firstName: { type: String },
   lastName: { type: String },
+  bio: { type: String },
   role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
   permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permission' }],
   otp: { type: String },

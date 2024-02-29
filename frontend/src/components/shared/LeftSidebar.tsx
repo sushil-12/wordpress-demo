@@ -59,8 +59,8 @@ const LeftSidebar = () => {
                 return true; // Stop iteration
             }
         });
-        if(matchedKey!=null){ setActiveSubmenu(matchedKey)}
-           
+        if (matchedKey != null) { setActiveSubmenu(matchedKey) }
+
     }, [isSuccess, rerender]);
 
     return (
@@ -70,14 +70,17 @@ const LeftSidebar = () => {
                     <span className="sr-only">Open sidebar</span>
                     <MenuIcon />
                 </button>
-                <aside id="sidebar-multi-level-sidebar" className="fixed border-r  top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-                    <div className="h-full overflow-y-auto bg-light-1 dark:bg-gray-800">
-                        <ul className="overflow-y-auto scroll-m-6">
-                            <li className="logo-container w-full mb-4">
-                                <Link to="/" className="flex gap-3 items-center justify-center pt-6 pb-7 px-16">
-                                    <img src={logoPath} alt="Logo" width={108} height={34} />
-                                </Link>
-                            </li>
+                <aside id="sidebar-multi-level-sidebar" className="fixed border-r h-full  top-0 left-0 z-40 w-64 transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+                    <div className="cu-simple-bar-resizer-handle ng-tns-c2398600540-13"></div>
+                    <div className="h-[10%] flex gap-3 items-center justify-center px-16">
+                        <Link to="/" className="m-0">
+                            <img src={logoPath || '/assets/images/logo-dashboard.svg'} alt="Logo" width={108} height={34} />
+                        </Link>
+                    </div>
+                    <div className=" bg-light-1 dark:bg-gray-800  min-h-[80%] max-h-[80%] overflow-y-auto ">
+
+                        <ul className="scroll-m-6 ">
+
                             {/* @ts-ignore */}
                             {domainSidebarLinks.comman?.map((link: INavLink) => {
                                 const regex = new RegExp(`^${link.route}(\/.*)?$`);
@@ -86,7 +89,7 @@ const LeftSidebar = () => {
                                 return (
                                     <React.Fragment key={link.label}>
                                         {link?.subcategory ? (
-                                            <li className="left-sidebar-link border-y">
+                                            <li className="left-sidebar-link border-b">
                                                 <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
@@ -105,10 +108,10 @@ const LeftSidebar = () => {
                                                 </ul>
                                             </li>
                                         ) : (
-                                            <li className={`left-sidebar-link border-y hover:bg-gray-100 ${isActive ? 'bg-secondary-gray' : ''}`}>
+                                            <li className={`left-sidebar-link border-b hover:bg-gray-100 ${isActive ? 'bg-secondary-gray' : ''}`}>
                                                 <div className="link-container" >
                                                     <NavLink className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
-                                                        <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1' : ''}`} />
+                                                        <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1`} />
                                                         <span className="ms-3  my-[22px]">{link.label}</span>
                                                     </NavLink>
                                                 </div>
@@ -121,10 +124,10 @@ const LeftSidebar = () => {
                             <button type="button" className="flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
                                 <img src={'/assets/icons/websites.svg'} alt={'websites'} className='pl-6 pr-1' />
                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{'Websites'}</span>
-                                <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow ${activeSubmenu!='' && 'rotated'} mr-5`} alt="" />
+                                <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow ${activeSubmenu != '' && 'rotated'} mr-5`} alt="" />
                             </button>
                             {/* Dropdown menu for "Websites" */}
-                            <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] || activeSubmenu!='' ? 'block' : 'hidden'}`}>
+                            <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] || activeSubmenu != '' ? 'block' : 'hidden'}`}>
 
                                 {Object.entries(domainSidebarLinks.websites || {}).map(([submenuKey, submenuItems]) => (
                                     <React.Fragment key={submenuKey}>
@@ -152,7 +155,7 @@ const LeftSidebar = () => {
                                                                 <button type="button" className="flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
                                                                     <img src={link.imgURL} alt={link.label} className='pl-6 pr-1' />
                                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap gap-4 ">{formatString(link.label)}</span>
-                                                                    <img src="/assets/icons/down-arrow.svg" className={`dropdown-arrow mr-5 ` } alt="" />
+                                                                    <img src="/assets/icons/down-arrow.svg" className={`dropdown-arrow mr-5 `} alt="" />
                                                                 </button>
 
                                                                 <ul id={`${link?.label}-dropdown`} className={` ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
@@ -194,27 +197,32 @@ const LeftSidebar = () => {
 
 
                         </ul>
-                        <div className="user_profile_actions bottom-0 mt-14">
-                            <Link to={`/profile/${user.id}`} className="flex gap-3">
-                                <img alt="profile" src={'/assets/icons/profile.svg'} width={50} height={50} className="h-14 w-14 rounded-full" />
-                                <div className="flex flex-col">
-                                    <p className="body-bold">
-                                        {user?.firstName + ' ' + user?.lastName}
-                                    </p>
-                                    <p className="small-regular text-light-3">
-                                        @{user.username}
-                                    </p>
-                                </div>
+                    </div>
+                    <div className=" min-h-[10%] h-[100%] max-h-[10%] w-full absolute bottom-0">
+                        <NavLink to={`/profile/${user.id}`} className={(navData) => (navData.isActive ? 'flex m-0 gap-[15px] bg-gray-100 items-center h-full' : 'flex m-0 gap-[15px] items-center h-full')} >
+                            <div className="img_container pl-6 h-6 ">
+                                <img alt="profile" src={'/assets/icons/profile.svg'} className="rounded-full w-full self-center " />
+                            </div>
+                            <div className="flex flex-col">
+                                <p className="body-bold">
+                                    {user?.firstName}
+                                </p>
+                                <p className="small-regular text-light-3">
+                                    @{user.username}
+                                </p>
+                            </div>
+                            <Button variant="ghost" title="Logout" className="shad-button_ghost" onClick={() => signOut()}>
+                                <img src="/assets/icons/logout.svg" />
+                            </Button>
+                        </NavLink>
 
-                            </Link>
-                            <NavLink key='settings' className={`flex gap-4 items-center p-4 text-primary-500`} to={'/settings'}>
+                        {/* <NavLink key='settings' className={`flex gap-4 items-center p-4 text-primary-500`} to={'/settings'}>
                                 <Settings className="shad-button_ghost" />Settings
                             </NavLink>
                             <Button variant="ghost" className="shad-button_ghost" onClick={() => signOut()}>
                                 <img src="/assets/icons/logout.svg" />
                                 <p className="small-medium lg:base-medium" >Logout</p>
-                            </Button>
-                        </div>
+                            </Button> */}
                     </div>
 
                 </aside>

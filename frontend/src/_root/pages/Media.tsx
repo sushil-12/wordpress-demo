@@ -10,7 +10,7 @@ import MediaGridSkeletonDemo from '@/components/skeletons/MediaGridSkeletonDemo'
 import { useParams } from 'react-router-dom';
 
 export default function Media() {
-  const {domain} = useParams()
+  const { domain } = useParams()
   const { media: contextMedia, setMedia } = useMedia();
   const [localMedia, setLocalMedia] = useState(contextMedia);
   const { toast } = useToast();
@@ -52,50 +52,53 @@ export default function Media() {
   };
 
   return (
-    <div className="common-container">
-      
-      {isLoading ? (
-        <div className="w-full mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"><MediaGridSkeletonDemo /></div>
-      ) : (
-        localMedia.length > 0 ? (
-          <div className="w-full">
-            <ImageUploader />
+    <div className="main-container px-5 w-full overflow-y-hidden ">
+      <div className="px-4 pt-5 pb-[38px] flex justify-between h-[10vh] min-h-[10vh] max-h-[10vh">
+        <h3 className="page-titles">Media</h3>
+      </div>
+      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto px-5 ">
+        {isLoading ? (
+          <div className="w-full mx-auto  mt-[15px]"><MediaGridSkeletonDemo /></div>
+        ) : (
+          localMedia.length > 0 ? (
+            <div className="w-full">
+              <ImageUploader />
+              <>
+                <div className="mx-auto w-full mt-[15px]">
+                  <h2 className="sr-only">Media</h2>
+                  <MediaGrid media={localMedia} isLoading={isLoading} />
+                </div>
+                <div className="card">
+                  {localMedia.length > 50 && <Paginator first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
+                </div>
+              </>
+            </div>
+          ) : (
             <>
-              <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                <h2 className="sr-only">Media</h2>
-                <MediaGrid media={localMedia} isLoading={isLoading} />
-              </div>
-              <div className="card">
-                {localMedia.length > 50 && <Paginator first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
+              <ImageUploader />
+              <div className="text-center p-5">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    vectorEffect="non-scaling-stroke"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                  />
+                </svg>
+                <h3 className="mt-2 text-sm font-semibold text-gray-900">No Media Exist</h3>
+                <p className="mt-1 text-sm text-gray-500">Get started by adding a new Media using dropbox above.</p>
               </div>
             </>
-          </div>
-        ) : (
-          <>
-            <div className="text-center">
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  vectorEffect="non-scaling-stroke"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                />
-              </svg>
-              <h3 className="mt-2 text-sm font-semibold text-gray-900">No Media Exist</h3>
-              <p className="mt-1 text-sm text-gray-500">Get started by adding a new Media using dropbox above.</p>
-              <ImageUploader />
-
-            </div>
-          </>
-        )
-      )}
+          )
+        )}
+      </div>
     </div>
   );
 }

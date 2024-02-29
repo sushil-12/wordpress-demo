@@ -187,9 +187,28 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  try {
+    const { name, bio, id } = req.body;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'User might not exists!');
+    }
+
+    user.firstName = name;
+    user.bio = bio;
+    await user.save();
+
+    ResponseHandler.success(res, { profile_edit: true, message: "Profile Edited successfully" }, HTTP_STATUS_CODES.OK);
+  } catch (error) {
+    ErrorHandler.handleError(error, res);
+  }
+};
+
 
 module.exports = {
   register,
   login,
+  editProfile,
   resetPassword
 };

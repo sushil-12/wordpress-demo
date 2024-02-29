@@ -68,13 +68,13 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
     }
 
     return (
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8">
             <ConfirmDialog />
             {media.map((mediaItem: MediaItem) => (
                 <div key={mediaItem?.id} className="group relative">
                     {mediaItem.title === 'false' && (
                         <a className="card group cursor-pointer">
-                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border p-4 surface-card overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 object-contain">
+                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border surface-card overflow-hidden xl:aspect-h-8 xl:aspect-w-7 object-contain">
                                 <div style={{ position: 'relative' }}>
                                     <img src={mediaItem.tempUrl} style={{ opacity: 0.2 }} />
                                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -86,7 +86,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                     )}
                     {mediaItem.title !== 'false' && (
                         <a className={`card group cursor-pointer ${isDeleting ? 'blur-sm' : ''}`} >
-                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border p-4 surface-card overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 object-contain" onClick={() => openEditModal(mediaItem)}>
+                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border surface-card overflow-hidden xl:aspect-h-8 xl:aspect-w-7 object-contain" onClick={() => openEditModal(mediaItem)}>
                                 <img
                                     src={mediaItem.url}
                                     alt={mediaItem.alt_text}
@@ -95,8 +95,8 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                             </div>
                             <div className="flex place-content-between-end mt-3" style={{ "placeContent": "space-between" }}>
                                 <div className="flex flex-col">
-                                    <h3 className="mt-4 text-sm text-gray-700">{mediaItem.title}</h3>
-                                    <p className="mt-1 text-lg font-medium text-gray-900">{bytesToSize(mediaItem.size)}</p>
+                                    <h3 className="mt-4 text-sm text-gray-700 page-innersubtitles">{mediaItem.title}</h3>
+                                    <p className="mt-1 text-xl font-semibold text-gray-900">{bytesToSize(mediaItem.size)}</p>
                                 </div>
                                 <Button onClick={() => confirmDelete(mediaItem.id)} className='outline-none p-0 bg-transparent border-none' ><Trash2Icon className='text-danger outline-none' /></Button>
                             </div>

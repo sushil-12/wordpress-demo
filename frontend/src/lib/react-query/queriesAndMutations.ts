@@ -33,6 +33,7 @@ import {
     getAllPostsAndPages,
     quickEditNavItemsbyID,
     resetPassword,
+    editProfile,
   } from "@/lib/appwrite/api";
 
   import {  INewUser} from "../types";
@@ -65,6 +66,12 @@ import {
   export const useSignOutAccount = () => {
     return useMutation({
       mutationFn: signOutAccount,
+    });
+  };
+  export const useEditProfile = () => {
+    return useMutation({
+      mutationFn: (user: {   name:string, id: string, bio:string}) =>
+        editProfile(user),
     });
   };
 

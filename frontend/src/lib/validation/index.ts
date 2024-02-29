@@ -116,6 +116,12 @@ export const CustomFormFieldSchema = z.object({
     customFields: z.array(FieldSchema).optional(),
 });
 
+export const editProfileFieldSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    bio: z.string(),
+});
+
 export const mediaEditFormSchema = z.object({
     id: z.string(),
     caption: z.string().min(0, { message: "Too Short" }).max(2000, 'Too big less than 50 character please'),

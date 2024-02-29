@@ -86,6 +86,11 @@
         "label": "Posts"
       },
       {
+        "imgURL": "/assets/icons/categories.svg",
+        "route": "technology",
+        "label": "Technology"
+      },
+      {
         "imgURL": "/assets/icons/plugins.svg",
         "route": "/plugins",
         "label": "Plugins"

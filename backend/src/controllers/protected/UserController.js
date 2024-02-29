@@ -21,6 +21,7 @@ const getProfile = async (req, res) => {
       username: user.username,
       email: user.email,
       firstName: user.firstName,
+      bio: user.bio,
       lastName: user.lastName,
       roles: user.role?.name,
       permissions: user.permissions.map(({ name, module }) => ({ name, module }))
