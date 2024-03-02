@@ -172,13 +172,34 @@
     /* HE Blue */
     border-style: dashed;
     border-color: #000C79;
-    border-width: 2px; /* Adjust the width of the dashes */
+    border-width: 2px;
+    /* Adjust the width of the dashes */
     border-radius: 12px;
-    border-spacing: 15px; /* Adjust the spacing between dashes */
-}
+    border-spacing: 15px;
+    /* Adjust the spacing between dashes */
+  }
 }
 
 @layer primereact {
+
+  .p-button:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .p-dialog .p-dialog-header .p-dialog-title {
+    font-family: "Inter", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-variation-settings: "slnt" 0 !important;
+  }
+
+  .p-dialog.p-confirm-dialog .p-confirm-dialog-message {
+    margin-left: 0px !important;
+  }
 
   .p-inputtext,
   .p-inputgroup-addon {
@@ -565,11 +586,11 @@
   }
 
   .shad-input {
-    @apply h-12 bg-slate-100 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-10 bg-white border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   .shad-textarea {
-    @apply h-36 bg-slate-100 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-36 bg-white rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   /* Button */

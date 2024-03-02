@@ -17,7 +17,8 @@ const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const { user, currentDomain, setCurrentDomain, rerender, setRerender } = useUserContext();
+    const { user, currentDomain, rerender } = useUserContext();
+    const [renderSidebar, rerenderSideBar] = useState(rerender);
     const logoPath: string | undefined = logos[currentDomain as keyof typeof logos];
 
     const [dropdownVisibility, setDropdownVisibility] = useState<DropdownVisibilityState>({});
@@ -51,6 +52,7 @@ const LeftSidebar = () => {
         if (isSuccess) {
             navigate(0);
         }
+        console.log(rerender, "TEST REE")
         const websiteKeys = Object.keys(websites);
         let matchedKey = null;
         websiteKeys.some(key => {
@@ -61,7 +63,7 @@ const LeftSidebar = () => {
         });
         if (matchedKey != null) { setActiveSubmenu(matchedKey) }
 
-    }, [isSuccess, rerender]);
+    }, [isSuccess, rerender, renderSidebar]);
 
     return (
         <div className="leftsidebar ">
@@ -201,18 +203,18 @@ const LeftSidebar = () => {
                     <div className=" min-h-[10%] h-[100%] max-h-[10%] w-full absolute bottom-0">
                         <NavLink to={`/profile/${user.id}`} className={(navData) => (navData.isActive ? 'flex m-0 gap-[15px] bg-gray-100 items-center h-full' : 'flex m-0 gap-[15px] items-center h-full')} >
                             <div className="img_container pl-6 h-6 ">
-                                <img alt="profile" src={'/assets/icons/profile.svg'} className="rounded-full w-full self-center " />
+                                <img alt="profile" src={user?.profile_pic || '/assets/icons/profile.svg'} className="rounded-full w-full self-center " />
                             </div>
                             <div className="flex flex-col">
                                 <p className="body-bold">
                                     {user?.firstName}
                                 </p>
-                                <p className="small-regular text-light-3">
-                                    @{user.username}
+                                <p className="text-xs underline font-normal">
+                                    My Profile
                                 </p>
                             </div>
                             <Button variant="ghost" title="Logout" className="shad-button_ghost" onClick={() => signOut()}>
-                                <img src="/assets/icons/logout.svg" />
+                                <img src="/assets/icons/logout.svg" className={`${renderSidebar}`} />
                             </Button>
                         </NavLink>
 

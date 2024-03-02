@@ -120,6 +120,7 @@ export const editProfileFieldSchema = z.object({
     id: z.string(),
     name: z.string(),
     bio: z.string(),
+    profile_pic:z.optional(z.custom<File>()),
 });
 
 export const mediaEditFormSchema = z.object({

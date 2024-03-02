@@ -16,8 +16,8 @@ class AuthService {
     let data = { password, form_type , reset_token};
     return this.api.post('/auth/reset-password', data);
   }
-  async editProfile(name: string, id: string, bio: string): Promise<any> {
-    let data = { name, id , bio};
+  async editProfile(name: string, id: string, bio: string, profile_pic?: File): Promise<any> {
+    let data = { name, id , bio, profile_pic};
     return this.api.post('/auth/update-profile', data);
   }
 

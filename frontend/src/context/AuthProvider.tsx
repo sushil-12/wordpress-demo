@@ -2,7 +2,7 @@ import { IContextType, IUser } from "@/lib/types";
 import { useNavigate } from "react-router";
 import { createContext, useContext, useEffect, useState } from "react"
 import { getCurrentUser } from "@/lib/appwrite/api";
-export const INITIAL_USER = {id: '',firstName: '', lastName: '',username: '',email: '', bio:'', role:'', permissions:[]};
+export const INITIAL_USER = {id: '',firstName: '', lastName: '',username: '',email: '', bio:'', profile_pic:'' ,role:'', permissions:[]};
 
 export const INITIAL_STATE = {
     user: INITIAL_USER,
@@ -39,8 +39,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     email: userData?.email,
                     role:userData?.role,
                     bio:userData?.bio,
+                    profile_pic:userData?.profile_pic,
                     permissions:userData?.permissions
-                    
                 }),
                 setIsAuthenticated(true);
                 return true;

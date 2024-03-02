@@ -36,10 +36,11 @@ export async function resetPassword(user: { password: string;  form_type: string
     throw new PromiseHandler(error?.response?.data?.message, 'Reset Password Failed', { user, error });
   }
 }
-export async function editProfile(user: { name: string;  id: string, bio:string}) {
+export async function editProfile(user: { name: string;  id: string, bio:string, profile_pic?: File}) {
   try {
-    const session = await Apiservices.authService.editProfile( user.name, user.id, user.bio);
-    return session;
+    const editProfileResponse = await Apiservices.authService.editProfile( user.name, user.id, user.bio, user?.profile_pic);
+    console.log(editProfileResponse, "returned")
+    return editProfileResponse;
   } catch (error: any) {
     throw new PromiseHandler(error?.response?.data?.message, 'Edit Profile Failed', { user, error });
   }

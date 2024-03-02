@@ -28,6 +28,7 @@ export type IUser = {
   email: string;
   role: string;
   bio:string;
+  profile_pic: string,
   permissions: Array<string>;
 };
 

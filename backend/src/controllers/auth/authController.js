@@ -8,6 +8,9 @@ const sendMail = require('../../utils/sendMail');
 const fs = require('fs');
 const handlebars = require('handlebars');
 const crypto = require('crypto');
+const cloudinary = require('../../config/cloudinary');
+
+const { Readable } = require('stream');
 
 
 const generateRandomString = (length) => {
@@ -189,17 +192,46 @@ const resetPassword = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-    const { name, bio, id } = req.body;
+    const { name, bio, id, profile_pic } = req.body;
     const user = await User.findOne({ _id: id });
+    
     if (!user) {
-      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'User might not exists!');
+      throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'User might not exist!');
     }
+    
+    if (profile_pic) {
+      const base64String = profile_pic;
+      const buffer = Buffer.from(base64String, 'base64');
+      const readableStream = new Readable();
+      readableStream.push(buffer);
+      readableStream.push(null);
 
+      let uploadPromise = new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({ folder: 'profile_pictures' },
+          (error, result) => {
+            if (error) {
+              console.error('Upload error:', error);
+              reject(error);
+            } else {
+              user.profile_pic = result.secure_url;
+              console.log(result.secure_url);
+              resolve();
+            }
+          }
+        );
+
+        readableStream.pipe(uploadStream);
+      });
+
+      await uploadPromise;
+      await user.save();
+    }
+    
     user.firstName = name;
     user.bio = bio;
     await user.save();
 
-    ResponseHandler.success(res, { profile_edit: true, message: "Profile Edited successfully" }, HTTP_STATUS_CODES.OK);
+    ResponseHandler.success(res, { user: user, message: "Profile Edited successfully" }, HTTP_STATUS_CODES.OK);
   } catch (error) {
     ErrorHandler.handleError(error, res);
   }

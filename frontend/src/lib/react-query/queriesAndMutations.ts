@@ -70,8 +70,7 @@ import {
   };
   export const useEditProfile = () => {
     return useMutation({
-      mutationFn: (user: {   name:string, id: string, bio:string}) =>
-        editProfile(user),
+      mutationFn: (user: {name:string, id: string, bio:string, profile_pic?: File}) => editProfile(user),
     });
   };
 
