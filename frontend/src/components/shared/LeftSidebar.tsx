@@ -211,7 +211,7 @@ const LeftSidebar = () => {
                     </div>
                     <div className=" min-h-[10%] h-[100%] max-h-[10%] w-full absolute bottom-0">
                         <NavLink to={`/profile/${user.id}`} className={(navData) => (navData.isActive ? 'flex m-0 gap-[15px] bg-gray-100 items-center h-full' : 'flex m-0 gap-[15px] items-center h-full')} >
-                            <div className="img_container pl-6 h-6 ">
+                            <div className="img_container pl-6">
                                 <img alt="profile" src={user?.profile_pic || '/assets/icons/profile.svg'} className="rounded-full w-full self-center " />
                             </div>
                             <div className="flex flex-col">
