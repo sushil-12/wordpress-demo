@@ -11,20 +11,20 @@ import { useEffect, useState } from "react";
 import { InputSwitch } from "primereact/inputswitch";
 import { SelectButton } from "primereact/selectbutton";
 import { createSlug } from "@/lib/utils";
-import { domainSidebarLinks, websiteMenus } from "@/constants";
+import { domainSidebarLinks } from "@/constants";
 import { Dropdown } from "primereact/dropdown";
 import { saveDatatoSidebar } from "@/lib/appwrite/api";
 import { Edit3Icon } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import SvgPickerComponent from "@/components/shared/SvgPickerComponent";
-import UploadSvgForm from "./UploadSvgForm";
+import SvgComponent from "@/utils/SvgComponent";
 
 type Website =
     | "the_logician"
     | "he_group"
     | "x_wear";
 
-const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> = ({ item, setRerender, activeTab }) => {
+const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, activeDomain?: string, setSelectedItem?:any, setFormType?:any }> = ({ item, setRerender, activeTab, activeDomain,setSelectedItem }) => {
 
     const items = [
         { name: 'Custom Post', value: 'custom_post' },
@@ -41,6 +41,8 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
     const [svgName, setSvgName] = useState('');
     const [website, setWebsite] = useState<Website>('the_logician');
     const [selectedMenuAfter, setSelectedMenuAfter] = useState(null);
+    const [localItem, setLocalItem] = useState<any>(item); // Initialize localItem with item passed from parent
+
 
     // @ts-ignore
     const validationSchema = {
@@ -51,7 +53,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
     const headerTemplate = () => {
         return (
             <div className="flex items-center justify-between">
-                <h1 className='page-innertitles'>Svg Picker <span className="text-sm">(double click to choose svg)</span></h1>
+                <h1 className='page-innertitles'>Svg Picker <span className="text-sm">(click to choose svg)</span></h1>
                 <button onClick={() => setSvgPicker(false)}><img src='/assets/icons/close.svg' className='cursor-pointer' /></button>
             </div>
         );
@@ -61,45 +63,59 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
         // @ts-ignore
         resolver: zodResolver(validationSchema[activeTab]),
         defaultValues: {
-            id: item?._id || '',
-            domain: item?.domain || '',
-            route: item?.route || '',
-            label: item?.label || '',
-            enabled: item?.enabled || true,
-            place_after: item?.place_after || 'end',
-            type: item?.type || 'default',
-            category: item?.category || false,
+            id:  '',
+            domain:  '',
+            route:  '',
+            label: '',
+            enabled: true,
+            place_after: 'end',
+            type: 'default',
+            category: 'no',
             // subcategory: [{ name: "", route: "", imgUrl: "" }]
         },
     });
-    console.log(item, "Skected");
+
     useEffect(() => {
-        if (item) {
-            setSvgName(item?.imgURL); form.setValue('id', item._id); form.setValue('route', item.route); form.setValue('label', item?.label); form.setValue('type', item.type); form.setValue('category', item.category); setType(item.type);
+        //@ts-ignore
+        console.log(item)
+        setLocalItem(item)
+
+        if (activeDomain) { setWebsite(activeDomain) }
+        if (localItem) {
+            setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category?'yes':'no'); setType(localItem.type);
         } else {
             form.reset()
         };
-    }, [item]);
+
+    }, [item, localItem, activeDomain]);
 
     const { toast } = useToast()
-
+    console.log(form, form.getValues(),localItem, "Hsa")
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
-        let route_link = values.type === 'custom_post' ? `posts/${values.route}` : values.route;
-        let newobject = { imgURL: svgName, route: values.route, label: values.label };
-        console.log(newobject, "NEW OBJECT"); alert("test")
+        let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : values.route;
+        let newobject = { imgURL: svgName, route: route_link, label: values.label };
 
-        // @ts-ignore
-        if (activeTab == 'websites') {
-            // @ts-ignore
-            const index = currentWebsiteSchema.findIndex(item => item.label === values.place_after);
-            if (index !== -1) {
-                currentWebsiteSchema.splice(index + 1, 0, newobject);
-                // @ts-ignore
-                domainSidebarLinks.websites[website] = currentWebsiteSchema;
+       
+        if (activeTab === 'website') {
+            const webObject = {  id: values.id || Math.random().toString(36).substr(2, 9),  imgURL: svgName, route: route_link, label: values.label, category: values.category === 'yes', type: values.type || 'default' };
+            if (values.id) {
+                 // @ts-ignore
+                const index = currentWebsiteSchema.findIndex(item => item.id === values.id);
+                if (index !== -1) {
+                    currentWebsiteSchema.splice(index, 1, webObject);
+                }
+            } else {
+                 // @ts-ignore
+                const index = currentWebsiteSchema.findIndex(item => item.label === values.place_after);
+                if (index !== -1) {
+                    currentWebsiteSchema.splice(index + 1, 0, webObject);
+                }
             }
+             // @ts-ignore
+            domainSidebarLinks.websites[website] = currentWebsiteSchema;
         }
         else {
             // @ts-ignore
@@ -121,6 +137,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
             const message = createOrEditNavItemResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
             form.reset();
             setRerender((prev: boolean) => !prev);
+            setSelectedItem(null); setSvgName('');
             return toast({ variant: 'default', description: message });
         } else {
             return toast({ variant: 'default', description: 'Something went wrong' });
@@ -193,19 +210,23 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
 
                     <FormLabel>
                         <div className="flex align-middle items-center">Choose Icon
-                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} >
-                                <Edit3Icon /></Button >
+                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><Edit3Icon /></Button >
+                            <SvgComponent className="border border-primary-500 p-4" svgName={svgName} />
                         </div>
                     </FormLabel>
-                    <FormControl><Input className="" placeholder="Pick an Svg" value={svgName} /></FormControl>
                     {activeTab !== 'comman' && type != 'default' &&
                         <FormField control={form.control} name="category" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Enable Category</FormLabel>
                                 <FormControl className="mx-4 mt-4">
                                     <InputSwitch
-                                        checked={form.getValues('category')}
-                                        onChange={(e) => { form.setValue('category', e.value) }}
+                                        checked={form.getValues("category") === 'yes'}
+                                        onChange={(e) => {
+                                            const newValue = form.getValues("category") === 'yes' ? 'no' : 'yes';
+                                            form.setValue("category", newValue);
+                                            field.onChange(newValue);
+                                            console.log(form, form.getValues("category") === 'yes')
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage className="shad-form_message" />
@@ -213,7 +234,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string }> 
                         )} />
                     }
                     <Dialog visible={svgPicker} onHide={() => setSvgPicker(false)} style={{ width: '60vw' }} header={headerTemplate} closable={false} >
-                        <SvgPickerComponent setSvgName={setSvgName} />
+                        <SvgPickerComponent setSvgName={setSvgName} setSvgPicker={setSvgPicker} />
                     </Dialog>
 
                     <Button type="submit" className="shad-button_primary w-max place-self-end ">

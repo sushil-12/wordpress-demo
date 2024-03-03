@@ -154,7 +154,7 @@ export const navItemFormSchema = z.object({
         path: ['label'],
     }),
     enabled: z.boolean(),
-    category: z.boolean(),
+    category: z.optional(z.string()),
     // subcategory: z.array(subNavItemSchema),
 });
 

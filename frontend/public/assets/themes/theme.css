@@ -1104,7 +1104,7 @@
     background: #ffffff;
   }
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
-    background: #4338CA;
+    background: #000C79;
   }
   .p-inputswitch.p-invalid .p-inputswitch-slider {
     border-color: #f0a9a7;
@@ -1591,8 +1591,8 @@
     color: #ffffff;
   }
   .p-selectbutton .p-button.p-highlight:hover {
-    background: #4338CA;
-    border-color: #4338CA;
+    background: #000C79;
+    border-color: #000C79;
     color: #ffffff;
   }
   .p-selectbutton .p-button.p-highlight:hover .p-button-icon-left,
@@ -1786,8 +1786,8 @@
     color: #ffffff;
   }
   .p-togglebutton.p-button.p-highlight:hover {
-    background: #4338CA;
-    border-color: #4338CA;
+    background: #000C79;
+    border-color: #000C79;
     color: #ffffff;
   }
   .p-togglebutton.p-button.p-highlight:hover .p-button-icon-left,
@@ -1808,14 +1808,14 @@
     border-radius: 0.375rem;
   }
   .p-button:enabled:hover, .p-button:not(button):not(a):not(.p-disabled):hover {
-    background: #4338CA;
+    background: #000C79;
     color: #ffffff;
-    border-color: #4338CA;
+    border-color: #000C79;
   }
   .p-button:enabled:active, .p-button:not(button):not(a):not(.p-disabled):active {
-    background: #4338CA;
+    background: #000C79;
     color: #ffffff;
-    border-color: #4338CA;
+    border-color: #000C79;
   }
   .p-button.p-button-outlined {
     background-color: transparent;
@@ -4167,7 +4167,7 @@
     right: -1rem;
   }
   .p-overlaypanel .p-overlaypanel-close:enabled:hover {
-    background: #4338CA;
+    background: #000C79;
     color: #ffffff;
   }
   .p-overlaypanel:after {

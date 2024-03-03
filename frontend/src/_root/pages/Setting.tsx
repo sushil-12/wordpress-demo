@@ -29,7 +29,7 @@ const Setting = () => {
   }, [render])
   return (
     <div className="main-container w-full overflow-hidden ">
-      <div className="px-4 py-5 flex justify-between h-[10vh] min-h-[10vh] max-h-[10vh">
+      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[44px]">
         <h3 className="page-titles">Settings</h3>
       </div>
       <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto px-5 ">

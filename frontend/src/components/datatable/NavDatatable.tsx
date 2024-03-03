@@ -1,9 +1,9 @@
-import {  Edit3Icon, PlusSquare } from 'lucide-react';
+import { Edit3Icon, PlusSquare } from 'lucide-react';
 import { useState } from 'react';
 import { TabPanel, TabView } from 'primereact/tabview';
 import * as React from 'react';
 import { INavLink } from '@/lib/types';
-import { formatString } from '@/lib/utils';
+import { createSlug, formatString } from '@/lib/utils';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import NavItemForm from '@/settings/NavItemForm';
 import SvgComponent from '@/utils/SvgComponent';
@@ -15,9 +15,12 @@ interface NavDatatableprops {
 }
 
 const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
-    console.log(navItems)
+    
     const [selectedItem, setSelectedItem] = useState(null);
     const [render, setRerender] = useState(true);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeDomain, setActiveDomain] = useState('the_logician');
+    const websitekeys = navItems.websites && Object.keys(navItems.websites);
 
     return (
         <div className="card">
@@ -66,16 +69,16 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                             })}
                         </ol>
                         <div className="w-1/2">
-                            <NavItemForm item={selectedItem} setRerender={setRerender} activeTab="comman" />
+                            <NavItemForm item={selectedItem} setRerender={setRerender} setSelectedItem={setSelectedItem} activeTab="comman" />
                         </div>
                     </div>
                 </TabPanel>
                 <TabPanel header="Websites">
                     <div className="card flex gap-4  ">
-                        <Accordion activeIndex={0} className='w-1/2'>
+                        <Accordion activeIndex={activeIndex} className='w-1/2' onTabChange={(e) => {setActiveIndex(e.index); setActiveDomain(websitekeys[e.index])}}>
                             {
                                 Object.entries(navItems.websites || {}).map(([submenuKey, submenuItems]) => (
-                                    <AccordionTab header={formatString(submenuKey)} key={submenuKey}>
+                                    <AccordionTab header={formatString(submenuKey)} key={submenuKey}  >
                                         <ul id={`-dropdown`} className='block'>
                                             {/* @ts-ignore */}
                                             {submenuItems.map((link: INavLink) => {
@@ -85,7 +88,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                         {link.subcategory ? (
                                                             <li className="left-sidebar-web-link hover:bg-gray-100 ">
                                                                 <button type="button" className="flex items-center w-full" >
-                                                                    <img src={link.imgURL} alt={link.label} className='pl-6 pr-1' />
+                                                                    <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
                                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(link.label)}</span>
                                                                     {/* <img src="/assets/icons/down-arrow.svg" className="dropdown-arrow mr-5" alt="" /> */}
                                                                 </button>
@@ -107,8 +110,9 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                             <li key={link.label} className={`leftsidebar-link`}>
                                                                 <div className="links">
                                                                     <div className="flex gap-4 items-center p-4" >
-                                                                        <img src={link.imgURL} alt={link.label} className="group-hover:invert-primary-500" />
+                                                                        <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
                                                                         {link.label}
+                                                                        <Edit3Icon className='cursor-pointer' onClick={() => setSelectedItem(link)} />
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -123,7 +127,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                             }
                         </Accordion>
                         <div className="w-1/2">
-                            <NavItemForm item={selectedItem} setRerender={setRerender} activeTab="website" />
+                            <NavItemForm item={selectedItem} setRerender={setRerender} activeTab="website" activeDomain={activeDomain}  setSelectedItem={setSelectedItem}/>
                         </div>
                     </div>
                 </TabPanel>

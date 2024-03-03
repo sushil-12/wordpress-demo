@@ -419,7 +419,7 @@
   .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
     background: #EEF2FF;
     border-color: #EEF2FF !important;
-    color: #4338CA !important;
+    color: #000C79 !important;
   }
 
   .p-image-toolbar {
@@ -542,7 +542,7 @@
 
   /* Left sidebar */
   .leftsidebar {
-    @apply md:flex flex-col justify-between min-w-[248px];
+    @apply md:flex flex-col justify-between min-w-[256px];
     ;
   }
 

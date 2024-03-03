@@ -21,6 +21,7 @@ import ProfilePageSkeleton from "@/components/skeletons/ProfilePageSkeleton";
 import { Skeleton } from "primereact/skeleton";
 import { editProfile } from "@/lib/appwrite/api";
 import SvgComponent from "@/utils/SvgComponent";
+import Header from "@/components/ui/header";
 
 const Profile = () => {
   const { user, setUser, isLoading, setRerender } = useUserContext();
@@ -83,18 +84,17 @@ const Profile = () => {
   }
 
   return (
-    <div className="main-container p-5 w-full">
-      <div className="px-4 bg-white flex justify-between h-[10vh] min-h-[10vh] max-h-[10vh]">
+    <div className="main-container w-full">
+      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[44px]">
         <h3 className="page-titles">My profile</h3>
         <nav className="flex">
           <NavLink key='settings' className={`flex gap-2 text-primary-500`} to={'/settings'}>
             <Settings className="shad-button_ghost" />Settings
           </NavLink>
-
         </nav>
       </div>
       {loader ? (<ProfilePageSkeleton />) : (
-        <div className="main-content px-2 w-[400px]">
+        <div className="main-content  h-[90vh] min-h-[90vh] max-h-[90vh] overflow-x-hidden overflow-y-auto p-6">
           <h3 className="page-subtitles">Edit profile picture</h3>
           <div className="edit_image_container pt-[40px] mb-[70px]">
             <div className="flex items-center gap-8">
@@ -109,7 +109,7 @@ const Profile = () => {
                   <input type="file" accept="image/*" multiple={false} className="hidden" onChange={handleFileChange} ref={fileInputRef} />
                   {/* @ts-ignore */}
                   <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[30px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
-                    <SvgComponent className="pl-3 pr-2 " svgName="close" />Upload
+                    <SvgComponent className="pl-3 pr-2 " svgName="upload" />Upload
                     {/* <img src="/assets/icons/upload.svg" alt="" className="pl-3 pr-2 " />Upload */}
                   </button>
                   <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[30px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
@@ -122,12 +122,12 @@ const Profile = () => {
             <div className="">
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-1 flex flex-col gap-3 w-full mt-4"
+                className="flex flex-col gap-3 w-full mt-4"
               >
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem className="outline-none focus-within:border-none focus:border-none">
                     <FormLabel>Name</FormLabel>
-                    <FormControl><Input className="outline-none focus-within:border-none focus:border-none" placeholder="Add name" {...field} /></FormControl>
+                    <FormControl><Input className="outline-none focus-within:border-none focus:border-none w-[350px]" placeholder="Add name" {...field}  /></FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
                 )}
@@ -136,14 +136,14 @@ const Profile = () => {
                   <FormItem>
                     <FormLabel>Bio</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Add Bio" className="outline-none focus-within:border-none focus:border-none" {...field}></Textarea>
+                      <Textarea placeholder="Add Bio" className="outline-none focus-within:border-none focus:border-none w-[350px]" {...field}></Textarea>
                     </FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
 
                 )}
                 />
-                <div className="flex gap-2.5">
+                <div className="flex gap-2.5 mt-[34px]">
                   <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[16px] ">
                     {
                       isUpdating ? <Loader /> : 'Save changes'

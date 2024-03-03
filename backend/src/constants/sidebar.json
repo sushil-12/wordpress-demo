@@ -2,7 +2,7 @@
   "comman": [
     {
       "imgURL": "dashboard",
-      "route": "/dashboard",
+      "route": "///dashboard",
       "label": "Dashboard"
     },
     {
@@ -11,7 +11,7 @@
       "label": "Business Statistic"
     },
     {
-      "imgURL": "briefcase",
+      "imgURL": "dashboard",
       "route": "personal-statisticss",
       "label": "Personal Statisticss"
     }
@@ -19,89 +19,94 @@
   "websites": {
     "the_logician": [
       {
-        "imgURL": "/assets/icons/media.svg",
+        "id": "the_logician_1",
+        "imgURL": "close",
         "route": "/media",
-        "label": "Media"
+        "label": "Media",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/pages.svg",
+        "id": "the_logician_2",
+        "imgURL": "plugins",
         "route": "/pages",
-        "label": "Pages"
+        "label": "Pages",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/posts.svg",
+        "id": "the_logician_4",
+        "imgURL": "close",
         "route": "/posts",
-        "label": "Posts"
+        "label": "Posts",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/categories.svg",
+        "id": "the_logician_5",
+        "imgURL": "websites",
         "route": "/posts/categories",
-        "label": "Categories"
+        "label": "Categories",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/interviews.svg",
-        "route": "/posts/interviews",
-        "label": "Interviews"
-      },
-      {
-        "imgURL": "/assets/icons/reviews.svg",
-        "route": "/posts/reviews",
-        "label": "Reviews",
-        "category": true
-      },
-      {
-        "imgURL": "/assets/icons/plugins.svg",
-        "route": "/plugins",
-        "label": "Plugins"
+        "id": "hgcvutyo9",
+        "imgURL": "briefcase",
+        "route": "/posts/review",
+        "label": "Review",
+        "category": true,
+        "type": "custom_post"
       }
     ],
     "he_group": [
       {
-        "imgURL": "/assets/icons/media.svg",
+        "id": "he_group_1",
+        "imgURL": "profile",
         "route": "/media",
-        "label": "Media"
+        "label": "Media",
+        "category": false
       },
       {
-        "imgURL": "/assets/icons/pages.svg",
+        "id": "he_group_2",
+        "imgURL": "close",
         "route": "/pages",
-        "label": "Pages"
+        "label": "Pages",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/posts.svg",
+        "id": "he_group_4",
+        "imgURL": "profile",
         "route": "/posts",
-        "label": "Posts"
-      },
-      {
-        "imgURL": "/assets/icons/categories.svg",
-        "route": "technology",
-        "label": "Technology"
-      },
-      {
-        "imgURL": "/assets/icons/plugins.svg",
-        "route": "/plugins",
-        "label": "Plugins"
+        "label": "Posts",
+        "category": false,
+        "type": "default"
       }
     ],
     "x_wear": [
       {
-        "imgURL": "/assets/icons/media.svg",
+        "id": "he_group_1",
+        "imgURL": "profile",
         "route": "/media",
-        "label": "Media"
+        "label": "Media",
+        "category": false
       },
       {
-        "imgURL": "/assets/icons/pages.svg",
+        "id": "he_group_2",
+        "imgURL": "websites",
         "route": "/pages",
-        "label": "Pages"
+        "label": "Pages",
+        "category": false,
+        "type": "default"
       },
       {
-        "imgURL": "/assets/icons/posts.svg",
+        "id": "he_group_4",
+        "imgURL": "dashboard",
         "route": "/posts",
-        "label": "Posts"
-      },
-      {
-        "imgURL": "/assets/icons/plugins.svg",
-        "route": "/plugins",
-        "label": "Plugins"
+        "label": "Posts",
+        "category": false,
+        "type": "default"
       }
     ]
   }
