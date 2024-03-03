@@ -7,6 +7,9 @@ import { Menubar } from 'primereact/menubar';
 import { TabMenu } from 'primereact/tabmenu';
 import { useEffect, useState } from "react";
 import { domainSidebarLinks, logos, websites } from "@/constants";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UploadSvgForm from "@/settings/UploadSvgForm";
+import SvgGrid from "@/components/shared/SvgGrid";
 
 
 const Setting = () => {
@@ -14,39 +17,56 @@ const Setting = () => {
   const [navItems, setNavItems] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [render, setRerender] = useState(true);
-  const {setRerender : setAppRender, rerender} = useUserContext();
-  const items = [
-    { label: 'Sidebar', icon: 'pi pi-book' },
-    // { label: 'Test One', icon: 'pi pi-chart-line' },
-    // { label: 'Test Two', icon: 'pi pi-list' },
-    // { label: 'Test Three', icon: 'pi pi-inbox' }
-  ];
+  const { setRerender: setAppRender, rerender } = useUserContext();
 
-  async function getNavItems(){
+  async function getNavItems() {
     setNavItems(domainSidebarLinks);
-  } 
+  }
   useEffect(() => {
     getNavItems();
-    setAppRender((prev:boolean)=> !prev);
+    setAppRender((prev: boolean) => !prev);
     console.log(rerender)
-   }, [render])
+  }, [render])
   return (
     <div className="main-container w-full overflow-hidden ">
-       <div className="px-4 py-5 flex justify-between h-[10vh] min-h-[10vh] max-h-[10vh">
+      <div className="px-4 py-5 flex justify-between h-[10vh] min-h-[10vh] max-h-[10vh">
         <h3 className="page-titles">Settings</h3>
       </div>
       <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto px-5 ">
-        <Menubar model={items} className="p-0 border-none page-innersubtitles text-bold"/>
-        <div className="p-4 page-innersubtitles">
-          <div className="flex  border-primary-500 gap-8" >
-            <div className="items w-3/4">
-              <NavDatatable navItems = {navItems} setSelectedItem={setSelectedItem} render={render}/>
+
+        <Tabs defaultValue="sidebar" className="w-full">
+          <TabsList className="grid w-full grid-cols-6 text-black">
+            <TabsTrigger value="sidebar">Sidebar</TabsTrigger>
+            <TabsTrigger value="upload_svg">Upload SVG Icons</TabsTrigger>
+          </TabsList>
+          <TabsContent value="sidebar">
+            <div className="p-4 page-innersubtitles">
+              <div className="flex  border-primary-500 gap-8" >
+                <div className="items w-full">
+                  <NavDatatable navItems={navItems} setSelectedItem={setSelectedItem} render={render} />
+                </div>
+                {/* <div className="form w-1/2">
+                  <NavItemForm item={selectedItem} setRerender={setRerender}  />
+                </div> */}
+              </div>
             </div>
-            <div className="form w-1/2">
-              <NavItemForm item={selectedItem} setRerender={setRerender}/>
+          </TabsContent>
+          <TabsContent value="upload_svg">
+            <div className="p-4 page-innersubtitles">
+              <div className="flex  border-primary-500 gap-8" >
+                <div className="items w-full">
+                  <SvgGrid />
+                </div>
+                {/* <div className="form w-1/2">
+                  <UploadSvgForm />
+                </div> */}
+              </div>
             </div>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
+
+
+
       </div>
     </div>
   );

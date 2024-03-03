@@ -8,7 +8,6 @@ import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { useToast } from '../ui/use-toast';
 import { useDeleteMedia } from '@/lib/react-query/queriesAndMutations';
 import { useMedia } from '@/context/MediaProvider';
-import { Trash2Icon } from 'lucide-react';
 import { bytesToSize } from '@/lib/utils';
 import { Skeleton } from 'primereact/skeleton';
 
@@ -71,7 +70,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
             message: 'Do you want to delete this media file?',
             header: 'Delete Confirmation',
             acceptClassName: 'pl-4 outline-none p-2 text-sm',
-            rejectClassName: 'pl-4 outline-none p-2 text-sm bg-transparent',
+            rejectClassName: 'pl-4 outline-none p-2 text-sm text-white',
             className: 'border bg-light-1 shadow-lg p-0',
             accept: () => accept(media_id),
             reject: reject,

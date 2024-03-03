@@ -327,6 +327,18 @@ export async function saveDatatoSidebar(jsonData: any) {
 
     return post?.data;
   } catch (error: any) {
-    throw new PromiseHandler(error?.response?.data?.message, 'Quick Edit failed', { error });
+    throw new PromiseHandler(error?.response?.data?.message, 'Upload failed', { error });
+  }
+}
+
+export async function uploadSvg(jsonData: any) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const post = await authenticatedApiService.uploadSvg( jsonData);
+
+    return post?.data;
+  } catch (error: any) {
+    console.log(error)
+    throw new PromiseHandler(error?.response?.data?.message, 'Upload failed', { error });
   }
 }

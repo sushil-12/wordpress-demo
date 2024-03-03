@@ -1,33 +1,19 @@
 {
   "comman": [
     {
-      "imgURL": "/assets/icons/dashboard.svg",
-      "route": "/",
+      "imgURL": "dashboard",
+      "route": "/dashboard",
       "label": "Dashboard"
     },
     {
-      "imgURL": "/assets/icons/personal.svg",
-      "route": "/personal-statistics",
-      "label": "Personal Statistic",
-      "subcategory": [
-        {
-          "imgURL": "/assets/icons/personal.svg",
-          "route": "/personal-statistics",
-          "label": "Personal Statistic"
-        }
-      ]
+      "imgURL": "plugins",
+      "route": "/buisness-statistics",
+      "label": "Business Statistic"
     },
     {
-      "imgURL": "/assets/icons/Briefcase.svg",
-      "route": "/buisness-statistics",
-      "label": "Business Statistic",
-      "subcategory": [
-        {
-          "imgURL": "/assets/icons/Briefcase.svg",
-          "route": "/buisness-statistics",
-          "label": "Business Statistic"
-        }
-      ]
+      "imgURL": "briefcase",
+      "route": "personal-statisticss",
+      "label": "Personal Statisticss"
     }
   ],
   "websites": {

@@ -9,6 +9,7 @@ const app = express();
 const fs = require('fs');
 
 const cors = require('cors');
+const { HTTP_STATUS_CODES } = require('./constants/error_message_codes');
 
 // Connect to MongoDB
 connectDB();
@@ -36,6 +37,44 @@ app.post('/writefile', (req, res) => {
         } else {
             ResponseHandler.success(res, {message: 'Sidebar Updated Succesfuly'}, HTTP_STATUS_CODES.CREATED);
         }
+    });
+});
+app.post('/upload/svg', (req, res) => {
+    const { name, code } = req.body;
+    const currentJson = './src/constants/svg_codes.json'; 
+    if (!name || !code) {
+        return res.status(400).json({ error: 'SVG name and code are required' });
+    }
+
+    // Read the existing JSON file
+    fs.readFile(currentJson, (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return res.status(500).send('Error reading file');
+        }
+
+        let svgData = {};
+        try {
+            // Parse the existing JSON content
+            svgData = JSON.parse(data);
+        } catch (parseErr) {
+            console.error('Error parsing JSON:', parseErr);
+            return res.status(500).send('Error parsing JSON');
+        }
+
+        // Append the new SVG data
+        svgData[name] = code;
+
+        const jsonString = JSON.stringify(svgData, null, 2);
+
+        // Write back to the JSON file
+        fs.writeFile(currentJson, jsonString, (writeErr) => {
+            if (writeErr) {
+                console.error('Error writing file:', writeErr);
+                return res.status(500).send('Error writing file');
+            }
+            ResponseHandler.success(res, {message: 'SVG Added Succesfuly'}, HTTP_STATUS_CODES.CREATED);
+        });
     });
 });
 

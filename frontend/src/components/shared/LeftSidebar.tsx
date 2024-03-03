@@ -8,6 +8,7 @@ import { MenuIcon, Settings } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
 import * as React from "react";
 import { createSlug, formatString } from "@/lib/utils";
+import SvgComponent from "@/utils/SvgComponent";
 
 interface DropdownVisibilityState {
     [key: string]: boolean;
@@ -93,7 +94,8 @@ const LeftSidebar = () => {
                                         {link?.subcategory ? (
                                             <li className="left-sidebar-link border-b">
                                                 <button type="button" className="flex items-center w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
-                                                    <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' />
+                                                    {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
+                                                    <SvgComponent className="pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
                                                     <img src="/assets/icons/down-arrow.svg" className={`${createSlug(link?.label)}-dropdown-arrow mr-5`} alt="" />
                                                 </button>
@@ -113,7 +115,9 @@ const LeftSidebar = () => {
                                             <li className={`left-sidebar-link border-b hover:bg-gray-100 ${isActive ? 'bg-secondary-gray' : ''}`}>
                                                 <div className="link-container" >
                                                     <NavLink className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
-                                                        <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1`} />
+                                                        {/* <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1`} /> */}
+                                                        <SvgComponent className="pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
+
                                                         <span className="ms-3  my-[22px]">{link.label}</span>
                                                     </NavLink>
                                                 </div>
@@ -138,7 +142,8 @@ const LeftSidebar = () => {
                                         <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
                                             <button type="button" className="flex items-center w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
-                                                <img src={websites[submenuKey]} alt={submenuKey} className='pl-6 pr-1' />
+                                                {/* <img src={websites[submenuKey]} alt={submenuKey} className='pl-6 pr-1' /> */}
+                                                <SvgComponent className="pl-6 pr-1" svgName={websites[submenuKey] || 'briefcase'} />
                                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(submenuKey)}</span>
                                                 <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow me-14`} alt="" />
                                             </button>
@@ -164,14 +169,18 @@ const LeftSidebar = () => {
                                                                     <li className={`left-sidebar-web-link ${isWebActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center" to={`${submenuKey}${link?.route}`}>
-                                                                                <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} />{link.label}
+                                                                                <SvgComponent className="group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
+                                                                                {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
+                                                                                {link.label}
                                                                             </NavLink>
                                                                         </div>
                                                                     </li>
                                                                     <li className={`left-sidebar-web-link ${isWebActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center " to={`${submenuKey}/category${link?.route}`}>
-                                                                                <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} />Manage category
+                                                                                {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
+                                                                                <SvgComponent className="group-hover:invert-primary-500 text-primary-500" svgName={link.imgURL || 'briefcase'} />
+                                                                                Manage category
                                                                             </NavLink>
                                                                         </div>
                                                                     </li>
@@ -182,7 +191,7 @@ const LeftSidebar = () => {
                                                             <li key={link.label} className={`left-sidebar-web-link ${isWebActive ? 'bg-light-blue text-primary-500 border-b-primary-500' : ''}`}>
                                                                 <div className="links">
                                                                     <NavLink className="flex gap-4 items-center" to={`${submenuKey}${link.route}`}>
-                                                                        <img src={link.imgURL} alt={link.label} className="group-hover:invert-primary-500 text-primary-500" />
+                                                                        <SvgComponent className="group-hover:invert-primary-500 text-primary-500" svgName={link.imgURL || 'briefcase'} />
                                                                         {link.label}
                                                                     </NavLink>
                                                                 </div>

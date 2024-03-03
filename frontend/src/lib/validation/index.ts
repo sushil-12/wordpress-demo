@@ -147,7 +147,6 @@ export const navItemFormSchema = z.object({
     id: z.string(),
     route: z.string(),
     domain: z.string(),
-    imgUrl: z.string(),
     type: z.string(),
     place_after: z.string(),
     label: z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
@@ -157,5 +156,22 @@ export const navItemFormSchema = z.object({
     enabled: z.boolean(),
     category: z.boolean(),
     // subcategory: z.array(subNavItemSchema),
+});
+
+export const commonNavSchema = z.object({
+    id: z.optional(z.string()),
+    route: z.string(),
+    label: z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
+        message: 'Too big, less than 50 characters please',
+        path: ['label'],
+    }),
+});
+
+export const svgUploader = z.object({
+    name:  z.string().min(1, { message: "Too Short" }).max(12).refine(value => value.length <= 12, {
+        message: 'Too big, less than 12 characters please',
+        path: ['name'],
+    }),
+    code: z.string(),
 });
 

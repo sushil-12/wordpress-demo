@@ -116,7 +116,7 @@ const SignInForm = () => {
     }
 
     if (state == 'login_form' || form.getValues('form_type') == 'login_form') {
-      const response_data = session?.data?.data;
+      const response_data = session?.data?.data; 
       if (response_data.email_sent) {
         navigate('/verify-account')
         setRunning(true)

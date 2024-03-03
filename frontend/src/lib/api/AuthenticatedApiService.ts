@@ -134,6 +134,9 @@ class AuthenticatedApiService {
   async saveDatatoSidebarApi(jsonData: any): Promise<any> {
     return await this.api.post('/writefile', jsonData);
   }
+  async uploadSvg(jsonData: any): Promise<any> {
+    return await this.api.post('/upload/svg', jsonData);
+  }
 
 }
 

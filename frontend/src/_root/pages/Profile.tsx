@@ -20,6 +20,7 @@ import { Settings } from "lucide-react";
 import ProfilePageSkeleton from "@/components/skeletons/ProfilePageSkeleton";
 import { Skeleton } from "primereact/skeleton";
 import { editProfile } from "@/lib/appwrite/api";
+import SvgComponent from "@/utils/SvgComponent";
 
 const Profile = () => {
   const { user, setUser, isLoading, setRerender } = useUserContext();
@@ -108,7 +109,8 @@ const Profile = () => {
                   <input type="file" accept="image/*" multiple={false} className="hidden" onChange={handleFileChange} ref={fileInputRef} />
                   {/* @ts-ignore */}
                   <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[30px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
-                    <img src="/assets/icons/upload.svg" alt="" className="pl-3 pr-2 " />Upload
+                    <SvgComponent className="pl-3 pr-2 " svgName="close" />Upload
+                    {/* <img src="/assets/icons/upload.svg" alt="" className="pl-3 pr-2 " />Upload */}
                   </button>
                   <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[30px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
                 </div>
