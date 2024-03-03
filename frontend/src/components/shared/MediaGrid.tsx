@@ -95,7 +95,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                                 </div>
                                 <div className="flex place-content-between-end mt-[9px]  max-w-[360px]" style={{ "placeContent": "space-between" }}>
                                     <div className="flex flex-col">
-                                        <Skeleton height='50px' width='100px' />
+                                        <Skeleton height='20px' width='100px' />
                                     </div>
                                     <Skeleton height='18px' width='18px' />
                                 </div>
@@ -104,7 +104,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                     )}
                     {mediaItem.title !== 'false' && (
                         <a className={`card group cursor-pointer  ${isDeleting ? 'blur-sm' : ''}`} >
-                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border surface-card overflow-hidden xl:aspect-h-8 xl:aspect-w-7 object-contain max-w-[360px] min-w-[360px] min-h-[201px] max-h-[201px] " onClick={() => openEditModal(mediaItem)}>
+                            <div className="aspect-h-1 aspect-w-1 w-full border-round border-1 surface-border surface-card overflow-hidden xl:aspect-h-8 xl:aspect-w-7  min-h-[201px] max-h-[201px] object-contain " onClick={() => openEditModal(mediaItem)}>
                                 <img
                                     src={mediaItem.url}
                                     alt={mediaItem.alt_text}

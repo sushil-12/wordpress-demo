@@ -54,7 +54,7 @@ export default function Media() {
 
   return (
     <div className="main-container px-5 w-full overflow-hidden ">
-      <div className="px-4 pt-5 pb-[38px] flex justify-between align-middle items-center h-[10vh] min-h-[10vh] max-h-[10vh">
+      <div className="px-4 pt-5 pb-[38px] flex justify-between align-middle items-center h-[10vh] min-h-[10vh] max-h-[10vh] overflow-hidden" >
         <h3 className="page-titles">Media</h3>
         <div className="flex justify-start items-center py-7 relative">
           <input
@@ -69,7 +69,7 @@ export default function Media() {
         </div>
 
       </div>
-      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto px-5">
+      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5">
         {isLoading ? (
           <div className="w-full mx-auto  mt-[24px]"><MediaGridSkeletonDemo /></div>
         ) : (
