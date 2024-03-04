@@ -12,20 +12,8 @@
     },
     {
       "imgURL": "dashboard",
-      "route": "/personal-statisticss",
-      "label": "Personal Statisticss"
-    },
-    {
-      "id": "exgdrsiwn",
-      "imgURL": "websites",
-      "route": "inventions",
-      "label": "Inventions"
-    },
-    {
-      "id": "wzdofptcm",
-      "imgURL": "websites",
-      "route": "inventions2",
-      "label": "Inventions2"
+      "route": "/personal-statistics",
+      "label": "Personal Statistics"
     }
   ],
   "websites": {

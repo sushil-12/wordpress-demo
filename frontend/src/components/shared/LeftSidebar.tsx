@@ -128,7 +128,7 @@ const LeftSidebar = () => {
                                 );
                             })}
 
-                            <button type="button" className="flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
+                            <button type="button" className=" left-sidebar-link flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
                                 <img src={'/assets/icons/websites.svg'} alt={'websites'} className='pl-6 pr-1' />
                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px] ">{'Websites'}</span>
                                 <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow ${activeSubmenu != '' && 'rotated'} mr-5`} alt="" />
@@ -159,7 +159,7 @@ const LeftSidebar = () => {
                                                     <React.Fragment key={link.label}>
                                                         {link.category ? (
                                                             <li className="left-sidebar-web-link hover:bg-gray-100 ">
-                                                                <button type="button" className="flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
+                                                                <button type="button" className=" left-sidebar-link flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
                                                                     <SvgComponent className="group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap gap-4 ">{formatString(link.label)}</span>
                                                                     <img src="/assets/icons/down-arrow.svg" className={`dropdown-arrow mr-5 `} alt="" />
