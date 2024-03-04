@@ -132,10 +132,11 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                     closeIcon={`hidden`}
                     closable={false}
                     pt={{
-                        root: { className: 'h-[50] bg-white-100 p-6 overflow-hidden' },
+                        root: { className: 'bg-white-100 overflow-hidden' },
                         headerTitle: { className: 'page-subtitles' },
-                        content:{className: 'overflow-hidden'}
+                        content:{className: 'overflow-hidden p-0 p-6'}
                     }}
+                    style={{ width:'1110px' , height:'662px'}}
                     visible={visible} onHide={onHide}>
                     <Galleria
                         ref={galleria}

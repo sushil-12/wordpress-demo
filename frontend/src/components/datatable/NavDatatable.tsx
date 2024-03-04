@@ -37,7 +37,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                 <button type="button" className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 w-full pe-5">
                                                     <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
-                                                    <Edit3Icon className='cursor-pointer' onClick={() => setSelectedItem(link)} />
+                                                     <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
                                                 </button>
                                                 <ul id={`${link?.label}-dropdown`} className={`block bg-white pl-10`}>
                                                     {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
@@ -60,7 +60,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                         <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
                                                         <span className="ms-3  my-[22px]">{link.label}</span>
                                                     </div>
-                                                    <Edit3Icon className='cursor-pointer' onClick={() => setSelectedItem(link)} />
+                                                     <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
                                                 </div>
                                             </li>
                                         )}
@@ -112,7 +112,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                                     <div className="flex gap-4 items-center p-4" >
                                                                         <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
                                                                         {link.label}
-                                                                        <Edit3Icon className='cursor-pointer' onClick={() => setSelectedItem(link)} />
+                                                                        <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
                                                                     </div>
                                                                 </div>
                                                             </li>

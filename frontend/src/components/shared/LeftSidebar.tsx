@@ -104,7 +104,8 @@ const LeftSidebar = () => {
                                                         <li key={subcategoryLink.label} className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                             <div className="links">
                                                                 <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
-                                                                    <img src={subcategoryLink.imgURL} alt={subcategoryLink.label} className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`} />{subcategoryLink.label}
+                                                                    <SvgComponent className="group-hover:invert-white " svgName={subcategoryLink.imgURL || 'briefcase'} />
+                                                                    {subcategoryLink.label}
                                                                 </NavLink>
                                                             </div>
                                                         </li>
@@ -129,7 +130,7 @@ const LeftSidebar = () => {
 
                             <button type="button" className="flex items-center w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
                                 <img src={'/assets/icons/websites.svg'} alt={'websites'} className='pl-6 pr-1' />
-                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{'Websites'}</span>
+                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px] ">{'Websites'}</span>
                                 <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow ${activeSubmenu != '' && 'rotated'} mr-5`} alt="" />
                             </button>
                             {/* Dropdown menu for "Websites" */}
@@ -142,8 +143,7 @@ const LeftSidebar = () => {
                                         <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
                                             <button type="button" className="flex items-center w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
-                                                {/* <img src={websites[submenuKey]} alt={submenuKey} className='pl-6 pr-1' /> */}
-                                                <SvgComponent className="pl-6 pr-1" svgName={websites[submenuKey] || 'briefcase'} />
+                                                <SvgComponent className="pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
                                                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{formatString(submenuKey)}</span>
                                                 <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow me-14`} alt="" />
                                             </button>
@@ -160,7 +160,7 @@ const LeftSidebar = () => {
                                                         {link.category ? (
                                                             <li className="left-sidebar-web-link hover:bg-gray-100 ">
                                                                 <button type="button" className="flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
-                                                                    <img src={link.imgURL} alt={link.label} className='pl-6 pr-1' />
+                                                                    <SvgComponent className="group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap gap-4 ">{formatString(link.label)}</span>
                                                                     <img src="/assets/icons/down-arrow.svg" className={`dropdown-arrow mr-5 `} alt="" />
                                                                 </button>
@@ -179,7 +179,7 @@ const LeftSidebar = () => {
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center " to={`${submenuKey}/category${link?.route}`}>
                                                                                 {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
-                                                                                <SvgComponent className="group-hover:invert-primary-500 text-primary-500" svgName={link.imgURL || 'briefcase'} />
+                                                                                <SvgComponent className="group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                                                 Manage category
                                                                             </NavLink>
                                                                         </div>

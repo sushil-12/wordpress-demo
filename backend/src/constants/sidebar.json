@@ -2,7 +2,7 @@
   "comman": [
     {
       "imgURL": "dashboard",
-      "route": "///dashboard",
+      "route": "/dashboard",
       "label": "Dashboard"
     },
     {
@@ -12,15 +12,27 @@
     },
     {
       "imgURL": "dashboard",
-      "route": "personal-statisticss",
+      "route": "/personal-statisticss",
       "label": "Personal Statisticss"
+    },
+    {
+      "id": "exgdrsiwn",
+      "imgURL": "websites",
+      "route": "inventions",
+      "label": "Inventions"
+    },
+    {
+      "id": "wzdofptcm",
+      "imgURL": "websites",
+      "route": "inventions2",
+      "label": "Inventions2"
     }
   ],
   "websites": {
     "the_logician": [
       {
         "id": "the_logician_1",
-        "imgURL": "close",
+        "imgURL": "media",
         "route": "/media",
         "label": "Media",
         "category": false,
@@ -47,6 +59,14 @@
         "imgURL": "websites",
         "route": "/posts/categories",
         "label": "Categories",
+        "category": false,
+        "type": "default"
+      },
+      {
+        "id": "mfs0m7j8g",
+        "imgURL": "interviews",
+        "route": "interviews",
+        "label": "Interviews",
         "category": false,
         "type": "default"
       },

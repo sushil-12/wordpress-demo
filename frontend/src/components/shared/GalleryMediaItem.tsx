@@ -10,19 +10,16 @@ const GalleryMediaItem: React.FC<{ item: MediaItem, modalVisibility: any }> = ({
     }, [item]);
 
     return (
-        <div className="flex flex-wrap min-h-[662px] max-h-[662px] gap-6">
-            <div className="w-[688px] min-h-[556px] max-h-[556px] ">
-                <div className="h-full w-full">
-                    <div className=" w-full max-h-[556px] rounded   ">
-                        <Image src={currentItem?.url} alt={currentItem?.alt_text} className="align-items-center" preview data-pr-tooltip='p-image-toolbar' />
-                    </div>
+        <div className="max-h-[556px] grow-0 flex flex-col md:flex-row gap-6 ">
+            <div className=" w-[688px]">
+                <div className="w-full h-full rounded overflow-hidden max-w-full max-h-full">
+                    <Image src={currentItem?.url} alt={currentItem?.alt_text} className="object-cover" />
                 </div>
             </div>
-            <div className=" mr-auto h-full px-4">
+            <div className="w-1/4 md:w-auto h-full px-4">
                 <MediaEditForm item={currentItem} handleModal={modalVisibility} />
             </div>
         </div>
-
     );
 };
 

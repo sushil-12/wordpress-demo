@@ -24,7 +24,7 @@ type Website =
     | "he_group"
     | "x_wear";
 
-const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, activeDomain?: string, setSelectedItem?:any, setFormType?:any }> = ({ item, setRerender, activeTab, activeDomain,setSelectedItem }) => {
+const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, activeDomain?: string, setSelectedItem?: any, setFormType?: any }> = ({ item, setRerender, activeTab, activeDomain, setSelectedItem }) => {
 
     const items = [
         { name: 'Custom Post', value: 'custom_post' },
@@ -63,9 +63,9 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         // @ts-ignore
         resolver: zodResolver(validationSchema[activeTab]),
         defaultValues: {
-            id:  '',
-            domain:  '',
-            route:  '',
+            id: '',
+            domain: '',
+            route: '',
             label: '',
             enabled: true,
             place_after: 'end',
@@ -82,7 +82,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
-            setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category?'yes':'no'); setType(localItem.type);
+            setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category ? 'yes' : 'no'); setType(localItem.type);
         } else {
             form.reset()
         };
@@ -90,41 +90,46 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     }, [item, localItem, activeDomain]);
 
     const { toast } = useToast()
-    console.log(form, form.getValues(),localItem, "Hsa")
+    console.log(form, form.getValues(), localItem, "Hsa")
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
         let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : values.route;
-        let newobject = { imgURL: svgName, route: route_link, label: values.label };
 
-       
         if (activeTab === 'website') {
-            const webObject = {  id: values.id || Math.random().toString(36).substr(2, 9),  imgURL: svgName, route: route_link, label: values.label, category: values.category === 'yes', type: values.type || 'default' };
+            const webObject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, category: values.category === 'yes', type: values.type || 'default' };
             if (values.id) {
-                 // @ts-ignore
+                // @ts-ignore
                 const index = currentWebsiteSchema.findIndex(item => item.id === values.id);
                 if (index !== -1) {
                     currentWebsiteSchema.splice(index, 1, webObject);
                 }
             } else {
-                 // @ts-ignore
+                // @ts-ignore
                 const index = currentWebsiteSchema.findIndex(item => item.label === values.place_after);
                 if (index !== -1) {
                     currentWebsiteSchema.splice(index + 1, 0, webObject);
                 }
             }
-             // @ts-ignore
+            // @ts-ignore
             domainSidebarLinks.websites[website] = currentWebsiteSchema;
         }
         else {
+            let newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label };
             // @ts-ignore
-            const index = currentCommonSchema.findIndex(item => item.label === values.label);
-            if (index !== -1) {
+            if (values.id) {
                 // @ts-ignore
-                currentCommonSchema.splice(index, 1, newobject);
+                const index = currentCommonSchema.findIndex(item => item.id === values.id);
+                if (index !== -1) {
+                    currentCommonSchema.splice(index, 1, newobject);
+                }
             } else {
                 // @ts-ignore
+                /* const index = currentWebsiteSchema.findIndex(item => item.label === values.place_after);
+                if (index !== -1) {
+                    currentWebsiteSchema.splice(index + 1, 0, newobject);
+                } */
                 currentCommonSchema.push(newobject);
             }
 
@@ -237,9 +242,16 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                         <SvgPickerComponent setSvgName={setSvgName} setSvgPicker={setSvgPicker} />
                     </Dialog>
 
-                    <Button type="submit" className="shad-button_primary w-max place-self-end ">
-                        Add
-                    </Button>
+                    <div className="flex gap-4">
+                        <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSvgName('') }} className=" border border-primary-500 ">
+                            Reset
+                        </Button>
+                        <Button type="submit" className="shad-button_primary ">
+                            Add
+                        </Button>
+
+                    </div>
+
                 </form>
             </div>
         </Form>
