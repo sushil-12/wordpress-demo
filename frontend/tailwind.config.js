@@ -42,7 +42,8 @@ module.exports = {
         'light-4': '#5C5C7B',
         'danger':"#810b00",
         'success':"#274e13",
-        'info':'#2f0084'
+        'info':'#2f0084',
+        'secondary-label':'#4B4B4B'
         
       },
 

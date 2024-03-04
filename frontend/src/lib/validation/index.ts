@@ -121,6 +121,8 @@ export const editProfileFieldSchema = z.object({
     name: z.string(),
     bio: z.string(),
     profile_pic:z.optional(z.custom<File>()),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(8, { message: "password must be of minimum 8 characters" }))
 });
 
 export const mediaEditFormSchema = z.object({

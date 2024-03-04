@@ -1,19 +1,22 @@
 {
   "comman": [
     {
+      "id": "7dg9i97e9",
       "imgURL": "dashboard",
       "route": "/dashboard",
       "label": "Dashboard"
     },
     {
-      "imgURL": "plugins",
-      "route": "/buisness-statistics",
-      "label": "Business Statistic"
+      "id": "hzjpof8p0",
+      "imgURL": "personal",
+      "route": "/personal-statistics",
+      "label": "Personal Statistic"
     },
     {
-      "imgURL": "dashboard",
-      "route": "/personal-statistics",
-      "label": "Personal Statistics"
+      "id": "85x0lipea",
+      "imgURL": "briefcase",
+      "route": "/buisness-statistics",
+      "label": "Business Statistic"
     }
   ],
   "websites": {
@@ -28,7 +31,7 @@
       },
       {
         "id": "the_logician_2",
-        "imgURL": "plugins",
+        "imgURL": "pages",
         "route": "/pages",
         "label": "Pages",
         "category": false,
@@ -36,7 +39,7 @@
       },
       {
         "id": "the_logician_4",
-        "imgURL": "close",
+        "imgURL": "posts",
         "route": "/posts",
         "label": "Posts",
         "category": false,
@@ -44,7 +47,7 @@
       },
       {
         "id": "the_logician_5",
-        "imgURL": "websites",
+        "imgURL": "categories",
         "route": "/posts/categories",
         "label": "Categories",
         "category": false,
@@ -60,8 +63,8 @@
       },
       {
         "id": "hgcvutyo9",
-        "imgURL": "briefcase",
-        "route": "/posts/review",
+        "imgURL": "reviews",
+        "route": "/posts//posts//posts//posts/review",
         "label": "Review",
         "category": true,
         "type": "custom_post"
@@ -77,7 +80,7 @@
       },
       {
         "id": "he_group_2",
-        "imgURL": "close",
+        "imgURL": "pages",
         "route": "/pages",
         "label": "Pages",
         "category": false,
@@ -85,7 +88,7 @@
       },
       {
         "id": "he_group_4",
-        "imgURL": "profile",
+        "imgURL": "posts",
         "route": "/posts",
         "label": "Posts",
         "category": false,
@@ -102,7 +105,7 @@
       },
       {
         "id": "he_group_2",
-        "imgURL": "websites",
+        "imgURL": "pages",
         "route": "/pages",
         "label": "Pages",
         "category": false,
@@ -110,7 +113,7 @@
       },
       {
         "id": "he_group_4",
-        "imgURL": "dashboard",
+        "imgURL": "posts",
         "route": "/posts",
         "label": "Posts",
         "category": false,

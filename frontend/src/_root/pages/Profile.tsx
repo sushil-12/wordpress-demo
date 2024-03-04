@@ -31,6 +31,8 @@ const Profile = () => {
   const [isUpdating, setisUpdating] = useState(false);
   const fileInputRef = useRef(null);
   const [imageSrc, setImageSrc] = useState('');
+  const [emailDisabled,setEmailDisabled] = useState(true)
+  const [passwordDisabled,setPasswordDisabled] = useState(true)
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -52,7 +54,7 @@ const Profile = () => {
     }
   };
  
-  useEffect(() => { console.log(currentUser); if (user) { setCurrentUser(user) }; if (currentUser) { form.setValue('name', currentUser.firstName); form.setValue('bio', currentUser?.bio); form.setValue('id', currentUser?.id) }; setImageSrc(currentUser?.profile_pic); setloader(false);  }, [currentUser, user])
+  useEffect(() => { console.log(currentUser); if (user) { setCurrentUser(user) }; if (currentUser) { form.setValue('name', currentUser.firstName); form.setValue('bio', currentUser?.bio); form.setValue('id', currentUser?.id) }; setImageSrc(currentUser?.profile_pic);form.setValue('email',currentUser?.email);  setloader(false);  }, [currentUser, user])
 
   const form = useForm<z.infer<typeof editProfileFieldSchema>>({
     resolver: zodResolver(editProfileFieldSchema),
@@ -60,6 +62,8 @@ const Profile = () => {
       id: currentUser?.id,
       name: currentUser?.firstName,
       bio: currentUser?.bio,
+      email:currentUser?.email,
+      password:''
     },
   });
 
@@ -126,7 +130,7 @@ const Profile = () => {
               >
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem className="outline-none focus-within:border-none focus:border-none">
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="text-secondary-label">Name</FormLabel>
                     <FormControl><Input className="outline-none focus-within:border-none focus:border-none w-[350px]" placeholder="Add name" {...field}  /></FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
@@ -134,7 +138,7 @@ const Profile = () => {
                 />
                 <FormField control={form.control} name="bio" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bio</FormLabel>
+                    <FormLabel className="text-secondary-label">Bio</FormLabel>
                     <FormControl>
                       <Textarea placeholder="Add Bio" className="outline-none focus-within:border-none focus:border-none w-[350px]" {...field}></Textarea>
                     </FormControl>
@@ -143,6 +147,37 @@ const Profile = () => {
 
                 )}
                 />
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-secondary-label">Email</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center">
+                      <Input className="outline-none shadow-none focus-within:border-none focus:border-none w-[350px] " {...field}  />
+                      <button  className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>
+                      </div>
+                    </FormControl>
+
+                    <FormMessage className="shad-form_message" />
+                  </FormItem>
+
+                )}
+                />
+                 <FormField control={form.control} name="password" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-secondary-label">Password</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center">
+                      <Input className="outline-none focus-within:border-none focus:border-none w-[350px] " {...field}  />
+                      <button  className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
+                      </div>
+                    </FormControl>
+
+                    <FormMessage className="shad-form_message" />
+                  </FormItem>
+
+                )}
+                />
+
                 <div className="flex gap-2.5 mt-[34px]">
                   <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[16px] ">
                     {

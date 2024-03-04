@@ -109,10 +109,13 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                         ) : (
                                                             <li key={link.label} className={`leftsidebar-link`}>
                                                                 <div className="links">
-                                                                    <div className="flex gap-4 items-center p-4" >
+                                                                    <div className="flex gap-4 items-center p-4 justify-between " >
+                                                                        <div className='flex items-center'>
+                                
                                                                         <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
                                                                         {link.label}
-                                                                        <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
+                                                                        </div>
+                                                                        <Edit3Icon className='cursor-pointer h-4 ' onClick={() => setSelectedItem(link)} />
                                                                     </div>
                                                                 </div>
                                                             </li>
