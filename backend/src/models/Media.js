@@ -6,6 +6,8 @@ const mediaSchema = new mongoose.Schema({
   description: String,
   alt_text: String,
   filename: String,
+  filetype: String,
+  dimesions: String,
   cloudinary_id: String,
   url: String,
   size: Number, // Size in bytes

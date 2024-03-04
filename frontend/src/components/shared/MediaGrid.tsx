@@ -111,7 +111,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                                     className="h-full w-full object-contain object-center items-center self-center group-hover:opacity-75"
                                 />
                             </div>
-                            <div className="flex place-content-between-end mt-[9px]  max-w-[360px]" style={{ "placeContent": "space-between" }}>
+                            <div className="flex place-content-between-end mt-[9px] " style={{ "placeContent": "space-between" }}>
                                 <div className="flex flex-col">
                                     <h3 className="mt-4 text-[16px] leading-[150%] text-[#242D35] page-innersubtitles">{mediaItem.title}</h3>
                                     <p className="mt-1 text-xl font-semibold text-gray-900">{bytesToSize(mediaItem.size)}</p>
@@ -134,19 +134,11 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                     pt={{
                         root: { className: 'bg-white-100 overflow-hidden' },
                         headerTitle: { className: 'page-subtitles' },
-                        content:{className: 'overflow-hidden p-0 p-6'}
+                        content:{className: 'overflow-y-auto p-6 pt-0'}
                     }}
-                    style={{ width:'1110px' , height:'662px'}}
+                    style={{ width:'1110px' , height:'auto'}}
                     visible={visible} onHide={onHide}>
-                    <Galleria
-                        ref={galleria}
-                        value={media}
-                        numVisible={1}
-                        item={itemTemplate}
-                        circular
-                        showThumbnails={false}
-                        activeIndex={media.findIndex((item) => item.id === selectedMedia.id)}
-                    />
+                     <GalleryMediaItem item={selectedMedia} modalVisibility={onHide} />
                 </Dialog>
             )}
         </div>

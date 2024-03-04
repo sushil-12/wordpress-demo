@@ -54,7 +54,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                 </ul>
                                             </li>
                                         ) : (
-                                            <li className={`left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100  border-y-2`}>
+                                            <li className={`left-sidebar-link  hover:bg-gray-100  `}>
                                                 <div className="link-container flex items-center justify-between me-5 " >
                                                     <div className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group">
                                                         <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
