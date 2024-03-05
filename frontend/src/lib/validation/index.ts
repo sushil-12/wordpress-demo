@@ -122,7 +122,7 @@ export const editProfileFieldSchema = z.object({
     bio: z.string(),
     profile_pic:z.optional(z.custom<File>()),
     email: z.optional(z.string().email()),
-    password: z.optional(z.string().min(8, { message: "password must be of minimum 8 characters" }))
+    password: z.optional(z.string())
 });
 
 export const mediaEditFormSchema = z.object({
@@ -174,6 +174,6 @@ export const svgUploader = z.object({
         message: 'Too big, less than 12 characters please',
         path: ['name'],
     }),
-    code: z.string(),
+    code: z.string().min(50, { message: "Please enter valid Svg code" }),
 });
 

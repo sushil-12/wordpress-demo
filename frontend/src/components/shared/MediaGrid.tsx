@@ -10,6 +10,7 @@ import { useDeleteMedia } from '@/lib/react-query/queriesAndMutations';
 import { useMedia } from '@/context/MediaProvider';
 import { bytesToSize } from '@/lib/utils';
 import { Skeleton } from 'primereact/skeleton';
+import SvgComponent from '@/utils/SvgComponent';
 
 
 interface MediaGridProps {
@@ -117,7 +118,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
                                     <p className="mt-1 text-xl font-semibold text-gray-900">{bytesToSize(mediaItem.size)}</p>
                                 </div>
                                 <Button onClick={() => confirmDelete(mediaItem.id)} className='outline-none p-0 bg-transparent border-none' >
-                                    <img src="/assets/icons/delete.svg" />
+                                   <SvgComponent className='' svgName='delete' />
                                 </Button>
                             </div>
                         </a>

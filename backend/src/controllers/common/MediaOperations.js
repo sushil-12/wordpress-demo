@@ -15,7 +15,7 @@ const bytesToSize = (bytes) => {
 const getAllMedia = async (req, res) => {
     try {
         const domainHeader = req.headers['domain'];
-        const { page = 1, limit = 50, search, filterBy } = req.query;
+        const { page = 1, limit = process.env.MEDIA_PAGINATION, search, filterBy } = req.query;
 
         const query = {};
         if (search) {
@@ -33,7 +33,7 @@ const getAllMedia = async (req, res) => {
         
 
         // Simulate pagination metadata
-        const totalDocuments = await Media.countDocuments(query);
+        const totalDocuments = await Media.countDocuments(query).where('domain', domainHeader);
         const totalPages = Math.ceil(totalDocuments / limit);
 
         const mediadata = media.map((media) => ({

@@ -8,7 +8,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { useUserContext } from '@/context/AuthProvider';
 import MediaGridSkeletonDemo from '@/components/skeletons/MediaGridSkeletonDemo';
 import { useParams } from 'react-router-dom';
-import { Input } from '@/components/ui/input';
 
 export default function Media() {
   const { domain } = useParams()
@@ -20,15 +19,17 @@ export default function Media() {
   setCurrentDomain(domain)
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 50,
+    limit: import.meta.env.VITE_MEDIA_PAGINATION,
     totalPages: 1,
     totalItems: 0,
   });
+  console.log("PAGINAATIOMN", import.meta.env.VITE_API_URL, import.meta.env.VITE_MEDIA_PAGINATION)
 
   const { mutateAsync: getAllMedia, isPending: isLoading } = useGetAllMediaFiles();
 
   useEffect(() => {
     setLocalMedia(contextMedia);
+    console.log(pagination)
     currentDomain
   }, [contextMedia, currentDomain]);
 
@@ -38,6 +39,7 @@ export default function Media() {
         const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit });
         setMedia(mediaResponse?.data?.mediadata);
         setPagination(mediaResponse?.data?.pagination || {});
+
         // return toast({ variant: "default", description: "Fetched sucessfully" })
       } catch (error) {
         return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
@@ -81,7 +83,7 @@ export default function Media() {
                   <MediaGrid media={localMedia} isLoading={isLoading} />
                 </div>
                 <div className="card">
-                  {localMedia.length > 50 && <Paginator first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
+                  {pagination.totalPages > 1 && <Paginator first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
                 </div>
               </>
             </div>

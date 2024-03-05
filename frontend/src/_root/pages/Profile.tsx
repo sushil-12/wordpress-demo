@@ -63,7 +63,7 @@ const Profile = () => {
       name: currentUser?.firstName,
       bio: currentUser?.bio,
       email:currentUser?.email,
-      password:''
+      password:'Click the button to change your password'
     },
   });
 
@@ -98,8 +98,8 @@ const Profile = () => {
         </nav>
       </div>
       {loader ? (<ProfilePageSkeleton />) : (
-        <div className="main-content  h-[90vh] min-h-[90vh] max-h-[90vh] overflow-x-hidden overflow-y-auto p-6">
-          <h3 className="page-subtitles">Edit profile picture</h3>
+        <div className="main-content  h-[90vh] min-h-[90vh] max-h-[90vh] overflow-x-hidden overflow-y-auto p-5">
+          <h3 className="page-subtitles mt-3">Edit profile picture</h3>
           <div className="edit_image_container pt-[40px] mb-[70px]">
             <div className="flex items-center gap-8">
               <div className="">
@@ -136,7 +136,7 @@ const Profile = () => {
                   </FormItem>
                 )}
                 />
-                <FormField control={form.control} name="bio" render={({ field }) => (
+                {/* <FormField control={form.control} name="bio" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-secondary-label">Bio</FormLabel>
                     <FormControl>
@@ -146,14 +146,14 @@ const Profile = () => {
                   </FormItem>
 
                 )}
-                />
+                /> */}
                 <FormField control={form.control} name="email" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-secondary-label">Email</FormLabel>
                     <FormControl>
                       <div className="flex items-center">
-                      <Input className="outline-none shadow-none focus-within:border-none focus:border-none w-[350px] " {...field}  />
-                      <button  className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>
+                      <Input className="outline-none shadow-none focus-within:border-none focus:border-none w-[350px] read-only:border-none  " readOnly {...field}  />
+                      <button  onClick={()=>{event?.preventDefault(); alert('in progress')}} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>
                       </div>
                     </FormControl>
 
@@ -167,8 +167,8 @@ const Profile = () => {
                     <FormLabel className="text-secondary-label">Password</FormLabel>
                     <FormControl>
                       <div className="flex items-center">
-                      <Input className="outline-none focus-within:border-none focus:border-none w-[350px] " {...field}  />
-                      <button  className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
+                      <Input className="outline-none focus-within:border-none focus:border-none w-[350px] read-only:border-none " {...field} readOnly />
+                      <button  onClick={()=>{event?.preventDefault(); alert('in progress')}} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
                       </div>
                     </FormControl>
 

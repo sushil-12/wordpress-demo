@@ -15,7 +15,7 @@ interface NavDatatableprops {
 }
 
 const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
-    
+
     const [selectedItem, setSelectedItem] = useState(null);
     const [render, setRerender] = useState(true);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -33,18 +33,20 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                 return (
                                     <React.Fragment key={link.label}>
                                         {link?.subcategory ? (
-                                            <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 border-y-2">
+                                            <li className="left-sidebar-link flex-col  mb-4 ">
                                                 <button type="button" className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 w-full pe-5">
                                                     <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
-                                                     <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
+                                                    <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className={`block bg-white pl-10`}>
-                                                    {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
-                                                        <li key={subcategoryLink.label} className={``}>
+                                                <ul id={`${link?.label}-dropdown`} className={` flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-900 w-full pe-5 py-2 `}>
+                                                    
+                                                    {link.subcategory.map((subcategoryLink: INavLink, index: Number) => ( // Changed variable name to avoid conflict
+                                                        <li key={subcategoryLink.label} className="list-disc">
                                                             <div className="links">
-                                                                <div className="flex gap-4 items-center p-4" >
-                                                                    <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
+                                                                <div className="flex gap-4 items-center  pl-14 pr-1 " >
+
+                                                                    <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white ' />
                                                                     {subcategoryLink.label}
                                                                 </div>
 
@@ -55,12 +57,12 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                             </li>
                                         ) : (
                                             <li className={`left-sidebar-link  hover:bg-gray-100  `}>
-                                                <div className="link-container flex items-center justify-between me-5 " >
+                                                <div className="link-container w-full flex items-center justify-between me-5 " >
                                                     <div className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group">
                                                         <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
                                                         <span className="ms-3  my-[22px]">{link.label}</span>
                                                     </div>
-                                                     <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
+                                                    <Edit3Icon className='cursor-pointer h-4' onClick={() => setSelectedItem(link)} />
                                                 </div>
                                             </li>
                                         )}
@@ -75,7 +77,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                 </TabPanel>
                 <TabPanel header="Websites">
                     <div className="card flex gap-4  ">
-                        <Accordion activeIndex={activeIndex} className='w-1/2' onTabChange={(e) => {setActiveIndex(e.index); setActiveDomain(websitekeys[e.index])}}>
+                        <Accordion activeIndex={activeIndex} className='w-1/2' onTabChange={(e) => { setActiveIndex(e.index); setActiveDomain(websitekeys[e.index]) }}>
                             {
                                 Object.entries(navItems.websites || {}).map(([submenuKey, submenuItems]) => (
                                     <AccordionTab header={formatString(submenuKey)} key={submenuKey}  >
@@ -111,9 +113,9 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                                 <div className="links">
                                                                     <div className="flex gap-4 items-center p-4 justify-between " >
                                                                         <div className='flex items-center'>
-                                
-                                                                        <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
-                                                                        {link.label}
+
+                                                                            <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white pl-6 pr-1' />
+                                                                            {link.label}
                                                                         </div>
                                                                         <Edit3Icon className='cursor-pointer h-4 ' onClick={() => setSelectedItem(link)} />
                                                                     </div>
@@ -130,7 +132,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                             }
                         </Accordion>
                         <div className="w-1/2">
-                            <NavItemForm item={selectedItem} setRerender={setRerender} activeTab="website" activeDomain={activeDomain}  setSelectedItem={setSelectedItem}/>
+                            <NavItemForm item={selectedItem} setRerender={setRerender} activeTab="website" activeDomain={activeDomain} setSelectedItem={setSelectedItem} />
                         </div>
                     </div>
                 </TabPanel>

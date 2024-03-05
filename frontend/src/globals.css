@@ -239,11 +239,31 @@
 
   .left-sidebar-link {
     min-height: 60px;
+    display: flex;
+    align-items: center;
     font-family: 'Inter';
     font-size: 16px;
     font-weight: 500;
     line-height: 100%;
     @apply text-secondary-link
+  }
+  .svg_logos > svg {
+    max-height: 24px;
+    max-width: 24px;
+    min-height: 24px;
+    min-width: 24px;
+  }
+  .leftsidebar_icons > svg{
+    max-height: 24px;
+    max-width: 24px;
+    min-height: 24px;
+    min-width: 24px;
+  }
+  .leftsidebar_icons_website  > svg{
+    max-height: 16px;
+    max-width: 16px;
+    min-height: 16px;
+    min-width: 16px;
   }
 
   .left-sidebar-web-link {

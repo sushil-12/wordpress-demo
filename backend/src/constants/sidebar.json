@@ -2,7 +2,7 @@
   "comman": [
     {
       "id": "7dg9i97e9",
-      "imgURL": "dashboard",
+      "imgURL": "he_group",
       "route": "/dashboard",
       "label": "Dashboard"
     },
@@ -10,13 +10,29 @@
       "id": "hzjpof8p0",
       "imgURL": "personal",
       "route": "/personal-statistics",
-      "label": "Personal Statistic"
+      "label": "Personal Statistic",
+      "subcategory": [
+        {
+          "id": "hzjpof8p0",
+          "imgURL": "briefcase",
+          "route": "/personal-statistics",
+          "label": "Personal Statistic"
+        }
+      ]
     },
     {
       "id": "85x0lipea",
       "imgURL": "briefcase",
       "route": "/buisness-statistics",
-      "label": "Business Statistic"
+      "label": "Business Statistic",
+      "subcategory": [
+        {
+          "id": "hzjpof8p0",
+          "imgURL": "personal",
+          "route": "/personal-statistics",
+          "label": "Personal Statistic"
+        }
+      ]
     }
   ],
   "websites": {
@@ -42,6 +58,14 @@
         "imgURL": "posts",
         "route": "/posts",
         "label": "Posts",
+        "category": false,
+        "type": "default"
+      },
+      {
+        "id": "w07j6tec1",
+        "imgURL": "plugins",
+        "route": "plugins",
+        "label": "plugins",
         "category": false,
         "type": "default"
       },
@@ -93,6 +117,14 @@
         "label": "Posts",
         "category": false,
         "type": "default"
+      },
+      {
+        "id": "2rwm4ecgr",
+        "imgURL": "posts",
+        "route": "/posts/technology",
+        "label": "Technology",
+        "category": false,
+        "type": "custom_post"
       }
     ],
     "x_wear": [
@@ -104,10 +136,26 @@
         "category": false
       },
       {
+        "id": "ucmgz84v3",
+        "imgURL": "posts",
+        "route": "xwear-custom-post-1dsdsfsfsfsf",
+        "label": "Xwear Custom Post 1dsdsfsfsfsf",
+        "category": true,
+        "type": "default"
+      },
+      {
         "id": "he_group_2",
         "imgURL": "pages",
         "route": "/pages",
         "label": "Pages",
+        "category": false,
+        "type": "default"
+      },
+      {
+        "id": "upju3k6vc",
+        "imgURL": "the_logician",
+        "route": "dashboard",
+        "label": "Dashboard",
         "category": false,
         "type": "default"
       },

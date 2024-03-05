@@ -19,6 +19,7 @@ const uploadMediaToLibrary = async (req, res) => {
       const b64 = Buffer.from(req.file.buffer).toString("base64");
       let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
       const uploadInfo = await handleUpload(dataURI, req.file.originalname, req);
+      console.log(uploadInfo)
 
       if (!uploadInfo) {
         throw new CustomError(500, 'Failed to upload one or more images to Cloudinary.');
