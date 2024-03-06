@@ -143,7 +143,7 @@ const login = async (req, res) => {
               ResponseHandler.success(res, { email_sent: true, otp: otp, message: "Verification code sent successfully" }, HTTP_STATUS_CODES.OK);
             })
             .catch((error) => {
-              ResponseHandler.error(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, { field_error:'password',email_sent: false, message:  "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR); return;
+              ResponseHandler.error(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, { field_error: 'password', email_sent: false, message: "Failed to send verification code" }, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR); return;
             });
         } catch (error) {
           ErrorHandler.handleError(error, res);
@@ -192,13 +192,13 @@ const resetPassword = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-    const { name, bio, id, profile_pic } = req.body;
+    const { name, bio, id, profile_pic, email, password } = req.body;
     const user = await User.findOne({ _id: id });
-    
+
     if (!user) {
       throw new CustomError(HTTP_STATUS_CODES.UNAUTHORIZED, 'User might not exist!');
     }
-    
+
     if (profile_pic) {
       const base64String = profile_pic;
       const buffer = Buffer.from(base64String, 'base64');
@@ -226,7 +226,17 @@ const editProfile = async (req, res) => {
       await uploadPromise;
       await user.save();
     }
-    
+
+
+    if (password && password != '' && password.length > 0) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    if (email && email != '' && email.length > 0) {
+      user.email = email;
+    }
+
     user.firstName = name;
     user.bio = bio;
     await user.save();
@@ -242,5 +252,6 @@ module.exports = {
   register,
   login,
   editProfile,
-  resetPassword
+  resetPassword,
+  generateRandomString
 };

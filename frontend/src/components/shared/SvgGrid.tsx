@@ -10,7 +10,7 @@ const SvgGrid = () => {
     const headerTemplate = (item: any) => {
         return (
             <div className="flex items-center justify-between">
-                <h1 className='page-innertitles'>Attachment Details</h1>
+                <h1 className='page-innertitles'>Upload Svgs</h1>
                 <button onClick={() => setVisible(false)}><img src='/assets/icons/close.svg' className='cursor-pointer' /></button>
             </div>
         );

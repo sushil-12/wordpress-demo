@@ -19,9 +19,12 @@ import Loader from "@/components/shared/Loader";
 import { Settings } from "lucide-react";
 import ProfilePageSkeleton from "@/components/skeletons/ProfilePageSkeleton";
 import { Skeleton } from "primereact/skeleton";
-import { editProfile } from "@/lib/appwrite/api";
+import { checkPasswordApi, editProfile, sendOtpForVerificationApi } from "@/lib/appwrite/api";
 import SvgComponent from "@/utils/SvgComponent";
 import Header from "@/components/ui/header";
+import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
+import { Dialog } from "primereact/dialog";
+
 
 const Profile = () => {
   const { user, setUser, isLoading, setRerender } = useUserContext();
@@ -31,8 +34,91 @@ const Profile = () => {
   const [isUpdating, setisUpdating] = useState(false);
   const fileInputRef = useRef(null);
   const [imageSrc, setImageSrc] = useState('');
-  const [emailDisabled,setEmailDisabled] = useState(true)
-  const [passwordDisabled,setPasswordDisabled] = useState(true)
+  const [emailDisabled, setEmailDisabled] = useState(true)
+  const [passwordDisabled, setPasswordDisabled] = useState(true);
+  const [oldPassword, setOldPassword] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [errormessage, setErrorMessage] = useState('');
+  const [disabled, setDisabled] = useState(false);
+  const [dialog, setDialog] = useState('');
+  const [form_type, setFormType] = useState('send_mail');
+
+
+  const [isEditingEmail, setIsEditingEmail] = useState(false); // State to track whether email is being edited
+  const [isLoadingPassword, setIsLoadingPassword] = useState(false); // State to track whether email is being edited
+  const [isEditingPass, setIsEditingPass] = useState(false); // State to track whether email is being edited setIsVerifyingEmail
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false); // State to track whether email is being edited 
+  const [visible, setVisible] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const headerTemplate = (item: any) => {
+    return (
+      <div className="flex items-center justify-between">
+        <h1 className='page-innertitles'>Update Credentials</h1>
+        <button onClick={() => { setVisible(false); setOldPassword(''); setErrorMessage(''); setFormType('send_mail') }}><img src='/assets/icons/close.svg' className='cursor-pointer' /></button>
+      </div>
+    );
+  };
+
+  const checkPassword = async () => {
+    setIsLoadingPassword(true);
+    const result = await checkPasswordApi(oldPassword);
+    if (result?.response?.data?.status == 'error') {
+      setIsLoadingPassword(false);
+      setErrorMessage(result?.response?.data?.message?.message);
+      return;
+    } else {
+      setIsLoadingPassword(false);
+      setErrorMessage('');
+      setVisible(false);
+      setIsEditingPass(!isEditingPass);
+    }
+  }
+
+  const verifyEmail = async () => {
+    console.log(form_type)
+    if (form_type == 'send_mail') {
+      let email = form.getValues('email');
+      if (email && email.length > 0) {
+        setIsVerifyingEmail(true);
+        const result = await sendOtpForVerificationApi(email, form_type);
+        console.log(result)
+        if (result?.response?.data?.status == 'error') {
+          setIsVerifyingEmail(false);
+          setErrorMessage(result?.response?.data?.message?.message);
+          return;
+        } else if (result?.data?.status == 'success' && result?.data?.data?.email_sent) {
+          setIsVerifyingEmail(false);
+          setErrorMessage('');
+          setFormType('verification')
+          setDialog('verification')
+          setVisible(true);
+        }
+      }
+
+    } else {
+      if (verificationCode && verificationCode.length > 0) {
+        setIsVerifyingEmail(true);
+        const result = await sendOtpForVerificationApi(verificationCode, form_type);
+        console.log(result)
+        if (result?.response?.data?.status == 'error') {
+          setIsVerifyingEmail(false);
+          setErrorMessage(result?.response?.data?.message?.message);
+          return;
+        } else if (result?.data?.status == 'success' && result?.data?.data?.verified) {
+          setIsVerifyingEmail(false);
+          setErrorMessage('');
+          setFormType('send_mail')
+          setIsEmailVerified(true);
+          setDialog('')
+          setVisible(false);
+        }
+      }
+
+    }
+
+  }
+
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -53,8 +139,8 @@ const Profile = () => {
       reader.readAsDataURL(file);
     }
   };
- 
-  useEffect(() => { console.log(currentUser); if (user) { setCurrentUser(user) }; if (currentUser) { form.setValue('name', currentUser.firstName); form.setValue('bio', currentUser?.bio); form.setValue('id', currentUser?.id) }; setImageSrc(currentUser?.profile_pic);form.setValue('email',currentUser?.email);  setloader(false);  }, [currentUser, user])
+
+  useEffect(() => { console.log(currentUser); if (user) { setCurrentUser(user) }; if (currentUser) { form.setValue('name', currentUser.firstName); form.setValue('bio', currentUser?.bio); form.setValue('id', currentUser?.id) }; setImageSrc(currentUser?.profile_pic); form.setValue('email', currentUser?.email); setloader(false); }, [currentUser, user])
 
   const form = useForm<z.infer<typeof editProfileFieldSchema>>({
     resolver: zodResolver(editProfileFieldSchema),
@@ -62,15 +148,39 @@ const Profile = () => {
       id: currentUser?.id,
       name: currentUser?.firstName,
       bio: currentUser?.bio,
-      email:currentUser?.email,
-      password:'Click the button to change your password'
+      email: currentUser?.email,
+      password: 'Click the button to change your password'
     },
   });
 
   async function onSubmit(values: z.infer<typeof editProfileFieldSchema>) {
     try {
-      setisUpdating(true)
-      const updateData = { name: values.name, id: values.id, bio: values.bio };
+
+
+      if (isEditingPass) {
+        const password = form.getValues('password') || 'x';
+        if (password.length < 8) {
+          form.setError('password', {
+            type: 'minLength',
+            message: 'Password must be at least 8 characters long',
+          });
+          setDisabled(true)
+          return;
+        }
+      } else {
+        setDisabled(false)
+      }
+      setisUpdating(true);
+
+
+      const updateData = {
+        name: values.name,
+        id: values.id,
+        bio: values.bio,
+        ...(isEditingEmail && isEmailVerified ? { email: values.email } : {}),
+        ...(isEditingPass ? { password: values.password } : {}),
+      };
+
       if (values.profile_pic) {
         // @ts-ignore
         updateData.profile_pic = values.profile_pic;
@@ -86,6 +196,7 @@ const Profile = () => {
 
 
   }
+
 
   return (
     <div className="main-container w-full">
@@ -103,8 +214,8 @@ const Profile = () => {
           <div className="edit_image_container pt-[40px] mb-[70px]">
             <div className="flex items-center gap-8">
               <div className="">
-                {imageSrc =='' ? ( <Skeleton width="110px" height="110px" className="rounded-full"></Skeleton>) :<img src={`${imageSrc}`} alt="" className="w-[110px] h-[110px]" /> }
-                
+                {imageSrc == '' ? (<Skeleton width="110px" height="110px" className="rounded-full"></Skeleton>) : <img src={`${imageSrc}`} alt="" className="w-[110px] h-[110px]" />}
+
               </div>
               <div className="img_description flex flex-col ">
                 <span className="page-innertitles mb-2.5">Upload new image</span>
@@ -112,11 +223,11 @@ const Profile = () => {
                 <div className="flex action_buttons gap-[10px]">
                   <input type="file" accept="image/*" multiple={false} className="hidden" onChange={handleFileChange} ref={fileInputRef} />
                   {/* @ts-ignore */}
-                  <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[30px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
+                  <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[40px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
                     <SvgComponent className="pl-3 pr-2 " svgName="upload" />Upload
                     {/* <img src="/assets/icons/upload.svg" alt="" className="pl-3 pr-2 " />Upload */}
                   </button>
-                  <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[30px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
+                  <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[40px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
                 </div>
               </div>
             </div>
@@ -129,9 +240,9 @@ const Profile = () => {
                 className="flex flex-col gap-3 w-full mt-4"
               >
                 <FormField control={form.control} name="name" render={({ field }) => (
-                  <FormItem className="outline-none focus-within:border-none focus:border-none">
+                  <FormItem className="outline-none">
                     <FormLabel className="text-secondary-label">Name</FormLabel>
-                    <FormControl><Input className="outline-none focus-within:border-none focus:border-none w-[350px]" placeholder="Add name" {...field}  /></FormControl>
+                    <FormControl><Input className="outline-none w-[350px]" placeholder="Add name" {...field} /></FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
                 )}
@@ -140,7 +251,7 @@ const Profile = () => {
                   <FormItem>
                     <FormLabel className="text-secondary-label">Bio</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Add Bio" className="outline-none focus-within:border-none focus:border-none w-[350px]" {...field}></Textarea>
+                      <Textarea placeholder="Add Bio" className="outline-none w-[350px]" {...field}></Textarea>
                     </FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
@@ -151,24 +262,71 @@ const Profile = () => {
                   <FormItem>
                     <FormLabel className="text-secondary-label">Email</FormLabel>
                     <FormControl>
-                      <div className="flex items-center">
-                      <Input className="outline-none shadow-none focus-within:border-none focus:border-none w-[350px] read-only:border-none  " readOnly {...field}  />
-                      <button  onClick={()=>{event?.preventDefault(); alert('in progress')}} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>
-                      </div>
-                    </FormControl>
+                      <div className={`flex items-center `}>
+                        <Input className={`outline-none shadow-none w-[350px] read-only:border-none  ${isEmailVerified && 'pointer-events-none'}`} readOnly={!isEditingEmail} {...field} />
 
+                        {!isEditingEmail ? (<button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>) :
+                          (
+                            <div className="flex flex-row gap-2">
+                              {form.getValues('email') !== currentUser.email && !isEmailVerified ? (<button onClick={() => { event?.preventDefault(); verifyEmail();  }} className="bg-primary-500 rounded flex ml-1 text-white items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" > {
+                                isVerifyingEmail ? <Loader /> : 'Verify Email'
+                              }</button>) : ''}
+                              <button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); setIsEmailVerified(false); form.setValue('email', currentUser.email); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >{'Cancel Editing Email'}</button>
+                            </div>
+                          )
+                        }                        
+                      </div>
+                     
+                    </FormControl>
+                    {isEmailVerified == false && currentUser.email !== form.getValues('email') && <p className="text-sm text-primary-500">Email verification will be required in order to save the email</p>}
                     <FormMessage className="shad-form_message" />
                   </FormItem>
 
                 )}
                 />
-                 <FormField control={form.control} name="password" render={({ field }) => (
+
+                <FormField control={form.control} name="password" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-secondary-label">Password</FormLabel>
                     <FormControl>
                       <div className="flex items-center">
-                      <Input className="outline-none focus-within:border-none focus:border-none w-[350px] read-only:border-none " {...field} readOnly />
-                      <button  onClick={()=>{event?.preventDefault(); alert('in progress')}} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
+                        <Input
+                          className="outline-none w-[350px] read-only:border-none"
+                          {...field}
+                          readOnly={!isEditingPass}
+                          onInputCapture={() => {
+                            const password = form.getValues('password');
+                            if (password && password.length > 7) {
+                              setDisabled(false);
+                            }
+                          }}
+                        />
+                        <Dialog visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw', minWidth: '300px' }} header={headerTemplate} closable={false} >
+                          {
+                            dialog == 'verification' ? (
+                              <div className="flex">
+                                <Input className="outline-none  w-[350px] mb-2 mr-2" min={6} onChange={(e) => setVerificationCode(e.target.value)} value={verificationCode} placeholder="Enter Otp" />
+                                {!isEditingPass && <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[14px] " onClick={verifyEmail}>
+                                  {
+                                    isVerifyingEmail ? <Loader /> : 'Verify Email'
+                                  }
+                                </Button>}
+                              </div>
+                            ) : (
+                              <div className="flex">
+                                <Input className="outline-none  w-[350px] mb-2 mr-2" min={8} onChange={(e) => setOldPassword(e.target.value)} value={oldPassword} placeholder="Enter your current password" />
+                                {!isEditingPass && <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[14px] " onClick={checkPassword}>
+                                  {
+                                    isLoadingPassword ? <Loader /> : 'Check Password'
+                                  }
+                                </Button>}
+                              </div>
+                            )
+                          }
+
+                          {errormessage != '' && <p className="text-sm ml-1 text-danger">{errormessage}</p>}
+                        </Dialog>
+                        <button onClick={(e) => { e.preventDefault(); setDialog('password'); setVisible(true) }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
                       </div>
                     </FormControl>
 
@@ -179,7 +337,7 @@ const Profile = () => {
                 />
 
                 <div className="flex gap-2.5 mt-[34px]">
-                  <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[16px] ">
+                  <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[16px] " disabled={disabled}>
                     {
                       isUpdating ? <Loader /> : 'Save changes'
                     }

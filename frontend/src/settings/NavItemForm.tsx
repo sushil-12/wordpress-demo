@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { commonNavSchema, navItemFormSchema } from "@/lib/validation";
 import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
@@ -14,7 +14,7 @@ import { createSlug } from "@/lib/utils";
 import { domainSidebarLinks } from "@/constants";
 import { Dropdown } from "primereact/dropdown";
 import { saveDatatoSidebar } from "@/lib/appwrite/api";
-import { Edit3Icon } from "lucide-react";
+import { Edit3Icon, Trash2Icon } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import SvgPickerComponent from "@/components/shared/SvgPickerComponent";
 import SvgComponent from "@/utils/SvgComponent";
@@ -42,6 +42,11 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     const [website, setWebsite] = useState<Website>('the_logician');
     const [selectedMenuAfter, setSelectedMenuAfter] = useState(null);
     const [localItem, setLocalItem] = useState<any>(item); // Initialize localItem with item passed from parent
+    const { control, getValues,setValue } = useForm();
+    let { fields, append, remove } = useFieldArray({
+        control,
+        name: 'fields', // Name of the field array in the form data
+    });
 
 
     // @ts-ignore
@@ -75,19 +80,22 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         },
     });
 
+
     useEffect(() => {
         //@ts-ignore
-        console.log(item)
+        console.log(svgName, "after reset")
         setLocalItem(item)
-
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
+            console.log(type)
+            console.log(svgName,localItem, "after reset")
             setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category ? 'yes' : 'no'); setType(localItem.type);
         } else {
             form.reset()
         };
 
     }, [item, localItem, activeDomain]);
+    
 
     const { toast } = useToast()
     console.log(form, form.getValues(), localItem, "Hsa")
@@ -95,7 +103,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
-        let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : values.route;
+        let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : `/`+values.route;
 
         if (activeTab === 'website') {
             const webObject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, category: values.category === 'yes', type: values.type || 'default' };
@@ -122,6 +130,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                 // @ts-ignore
                 const index = currentCommonSchema.findIndex(item => item.id === values.id);
                 if (index !== -1) {
+                    // @ts-ignore
                     currentCommonSchema.splice(index, 1, newobject);
                 }
             } else {
@@ -151,7 +160,8 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
     return (
         <Form {...form}>
-            <div className="">
+            <div className="border-l pl-4">
+                <h6 className="bold font-semibold under py-4">SideBar Navigation Form</h6>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-1 flex flex-col gap-3 w-full mt-4"
@@ -219,6 +229,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                             <SvgComponent className="border border-primary-500 p-4" svgName={svgName} />
                         </div>
                     </FormLabel>
+
                     {activeTab !== 'comman' && type != 'default' &&
                         <FormField control={form.control} name="category" render={({ field }) => (
                             <FormItem>
@@ -238,16 +249,81 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                             </FormItem>
                         )} />
                     }
+                    
+                    {activeTab === 'comman' && (
+                        <div className="border border-dashed">
+                            {fields.map((field, index) => (
+                                <div key={field.id} className="dynamic-field p-4 flex gap-4 font-inter text-sm align-middle">
+                                    {/* Field 1 in repeater */}
+                                    <FormField
+                                        control={control}
+                                        name={`fields[${index}].label`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm">Field Label</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        className="shad-input"
+                                                        placeholder="Enter Field Label"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={control}
+                                        name={`fields[${index}].label`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm">Enter Svg Name</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        className="shad-input"
+                                                        placeholder="Enter svg name"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {/* Icon Selection */}
+                                    {/* <div className="flex align-middle items-center">
+                                        Choose Icon
+                                        <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><Edit3Icon /></Button >
+                                        <SvgComponent className="border border-primary-500 p-4" svgName={form.getValues(`fields[${index}].label`)} />
+                                    </div> */}
+
+                                    {/* Remove Field Button */}
+                                    <button type="button" onClick={() => remove(index)}>
+                                        <Trash2Icon />
+                                    </button>
+                                </div>
+                            ))}
+                            {/* Button to Add Set of Fields */}
+                            <button
+                                type="button"
+                                className="bg-primary-500 py-2 w-[200px] text-white text-sm rounded float-end"
+                                onClick={() => append({ label: '', svgName:'' })}
+                            >
+                                Add a subcategory
+                            </button>
+                        </div>
+                    )}
+
                     <Dialog visible={svgPicker} onHide={() => setSvgPicker(false)} style={{ width: '60vw' }} header={headerTemplate} closable={false} >
                         <SvgPickerComponent setSvgName={setSvgName} setSvgPicker={setSvgPicker} />
                     </Dialog>
 
                     <div className="flex gap-4">
-                        <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSvgName('') }} className=" border border-primary-500 ">
+                        <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSelectedItem(null); setSvgName(''); setLocalItem(null);  setRerender((prev: boolean) => !prev);  setSvgName('') }} className=" border border-primary-500 ">
                             Reset
                         </Button>
                         <Button type="submit" className="shad-button_primary ">
-                            Add
+                            Save
                         </Button>
 
                     </div>

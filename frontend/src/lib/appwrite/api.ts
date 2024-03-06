@@ -36,9 +36,9 @@ export async function resetPassword(user: { password: string;  form_type: string
     throw new PromiseHandler(error?.response?.data?.message, 'Reset Password Failed', { user, error });
   }
 }
-export async function editProfile(user: { name: string;  id: string, bio:string, profile_pic?: File}) {
+export async function editProfile(user: { name: string;  id: string, bio:string, profile_pic?: File, email?:string, password?:string}) {
   try {
-    const editProfileResponse = await Apiservices.authService.editProfile( user.name, user.id, user.bio, user?.profile_pic);
+    const editProfileResponse = await Apiservices.authService.editProfile( user.name, user.id, user.bio, user?.profile_pic,  user?.email, user?.password,);
     console.log(editProfileResponse, "returned")
     return editProfileResponse;
   } catch (error: any) {
@@ -56,6 +56,38 @@ export async function getAccount() {
   }
 }
 
+export async function checkPasswordApi(password:string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const currentAccount = await authenticatedApiService.checkPassword(password);
+    return currentAccount;
+  } catch (error) {
+    return error;
+    throw new PromiseHandler('Error getting user account', 'GET ACCOUNT ERROR', { error });
+  }
+}
+
+export async function sendOtpForVerificationApi(email:string, form_type: string) {
+  try {
+    const authenticatedApiService = new AuthenticatedApiService();
+    const currentAccount = await authenticatedApiService.sendOtpForVerification(email, form_type);
+    return currentAccount;
+  } catch (error) {
+    return error;
+    throw new PromiseHandler('Error getting user account', 'GET ACCOUNT ERROR', { error });
+  }
+}
+
+// export async function verifyEmail(is:string) {
+//   try {
+//     const authenticatedApiService = new AuthenticatedApiService();
+//     const currentAccount = await authenticatedApiService.checkPassword(password);
+//     return currentAccount;
+//   } catch (error) {
+//     return error;
+//     throw new PromiseHandler('Error getting user account', 'GET ACCOUNT ERROR', { error });
+//   }
+// }
 // ============================== GET USER
 export async function getCurrentUser() {
   try {
@@ -87,10 +119,10 @@ export async function uploadMediaFile(files: File) {
   }
 }
 
-export async function getAllMedia(page: number, limit: number): Promise<any> {
+export async function getAllMedia(page: number, limit: number, search?:string): Promise<any> {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
-    const allMedia = await authenticatedApiService.getAllMediaFiles(page, limit);
+    const allMedia = await authenticatedApiService.getAllMediaFiles(page, limit, search);
 
     return allMedia?.data;
   } catch (error) {

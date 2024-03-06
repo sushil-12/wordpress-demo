@@ -8,7 +8,6 @@ import UploadSvgForm from '@/settings/UploadSvgForm';
 const SvgPickerComponent = ({ setSvgName, setSvgPicker }) => {
     const [activeCard, setActiveCard] = useState('');
     const [visible, setVisible] = useState(false);
-    console.log(Icons, "ICONS")
 
     const headerTemplate = (item: any) => {
         return (
@@ -19,6 +18,7 @@ const SvgPickerComponent = ({ setSvgName, setSvgPicker }) => {
         );
     };
     const handleDoubleClick = (svgName: any) => {
+        console.log(svgName);
         setSvgName(svgName);
         setActiveCard(svgName);
         console.log(activeCard, "ACTIVE")
@@ -31,7 +31,7 @@ const SvgPickerComponent = ({ setSvgName, setSvgPicker }) => {
             <div className="w-full grid grid-cols-6 sm:grid-cols-5 gap-4 text-center relative">
                 <Dialog visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw' }} header={headerTemplate} closable={false} > <UploadSvgForm setVisible={setVisible} /> </Dialog>
                 {Object.entries(Icons).map(([svgName, svgContent]) => (
-                    <div className="block min-w-[128px] max-w-[128px] min-h-24 max-h-24 h-24 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700  cursor-pointer col-12 md:col-2 mx-auto flex-col justify-center" key={svgName}>
+                    <div className="block min-w-[128px] max-w-[128px] min-h-24 max-h-24 h-24 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700  cursor-pointer col-12 md:col-2 mx-auto flex-col justify-center" key={svgName} onClick={()=>handleDoubleClick(svgName)}>
                         <div dangerouslySetInnerHTML={{ __html: svgContent }} className='flex justify-center text-center mb-3 max-h-4 svg_logos  text-color-secondary w-full h-fit ' />
                         <div>{svgName}</div>
                     </div>

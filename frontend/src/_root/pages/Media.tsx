@@ -15,6 +15,7 @@ export default function Media() {
   const [localMedia, setLocalMedia] = useState(contextMedia);
   const { toast } = useToast();
   const { currentDomain, setCurrentDomain } = useUserContext();
+  const [searchInput, setSearchInput] = useState('');
   //@ts-ignore
   setCurrentDomain(domain)
   const [pagination, setPagination] = useState({
@@ -33,13 +34,13 @@ export default function Media() {
     currentDomain
   }, [contextMedia, currentDomain]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit });
+        const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit, search: searchInput });
         setMedia(mediaResponse?.data?.mediadata);
         setPagination(mediaResponse?.data?.pagination || {});
-
         // return toast({ variant: "default", description: "Fetched sucessfully" })
       } catch (error) {
         return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
@@ -48,7 +49,7 @@ export default function Media() {
     };
 
     fetchData();
-  }, [getAllMedia, setMedia, pagination.page, pagination.limit]);
+  }, [getAllMedia, setMedia, pagination.page, pagination.limit, searchInput]);
 
   const onPageChange = (event: any) => {
     setPagination({ ...pagination, page: event.page + 1 });
@@ -56,10 +57,12 @@ export default function Media() {
 
   return (
     <div className="main-container px-5 w-full overflow-hidden ">
-      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[44px]">
+      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[31px]">
         <h3 className="page-titles">Media</h3>
         <div className="flex justify-start items-center py-7 relative">
           <input
+            onChange={() => setSearchInput(event?.target.value)}
+            value={searchInput}
             className="leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300 outline-none w-[239px] h-10 text-[14px] font-medium hover:rounded-[50px] "
             type="text"
             placeholder="Search"

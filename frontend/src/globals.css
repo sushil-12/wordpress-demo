@@ -239,12 +239,11 @@
 
   .left-sidebar-link {
     min-height: 60px;
-    display: flex;
-    align-items: center;
     font-family: 'Inter';
     font-size: 16px;
     font-weight: 500;
     line-height: 100%;
+    padding: 20px 0px;
     @apply text-secondary-link
   }
   .svg_logos > svg {

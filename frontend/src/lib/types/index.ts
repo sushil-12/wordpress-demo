@@ -18,6 +18,7 @@ export type INavLink = {
   type:string;
   category:string;
   subcategory?:any;
+  id?:string;
 };
 
 export type IUser = {

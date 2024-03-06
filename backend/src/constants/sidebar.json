@@ -138,10 +138,10 @@
       {
         "id": "ucmgz84v3",
         "imgURL": "posts",
-        "route": "xwear-custom-post-1dsdsfsfsfsf",
-        "label": "Xwear Custom Post 1dsdsfsfsfsf",
+        "route": "/posts/test-custom-post",
+        "label": "test custom post",
         "category": true,
-        "type": "default"
+        "type": "custom_post"
       },
       {
         "id": "he_group_2",

@@ -88,9 +88,9 @@ import {
   };
 
 
-  export const useGetAllMediaFiles = (): UseMutationResult<any, unknown, { page: number; limit: number }, unknown> => {
+  export const useGetAllMediaFiles = (): UseMutationResult<any, unknown, { page: number; limit: number,search?:string }, unknown> => {
     return useMutation({
-      mutationFn: ({ page, limit }) => getAllMedia(page, limit),
+      mutationFn: ({ page, limit,search }) => getAllMedia(page, limit, search),
     });
   };
   export const useGetAllImages = () => {
