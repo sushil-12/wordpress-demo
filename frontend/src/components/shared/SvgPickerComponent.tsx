@@ -5,9 +5,11 @@ import { Button } from '../ui/button';
 import UploadSvgForm from '@/settings/UploadSvgForm';
 
 // @ts-ignore
-const SvgPickerComponent = ({ setSvgName, setSvgPicker }) => {
+const SvgPickerComponent = ({ setSvgName, setSvgPicker, form_type='normal' }) => {
     const [activeCard, setActiveCard] = useState('');
     const [visible, setVisible] = useState(false);
+
+   
 
     const headerTemplate = (item: any) => {
         return (
@@ -18,11 +20,18 @@ const SvgPickerComponent = ({ setSvgName, setSvgPicker }) => {
         );
     };
     const handleDoubleClick = (svgName: any) => {
-        console.log(svgName);
-        setSvgName(svgName);
-        setActiveCard(svgName);
-        console.log(activeCard, "ACTIVE")
-        setSvgPicker(false);
+
+        if(form_type == 'repeater'){
+            setSvgPicker(setSvgName, svgName );
+            setActiveCard(svgName);
+        }
+        else{
+            console.log(svgName);
+            setSvgName(svgName);
+            setActiveCard(svgName);
+            setSvgPicker(false);       
+         }
+       
     };
 
     return (

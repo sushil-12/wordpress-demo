@@ -38,15 +38,33 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
     const [type, setType] = useState('custom_post');
     const [svgPicker, setSvgPicker] = useState(false);
+    const [repeaterSvgPicker, setRepeaterSvgPicker] = useState(false);
     const [svgName, setSvgName] = useState('');
     const [website, setWebsite] = useState<Website>('the_logician');
     const [selectedMenuAfter, setSelectedMenuAfter] = useState(null);
     const [localItem, setLocalItem] = useState<any>(item); // Initialize localItem with item passed from parent
     const { control, getValues,setValue } = useForm();
-    let { fields, append, remove } = useFieldArray({
+    let { fields, append, remove, update } = useFieldArray({
         control,
         name: 'fields', // Name of the field array in the form data
     });
+
+
+    const updateFieldAtIndex = (index, iconValue) => {
+        // Make sure the index is valid
+       
+        if (index >= 0 && index < fields.length) {
+            const updatedFields = [...fields];
+            console.log(updatedFields);
+            console.log(updatedFields)
+            return 
+    
+            // Use the update method to update the fields array in the form state
+            update(index, updatedFields);
+        } else {
+            console.error('Invalid index provided for update');
+        }
+    };
 
 
     // @ts-ignore
@@ -63,6 +81,15 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             </div>
         );
     };
+    const headerRepeaterTemplate = () => {
+        return (
+            <div className="flex items-center justify-between">
+                <h1 className='page-innertitles'>Svg Picker <span className="text-sm">(click to choose svg)</span></h1>
+                <button onClick={() => setRepeaterSvgPicker(false)}><img src='/assets/icons/close.svg' className='cursor-pointer' /></button>
+            </div>
+        );
+    };
+    
 
     const form = useForm<z.infer<typeof navItemFormSchema>>({
         // @ts-ignore
@@ -76,15 +103,15 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             place_after: 'end',
             type: 'default',
             category: 'no',
-            // subcategory: [{ name: "", route: "", imgUrl: "" }]
+            subcategory: [{ name: "", route: "", imgUrl: "" }]
         },
     });
 
 
     useEffect(() => {
-        //@ts-ignore
         console.log(svgName, "after reset")
         setLocalItem(item)
+        //@ts-ignore
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
             console.log(type)
@@ -100,6 +127,8 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     const { toast } = useToast()
     console.log(form, form.getValues(), localItem, "Hsa")
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
+        console.log(values, "TEST");
+        return;
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
@@ -272,30 +301,17 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                             </FormItem>
                                         )}
                                     />
-                                    <FormField
-                                        control={control}
-                                        name={`fields[${index}].label`}
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-sm">Enter Svg Name</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        className="shad-input"
-                                                        placeholder="Enter svg name"
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage className="shad-form_message" />
-                                            </FormItem>
-                                        )}
-                                    />
-
+                                  
                                     {/* Icon Selection */}
-                                    {/* <div className="flex align-middle items-center">
+                                    <div className="flex align-middle items-center">
                                         Choose Icon
-                                        <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><Edit3Icon /></Button >
-                                        <SvgComponent className="border border-primary-500 p-4" svgName={form.getValues(`fields[${index}].label`)} />
-                                    </div> */}
+                                        <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); }} ><Edit3Icon /></Button >
+                                        <Dialog visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate} closable={false} >
+                                            <SvgPickerComponent setSvgName={index} setSvgPicker={updateFieldAtIndex} form_type={'repeater'} />
+                                        </Dialog>
+
+                                        <SvgComponent className="border border-primary-500 p-4" svgName={fields[index].icon} />
+                                    </div>
 
                                     {/* Remove Field Button */}
                                     <button type="button" onClick={() => remove(index)}>

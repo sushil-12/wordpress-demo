@@ -157,7 +157,7 @@ export const navItemFormSchema = z.object({
     }),
     enabled: z.boolean(),
     category: z.optional(z.string()),
-    // subcategory: z.array(subNavItemSchema),
+    subcategory: z.array(subNavItemSchema),
 });
 
 export const commonNavSchema = z.object({
@@ -167,6 +167,8 @@ export const commonNavSchema = z.object({
         message: 'Too big, less than 50 characters please',
         path: ['label'],
     }),
+    subcategory: z.array(subNavItemSchema),
+
 });
 
 export const svgUploader = z.object({
