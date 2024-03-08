@@ -11,11 +11,12 @@ import { Dialog } from 'primereact/dialog';
 import CustomFieldForm from '@/plugin/post/_custom_form/CustomFieldForm';
 import { useUserContext } from '@/context/AuthProvider';
 import { useParams } from 'react-router-dom';
+import SvgComponent from '@/utils/SvgComponent';
 
 
 const CustomFieldDatatable = () => {
-    const {domain} = useParams();
-    const {setCurrentDomain} = useUserContext();
+    const { domain } = useParams();
+    const { setCurrentDomain } = useUserContext();
     // @ts-ignore
     setCurrentDomain(domain)
     const [visible, setVisible] = useState(false);
@@ -23,18 +24,22 @@ const CustomFieldDatatable = () => {
     const [selectedCustomField, setSelectedCustomField] = useState({});
     const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
 
-    async function  fetchCustomFields() {
+    async function fetchCustomFields() {
         const customFieldsResponse = await getAllCustomFields('all');
+        console.log(customFieldsResponse?.data)
         setCustomFields(customFieldsResponse?.data?.customField)
     }
 
-    useEffect(() => {fetchCustomFields() }, [visible])
+    useEffect(() => { fetchCustomFields() }, [visible])
     const titleTemplate = (rowData: any) => {
         return <>{!isCustomFieldLoading ? rowData.title : <Skeleton width='100' height='1.5rem' />}</>;
     };
 
-    const postTypeTemplate = (rowData: any) => {
+    const itemTypeTemplate = (rowData: any) => {
         return <Tag value={rowData.item_type} className='px-4 py-2'></Tag>;
+    };
+    const postTypeTemplate = (rowData: any) => {
+        return <Tag value={rowData.post_type} className='px-4 py-2'></Tag>;
     };
 
     const header = <div className="text-lg font-bold flex justify-between">Custom Fields Template </div>;
@@ -48,9 +53,12 @@ const CustomFieldDatatable = () => {
     };
     const actionTemplate = (rowData: any) => {
         return (
-            <div className='flex'>
+            <div className='flex gap-3'>
                 <Button className="rounded-full bg-none p-1 text-dark shadow-sm hover:text-primary-500  " size="sm" onClick={() => handleEditData(rowData)} >
                     <Edit2 className='h-5' />
+                </Button>
+                <Button onClick={() => alert('in progress')} className='outline-none p-0 border-none' >
+                    <SvgComponent className='' svgName='delete' />
                 </Button>
             </div>
         )
@@ -60,12 +68,12 @@ const CustomFieldDatatable = () => {
         <div className="card bg-slate-100 shadow-lg rounded-md">
             <div className="border-b border-gray-200 bg-white  py-2 flex justify-between px-4">
                 <h3 className="text-base font-semibold leading-6 text-gray-900 flex gap-3 p-4"> Manage Custom Fields</h3>
-                <Button className="shad-button_primary place-self-end" size="sm" onClick={() => {setVisible(true); setSelectedCustomField({});}} >
+                <Button className="shad-button_primary place-self-end" size="sm" onClick={() => { setVisible(true); setSelectedCustomField({}); }} >
                     <PlusSquare /> Add New
                 </Button>
             </div>
-            <Dialog header="Add/Edit Template" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
-                <CustomFieldForm setVisible={setVisible}  selectedCustomField ={selectedCustomField}/>
+            <Dialog header="Add/Edit Custom Field" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+                <CustomFieldForm setVisible={setVisible} selectedCustomField={selectedCustomField} />
             </Dialog>
             {isCustomFieldLoading ? (<SkeletonTable rowCount={5} />) : (
                 <DataTable
@@ -77,7 +85,8 @@ const CustomFieldDatatable = () => {
                     className="w-full p-8"
                 >
                     <Column expander field="label" header="Title" body={titleTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
-                    <Column expander field="item_type" header="Item Type" body={postTypeTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
+                    {/* <Column expander field="item_type" header="Item Type" body={itemTypeTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column> */}
+                    <Column expander field="post_type" header="Post Type" body={postTypeTemplate} className=" font-semibold"><Skeleton width="100%" height="1.5rem" /></Column>
                     <Column field="customFieldsId" header="Actions" body={actionTemplate} className=""><Skeleton width="100%" height="1.5rem" /> </Column>
                 </DataTable >)}
         </div>

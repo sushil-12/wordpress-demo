@@ -53,8 +53,8 @@ const Profile = () => {
   const headerTemplate = (item: any) => {
     return (
       <div className="flex items-center justify-between">
-        <h1 className='page-innertitles'>Update Credentials</h1>
-        <button onClick={() => { setVisible(false); setOldPassword(''); setErrorMessage(''); setFormType('send_mail') }}><img src='/assets/icons/close.svg' className='cursor-pointer' /></button>
+        <h1 className='page-innertitles'>{form_type==='validation' ? 'Enter Your Current Password' : 'Enter verification code'}</h1>
+        <button onClick={() => { setVisible(false); setOldPassword(''); setErrorMessage(''); setFormType('send_mail') }}><img src='/assets/icons/close.svg' className='cursor-pointer float-right' /></button>
       </div>
     );
   };
@@ -305,7 +305,7 @@ const Profile = () => {
                           {
                             dialog == 'verification' ? (
                               <div className="flex">
-                                <Input className="outline-none  w-[350px] mb-2 mr-2" min={6} onChange={(e) => setVerificationCode(e.target.value)} value={verificationCode} placeholder="Enter Otp" />
+                                <Input className="outline-none  w-[350px] mb-2 mr-2" min={6} onChange={(e) => setVerificationCode(e.target.value)} value={verificationCode} placeholder="Enter Verification Code" />
                                 {!isEditingPass && <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[14px] " onClick={verifyEmail}>
                                   {
                                     isVerifyingEmail ? <Loader /> : 'Verify Email'
@@ -317,7 +317,7 @@ const Profile = () => {
                                 <Input className="outline-none  w-[350px] mb-2 mr-2" min={8} onChange={(e) => setOldPassword(e.target.value)} value={oldPassword} placeholder="Enter your current password" />
                                 {!isEditingPass && <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[14px] " onClick={checkPassword}>
                                   {
-                                    isLoadingPassword ? <Loader /> : 'Check Password'
+                                    isLoadingPassword ? <Loader /> : 'Verify Password'
                                   }
                                 </Button>}
                               </div>

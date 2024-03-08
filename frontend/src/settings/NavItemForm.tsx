@@ -42,7 +42,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     const [website, setWebsite] = useState<Website>('the_logician');
     const [selectedMenuAfter, setSelectedMenuAfter] = useState(null);
     const [localItem, setLocalItem] = useState<any>(item); // Initialize localItem with item passed from parent
-    const { control, getValues,setValue } = useForm();
+    const { control, getValues, setValue } = useForm();
     let { fields, append, remove } = useFieldArray({
         control,
         name: 'fields', // Name of the field array in the form data
@@ -88,14 +88,14 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
             console.log(type)
-            console.log(svgName,localItem, "after reset")
+            console.log(svgName, localItem, "after reset")
             setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category ? 'yes' : 'no'); setType(localItem.type);
         } else {
             form.reset()
         };
 
     }, [item, localItem, activeDomain]);
-    
+
 
     const { toast } = useToast()
     console.log(form, form.getValues(), localItem, "Hsa")
@@ -103,7 +103,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
-        let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : `/`+values.route;
+        let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : `/` + values.route;
 
         if (activeTab === 'website') {
             const webObject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, category: values.category === 'yes', type: values.type || 'default' };
@@ -161,7 +161,13 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     return (
         <Form {...form}>
             <div className="border-l pl-4">
-                <h6 className="bold font-semibold under py-4">SideBar Navigation Form</h6>
+                <div className="flex justify-between items-center">
+                    <h6 className="bold font-semibold under py-4">SideBar Form</h6>
+                    <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSelectedItem(null); setSvgName(''); setLocalItem(null); setRerender((prev: boolean) => !prev); setSvgName('') }} className=" border border-primary-500 h-30 bg-primary-500 text-white ">
+                       + Add New
+                    </Button>
+                </div>
+
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-1 flex flex-col gap-3 w-full mt-4"
@@ -249,7 +255,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                             </FormItem>
                         )} />
                     }
-                    
+
                     {activeTab === 'comman' && (
                         <div className="border border-dashed">
                             {fields.map((field, index) => (
@@ -272,7 +278,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                             </FormItem>
                                         )}
                                     />
-                                    <FormField
+                                    {/* <FormField
                                         control={control}
                                         name={`fields[${index}].label`}
                                         render={({ field }) => (
@@ -288,18 +294,18 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                 <FormMessage className="shad-form_message" />
                                             </FormItem>
                                         )}
-                                    />
+                                    /> */}
 
                                     {/* Icon Selection */}
-                                    {/* <div className="flex align-middle items-center">
+                                    <div className="flex align-middle items-center">
                                         Choose Icon
                                         <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><Edit3Icon /></Button >
-                                        <SvgComponent className="border border-primary-500 p-4" svgName={form.getValues(`fields[${index}].label`)} />
-                                    </div> */}
+                                        <SvgComponent className="border border-primary-500 p-4" svgName={'he_group'} />
+                                    </div>
 
                                     {/* Remove Field Button */}
                                     <button type="button" onClick={() => remove(index)}>
-                                        <Trash2Icon />
+                                        <SvgComponent className="" svgName={'delete'} />
                                     </button>
                                 </div>
                             ))}
@@ -307,9 +313,9 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                             <button
                                 type="button"
                                 className="bg-primary-500 py-2 w-[200px] text-white text-sm rounded float-end"
-                                onClick={() => append({ label: '', svgName:'' })}
+                                onClick={() => append({ label: '', svgName: '' })}
                             >
-                                Add a subcategory
+                                Add New Submenu
                             </button>
                         </div>
                     )}
@@ -319,9 +325,9 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                     </Dialog>
 
                     <div className="flex gap-4">
-                        <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSelectedItem(null); setSvgName(''); setLocalItem(null);  setRerender((prev: boolean) => !prev);  setSvgName('') }} className=" border border-primary-500 ">
+                        {/* <Button type="submit" onClick={() => { event?.preventDefault(); form.reset(); setSelectedItem(null); setSvgName(''); setLocalItem(null);  setRerender((prev: boolean) => !prev);  setSvgName('') }} className=" border border-primary-500 ">
                             Reset
-                        </Button>
+                        </Button> */}
                         <Button type="submit" className="shad-button_primary ">
                             Save
                         </Button>

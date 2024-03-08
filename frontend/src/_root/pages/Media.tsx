@@ -86,7 +86,7 @@ export default function Media() {
                   <MediaGrid media={localMedia} isLoading={isLoading} />
                 </div>
                 <div className="card">
-                  {pagination.totalPages > 1 && <Paginator first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
+                  {pagination.totalPages > 1 && <Paginator className='mt-10 mb-10' first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
                 </div>
               </>
             </div>

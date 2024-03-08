@@ -2,23 +2,15 @@
   "comman": [
     {
       "id": "7dg9i97e9",
-      "imgURL": "he_group",
-      "route": "/dashboard",
+      "imgURL": "dashboard",
+      "route": "//dashboard",
       "label": "Dashboard"
     },
     {
       "id": "hzjpof8p0",
-      "imgURL": "personal",
-      "route": "/personal-statistics",
-      "label": "Personal Statistic",
-      "subcategory": [
-        {
-          "id": "hzjpof8p0",
-          "imgURL": "briefcase",
-          "route": "/personal-statistics",
-          "label": "Personal Statistic"
-        }
-      ]
+      "imgURL": "profile",
+      "route": "////personal-statistics",
+      "label": "Personal Statistic"
     },
     {
       "id": "85x0lipea",
@@ -30,7 +22,7 @@
           "id": "hzjpof8p0",
           "imgURL": "personal",
           "route": "/personal-statistics",
-          "label": "Personal Statistic"
+          "label": "Buisness Submenu"
         }
       ]
     }
@@ -64,7 +56,7 @@
       {
         "id": "w07j6tec1",
         "imgURL": "plugins",
-        "route": "plugins",
+        "route": "/plugins",
         "label": "plugins",
         "category": false,
         "type": "default"
@@ -148,6 +140,14 @@
         "imgURL": "pages",
         "route": "/pages",
         "label": "Pages",
+        "category": false,
+        "type": "default"
+      },
+      {
+        "id": "9ytuxr48i",
+        "imgURL": "interviews",
+        "route": "/custom-post-1",
+        "label": "Custom post 1",
         "category": false,
         "type": "default"
       },

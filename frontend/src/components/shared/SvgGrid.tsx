@@ -3,6 +3,7 @@ import { Button } from '../ui/button'
 import { Dialog } from 'primereact/dialog'
 import UploadSvgForm from '@/settings/UploadSvgForm';
 import Icons from '../../../../backend/src/constants/svg_codes.json';
+import SvgComponent from '@/utils/SvgComponent';
 
 const SvgGrid = () => {
     const [visible, setVisible] = useState(false);
@@ -22,7 +23,8 @@ const SvgGrid = () => {
             <div className="w-full grid sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4 text-center">
                 {/* SVG > path we can set dynamic color */}
                 {Object.entries(Icons).map(([svgName, svgContent]) => (
-                    <div className="block min-w-[128px] max-w-[128px] min-h-24 max-h-24 h-24 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700  cursor-pointer col-12 md:col-2 mx-auto flex-col justify-center">
+                    <div className="block min-w-[128px] max-w-[128px] min-h-24 max-h-24 h-24 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700  cursor-pointer col-12 md:col-2 mx-auto flex-col justify-center relative">
+                        <button onClick={() => {}} className=' absolute top-0 right-0'><SvgComponent className='' svgName='delete' /></button>
                         <div dangerouslySetInnerHTML={{ __html: svgContent }} className='flex justify-center text-center mb-3 max-h-4 svg_logos  text-color-secondary w-full h-fit ' />
                         <div className='text-sm text-wrap text-center '>{svgName}</div>
                     </div>

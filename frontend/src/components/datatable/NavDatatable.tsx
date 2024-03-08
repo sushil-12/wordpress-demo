@@ -33,7 +33,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
     React.useEffect(()=>{console.log(render)},[render]);
     const confirmDelete= (itemId, type, submenuKey='') =>{
         confirmDialog({
-            message: 'Do you want to delete this nav item?',
+            message: 'Are you sure you want to delete?',
             header: 'Delete Confirmation',
             acceptClassName: 'pl-4 outline-none p-2 text-sm',
             rejectClassName: 'pl-4 outline-none p-2 text-sm text-white',
@@ -102,14 +102,14 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                 <ul id={`${link?.label}-dropdown`} className={` flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-900 w-full pe-5 py-2  hover:bg-gray-100`}>
 
                                                     {link.subcategory.map((subcategoryLink: INavLink, index: Number) => ( // Changed variable name to avoid conflict
-                                                        <li key={subcategoryLink.label} className="list-disc">
-                                                            <div className="links">
+                                                        <li key={subcategoryLink.label} className="list-disc w-full">
+                                                            <div className="links flex justify-between w-full">
                                                                 <div className="flex gap-4 items-center  pl-14 pr-1 " >
 
                                                                     <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white ' />
                                                                     {subcategoryLink.label}
                                                                 </div>
-
+                                                                <button onClick={() => { confirmDelete(link?.id, "comman") }}><SvgComponent className='' svgName='delete' /></button>
                                                             </div>
                                                         </li>
                                                     ))}

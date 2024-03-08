@@ -254,7 +254,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
                     </div>
 
                     <Button type="submit" className="shad-button_primary max-w-fit self-end">
-                        Add Field
+                        Save
                     </Button>
                 </form>
             </div>

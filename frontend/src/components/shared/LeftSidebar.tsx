@@ -116,7 +116,7 @@ const LeftSidebar = () => {
                                                 <button type="button" className="flex justify-between items-center  pl-6 w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
                                                     <div className="flex items-center gap-[8px]">
-                                                        <SvgComponent className=" leftsidebar_icon" svgName={link.imgURL || 'briefcase'} />
+                                                        <SvgComponent className=" leftsidebar_icons" svgName={link.imgURL || 'briefcase'} />
                                                         <span className="flex-1 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] min-w-[150px] ">{link?.label}</span>
                                                     </div>
 
@@ -171,7 +171,7 @@ const LeftSidebar = () => {
                                             <button type="button" className="flex items-center justify-between w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
                                                 <SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
-                                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(submenuKey)}</span>
+                                                <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(submenuKey)}</span>
                                                 <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow submenu me-14`} alt="" />
                                             </button>
 

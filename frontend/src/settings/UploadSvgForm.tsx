@@ -92,7 +92,7 @@ const UploadSvgForm = ({setVisible}) => {
                                         </label>
                                         <FormControl>
                                             <Textarea
-                                                className=""
+                                                className="h-40"
                                                 placeholder="Add Svg Code"
                                                 {...field}
                                             />
