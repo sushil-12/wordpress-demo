@@ -19,7 +19,7 @@ const uploadMediaToLibrary = async (req, res) => {
       const b64 = Buffer.from(req.file.buffer).toString("base64");
       let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
       const uploadInfo = await handleUpload(dataURI, req.file.originalname, req);
-      console.log(uploadInfo)
+     
 
       if (!uploadInfo) {
         throw new CustomError(500, 'Failed to upload one or more images to Cloudinary.');
@@ -30,15 +30,19 @@ const uploadMediaToLibrary = async (req, res) => {
         caption: req.body.caption ? req.body.caption : '',
         description: req.body.description ? req.body.description : 'upload file to hegroup',
         alt_text: req.body.alt_text ? req.body.alt_text : 'upload file to hegroup',
-        filename: req.body.filename?  req.file.originalname : 'upload file to hegroup',
+        filename: req.body.filename ? req.file.originalname : 'upload file to hegroup',
         cloudinary_id: uploadInfo.cloudinary_id,
         url: uploadInfo.url,
         size: (uploadInfo.size),
+        width: uploadInfo.width,
+        height: uploadInfo?.height,
+        resource_type: uploadInfo.resource_type,
+        format:uploadInfo?.format,
         storage_type: 'cloudinary',
         author: req.userId, // Ensure req.user is defined
-        category: req.body.category?req.file.category : '',
+        category: req.body.category ? req.file.category : '',
         tags: req.body.tags,
-        domain:domainHeader,
+        domain: domainHeader,
       };
 
       const savedMedia = await Media.create(uploadedMedia);
@@ -53,7 +57,7 @@ const uploadMediaToLibrary = async (req, res) => {
 async function handleUpload(file, originalname, req) {
   const res = await cloudinary.uploader.upload(file, {
     resource_type: "auto",
-    folder:req.headers['domain']
+    folder: req.headers['domain']
     // Include any other Cloudinary upload options if needed
   });
 
@@ -62,13 +66,17 @@ async function handleUpload(file, originalname, req) {
     url: res.secure_url,
     size: res.bytes,
     filename: originalname,
+    width:  res.width,
+    height:  res.height,
+    resource_type:res.resource_type,
+    format:res.format
   };
 }
 
 
 const deleteMedia = async (req, res) => {
   try {
-    const { media_id } = req.params; 
+    const { media_id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(media_id)) {
       throw new CustomError(400, 'Invalid media ID');
     }
@@ -87,5 +95,5 @@ const deleteMedia = async (req, res) => {
 };
 
 module.exports = {
-  uploadMediaToLibrary,deleteMedia
+  uploadMediaToLibrary, deleteMedia
 };

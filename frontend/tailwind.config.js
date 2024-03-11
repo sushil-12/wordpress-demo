@@ -27,7 +27,7 @@ module.exports = {
         'secondary-link': '#4F5B67',
         'secondary-gray' : '#F0F0F0',
         'secondary-light-gray' : '#CCD1DB',
-        'light-gray': "#F6F6F",
+        'light-gray': "#F6F6F6",
         'light-blue': "#E8EBFF",
         'secondary-border':'#EDEDED',
         'off-white': '#D0DFFF',
@@ -40,10 +40,10 @@ module.exports = {
         'light-2': '#EFEFEF',
         'light-3': '#7878A3',
         'light-4': '#5C5C7B',
-        'danger':"#810b00",
+        'danger':"#FF0000",
         'success':"#274e13",
         'info':'#2f0084',
-        'secondary-label':'#4B4B4B'
+        'secondary-label':'#4B4B4B',
         
       },
 

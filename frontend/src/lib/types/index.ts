@@ -51,6 +51,10 @@ export type MediaItem = {
   filename: string,
   cloudinary_id: string,
   url: string,
+  format:string,
+  width:string,
+  height:string,
+  resource_type:string,
   size: any,
   storage_type: string
   author: string,

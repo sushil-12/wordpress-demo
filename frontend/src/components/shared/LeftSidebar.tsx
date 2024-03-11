@@ -18,7 +18,7 @@ const LeftSidebar = () => {
     const { mutate: signOut, isSuccess } = useSignOutAccount();
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    
+
     const { user, currentDomain, rerender } = useUserContext();
     const [renderSidebar, rerenderSideBar] = useState(rerender);
     const logoPath: string | undefined = logos[currentDomain as keyof typeof logos];
@@ -29,7 +29,7 @@ const LeftSidebar = () => {
     const toggleActiveSubmenu = (submenuKey: string) => {
         setActiveSubmenu(submenuKey);
         const dropdownArrows = document.getElementsByClassName(`${createSlug(submenuKey)}-dropdown-arrow`);
-        const submenu =document.getElementsByClassName(`submenu`);
+        const submenu = document.getElementsByClassName(`submenu`);
         for (let i = 0; i < submenu.length; i++) {
             submenu[i].classList.remove('rotated');
         }
@@ -39,7 +39,7 @@ const LeftSidebar = () => {
     };
 
     const toggleDropdown = (label: any) => {
-       
+
         console.log("sdsd")
         Object.keys(dropdownVisibility).forEach((dropdownLabel) => {
             if (dropdownLabel !== label && dropdownVisibility[dropdownLabel]) {
@@ -50,9 +50,9 @@ const LeftSidebar = () => {
             ...prevVisibility,
             [label]: !prevVisibility[label],
         }));
-      
+
         const dropdownArrow = document.getElementsByClassName(`${createSlug(label)}-dropdown-arrow`)[0];
-        const menu =document.getElementsByClassName(`menu`);
+        const menu = document.getElementsByClassName(`menu`);
         for (let i = 0; i < menu.length; i++) {
             menu[i].classList.remove('rotated');
         }
@@ -84,7 +84,7 @@ const LeftSidebar = () => {
         if (matchedKey != null) { setActiveSubmenu(matchedKey) }
 
     }, [isSuccess, rerender, renderSidebar]);
-    
+
 
     return (
         <div className="leftsidebar overflow-hidden">
@@ -112,8 +112,8 @@ const LeftSidebar = () => {
                                 return (
                                     <React.Fragment key={link.label}>
                                         {link?.subcategory ? (
-                                            <li className="left-sidebar-link my-auto border-b">
-                                                <button type="button" className="flex justify-between items-center  pl-6 w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
+                                            <li className="  left-sidebar-link-dropdown my-auto border-b">
+                                                <button type="button" className="flex relative justify-between items-center  pl-6 w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
                                                     <div className="flex items-center gap-[8px]">
                                                         <SvgComponent className=" leftsidebar_icons" svgName={link.imgURL || 'briefcase'} />
@@ -122,12 +122,13 @@ const LeftSidebar = () => {
 
                                                     <img src="/assets/icons/down-arrow.svg" className={`${createSlug(link?.label)}-dropdown-arrow menu float-right me-5 `} alt="" />
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className={`py-2 space-y-2 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
+                                                <ul id={`${link?.label}-dropdown`} className={`relative pl-6 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
                                                     {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
-                                                        <li key={subcategoryLink.label} className={`leftsidebar-link group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                                        <li key={subcategoryLink.label} className={` group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                             <div className="links">
+                                                                
                                                                 <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
-                                                                    <SvgComponent className=" leftsidebar_icons group-hover:invert-white " svgName={subcategoryLink.imgURL || 'briefcase'} />
+                                                                    <SvgComponent className=" leftsidebar_icons group-hover:invert-primary-500 " svgName={subcategoryLink.imgURL || 'briefcase'} />
                                                                     {subcategoryLink.label}
                                                                 </NavLink>
                                                             </div>
@@ -153,12 +154,14 @@ const LeftSidebar = () => {
                                 );
                             })}
 
-                            <button type="button" className=" left-sidebar-link justify-between flex items-center pl-6 w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
-                                <div className="flex items-center  gap-[8px]">
-                                    <SvgComponent className="" svgName="websites" />
-                                    <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px]  ">{'Websites'}</span>
-                                </div>
-                                <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow me-5 ${activeSubmenu != '' && 'rotated'}  right-5`} alt="" />
+                            <button type="button" className=" left-sidebar-link justify-center flex pl-6 w-full" aria-controls={`websites-dropdown`} data-collapse-toggle={`websites-dropdown`} onClick={() => toggleDropdown('websites')}>
+                                <div className="flex w-full">
+                                    <div className="flex items-center gap-[8px] w-full p-0 ">
+                                        <SvgComponent className="" svgName="websites" />
+                                        <span className="flex-1 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] min-w-[150px] ">{'Websites'}</span>
+
+                                    </div>
+                                    <img src="/assets/icons/down-arrow.svg" className={`websites-dropdown-arrow me-5 ${activeSubmenu != '' && 'rotated'}  right-5`} alt="" /></div>
                             </button>
                             {/* Dropdown menu for "Websites" */}
                             <ul id={`websites-dropdown`} className={`${dropdownVisibility['websites'] || activeSubmenu != '' ? 'block' : 'hidden'}`}>
@@ -170,8 +173,8 @@ const LeftSidebar = () => {
                                         <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
                                             <button type="button" className="flex items-center justify-between w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
-                                                <SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
-                                                <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(submenuKey)}</span>
+                                                <div className="flex gap-[9px] items-center"><SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
+                                                <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(submenuKey)}</span></div>
                                                 <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow submenu me-14`} alt="" />
                                             </button>
 

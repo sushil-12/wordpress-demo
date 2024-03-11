@@ -100,6 +100,18 @@ export const PostFormSchema = z.object({
     customRepeaterFields: z.array(CustomRepeaterFieldSchema).optional(),
 });
 
+export const quickEditFormSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1),
+    slug: z.string(),
+    status:z.string(),
+    month:z.string(),
+    day:z.string(),
+    time:z.string(),
+    year:z.string(),
+
+});
+
 export const FieldSchema = z.object({
     name: z.string(),
     label: z.string(),
@@ -142,7 +154,7 @@ const subNavItemSchema = z.object({
         path: ['label'],
     }),
     route: z.string(),
-    imgUrl: z.string(),
+    imgURL: z.string(),
 });
 
 export const navItemFormSchema = z.object({
@@ -157,7 +169,7 @@ export const navItemFormSchema = z.object({
     }),
     enabled: z.boolean(),
     category: z.optional(z.string()),
-    // subcategory: z.array(subNavItemSchema),
+    subcategory: z.array(subNavItemSchema),
 });
 
 export const commonNavSchema = z.object({
@@ -167,6 +179,8 @@ export const commonNavSchema = z.object({
         message: 'Too big, less than 50 characters please',
         path: ['label'],
     }),
+    subcategory: z.array(subNavItemSchema),
+
 });
 
 export const svgUploader = z.object({

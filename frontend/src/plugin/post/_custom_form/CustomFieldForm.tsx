@@ -164,7 +164,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
                                                 <FormLabel>Field Label</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        className="shad-input"
+                                                        className="shad-input border border-dark-1"
                                                         placeholder="Enter Field Label"
                                                         {...field}
                                                     />

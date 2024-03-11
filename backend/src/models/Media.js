@@ -10,6 +10,10 @@ const mediaSchema = new mongoose.Schema({
   dimesions: String,
   cloudinary_id: String,
   url: String,
+  width: String,
+  height: String,
+  resource_type: String,
+  format: String,
   size: Number, // Size in bytes
   storage_type: {
     type: String,

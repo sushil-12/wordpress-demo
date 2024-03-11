@@ -115,7 +115,7 @@ export async function uploadMediaFile(files: File) {
     if (!newMedia) throw Error;
     return newMedia.data;
   } catch (error) {
-    throw new PromiseHandler('Failed to upload a media', 'CREATE USER FAILED', { files });
+    throw new PromiseHandler('Failed to upload a media', 'Media Upload FAILED', { files });
   }
 }
 

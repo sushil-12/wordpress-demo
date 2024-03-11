@@ -11,11 +11,13 @@ import { useEditMedia } from "@/lib/react-query/queriesAndMutations";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { MediaItem } from "@/lib/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMedia } from "@/context/MediaProvider";
 import { bytesToSize } from "@/lib/utils";
+import SvgComponent from "@/utils/SvgComponent";
 
 const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, handleModal }) => {
+    const [isCopied, setIsCopied] = useState(false);
 
     const form = useForm<z.infer<typeof mediaEditFormSchema>>({
         resolver: zodResolver(mediaEditFormSchema),
@@ -41,7 +43,13 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
         form.setValue('category', '');
         form.setValue('tags', '');
         form.setValue('title', item?.title);
-    }, [item, form]);
+        const timer = setTimeout(() => {
+            setIsCopied(false);
+        }, 5000);
+
+        // Clear the timer on component unmount or if isCopied changes
+        return () => clearTimeout(timer);
+    }, [item, form, isCopied]);
     const { toast } = useToast()
     const { mutateAsync: editMedia, isPending: isUpdatingMedia } = useEditMedia();
     const { media, setMedia } = useMedia();
@@ -56,8 +64,8 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
             return toast({ variant: "destructive", description: "Edit Failed" })
         }
         if (editMediaResponse?.code == 200) {
-            handleModal()
-            return toast({ variant: "default", description: 'Media Updated Successfuly' })
+            // handleModal()
+            // return toast({ variant: "default", description: 'Media Updated Successfuly' })
         } else {
             handleModal()
             return toast({ variant: "default", description: 'Media Editing Failed' })
@@ -67,40 +75,47 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
     return (
         <Form {...form}>
             <div className="">
-                <p><span className="text-xs font-semibold leading-[150%]">Uploaded on:</span> <span className="text-xs font-[400] leading-[150%]"> November 30,2023</span></p>
+                <p><span className="text-xs font-semibold leading-[150%]">Uploaded on:</span> <span className="text-xs font-[400] leading-[150%]"> {new Date(item?.createdAt).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}</span></p>
                 <p><span className="text-xs font-semibold leading-[150%]">File name:</span> <span className="text-xs font-[400] leading-[150%]">{item?.filename}</span></p>
-                <p><span className="text-xs font-semibold leading-[150%]">File type:</span> <span className="text-xs font-[400] leading-[150%]">image/webp</span></p>
+                <p><span className="text-xs font-semibold leading-[150%]">File type:</span> <span className="text-xs font-[400] leading-[150%]">{item?.format}</span></p>
                 <p><span className="text-xs font-semibold leading-[150%]">File size:</span> <span className="text-xs font-[400] leading-[150%]">{bytesToSize(item.size)}</span></p>
-                <p><span className="text-xs font-semibold leading-[150%]">Dimension:</span> <span className="text-xs font-[400] leading-[150%]"> 290 by 210 pixels</span></p>
+                <p>
+                    <span className="text-xs font-semibold leading-[150%]">Dimension:</span>
+                    {item?.width && item?.height ? (
+                        <span className="text-xs font-[400] leading-[150%]">
+                            {item.width} by {item.height} pixels
+                        </span>
+                    ): (<span className="text-xs font-[400] leading-[150%]"> undefined</span>)}
+                </p>
                 <form
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    onChange={form.handleSubmit(onSubmit)}
                     className="space-y-1 flex flex-col gap-3 w-full mt-4"
                 >
-                        <FormField control={form.control} name="alt_text" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Alternative Text</FormLabel>
-                                <FormControl><Textarea className=" w-80 h-84 focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add Alternative text" {...field} /></FormControl>
-                                <FormMessage className="shad-form_message" />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField control={form.control} name="title" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Title</FormLabel>
-                                <FormControl><Input className="w-[350px] focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add title" {...field} /></FormControl>
-                                <FormMessage className="shad-form_message" />
-                            </FormItem>
-                        )}
-                        />
-                         <FormField control={form.control} name="title" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>File URL:</FormLabel>
-                                <FormControl><Input className="w-[350px] focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add url" value={item?.url}/></FormControl>
-                                <FormMessage className="shad-form_message" />
-                            </FormItem>
-                        )}
-                        />
-                        {/* <FormField control={form.control} name="caption" render={({ field }) => (
+                    <FormField control={form.control} name="alt_text" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Alternative Text</FormLabel>
+                            <FormControl><Textarea className=" w-80 h-84 focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add Alternative text" {...field} /></FormControl>
+                            <FormMessage className="shad-form_message" />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField control={form.control} name="title" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl><Input className="w-[350px] focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add title" {...field} /></FormControl>
+                            <FormMessage className="shad-form_message" />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField control={form.control} name="title" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>File URL:</FormLabel>
+                            <FormControl><Input className="w-[350px] focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add url" value={item?.url} /></FormControl>
+                            <FormMessage className="shad-form_message" />
+                        </FormItem>
+                    )}
+                    />
+                    {/* <FormField control={form.control} name="caption" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Caption</FormLabel>
                                 <FormControl><Input className="shad-input" placeholder="Enter Caption" {...field} /></FormControl>
@@ -109,7 +124,7 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                         )}
                         /> */}
 
-                     {/*<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {/*<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <FormField control={form.control} name="filename" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Filename</FormLabel>
@@ -150,14 +165,21 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                     </div>
 
 
-                    <Button type="submit" className="shad-button_primary h-10 place-self-start " onClick={() => {event?.preventDefault(); navigator.clipboard.writeText(item?.url)}}>
-                        {isUpdatingMedia ? (
-                            <div className="flex-center gap-2">
-                                <Loader />
-                            </div>
-                        ) : (
-                           <span className="flex gap-[7px] text-sm leading-5 items-center  py-[10px]"><img src="/assets/icons/copy.svg" alt="" />Copy URL to clipboard</span> 
-                        )}
+                    <Button type="submit" className={`text-white bg-primary-500  h-10 place-self-start ${isCopied && 'bg-success'} `} onClick={() => { event?.preventDefault(); navigator.clipboard.writeText(item?.url); setIsCopied(true); }}>
+                        <span className="flex gap-[7px] text-sm leading-5 items-center py-[10px]">
+                            {!isCopied ? (
+                                <>
+                                    <img src="/assets/icons/copy.svg" alt="" />
+                                    Copy URL to clipboard
+                                </>
+                            ) : (
+                                <>
+                                    <SvgComponent className="h-6 w-6" svgName="checked" />
+                                    Copy URL to clipboard
+                                </>
+                            )}
+                        </span>
+
                     </Button>
                 </form>
             </div>

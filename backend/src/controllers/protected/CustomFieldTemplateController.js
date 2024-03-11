@@ -71,10 +71,14 @@ const getAllCustomField = async (req, res) => {
         const postType = req.params.post_type;
         const domain = req.headers['domain'];
         let allCustomField;
-        if (postType !== undefined && postType !== 'all') {
-            allCustomField = await CustomField.findOne({ post_type: postType}).sort({ createdAt: -1 });
+        if (postType !== undefined && postType !== 'all' && postType == 'page') {
+            if (postType == 'page') {
+                allCustomField = await CustomField.find({ item_type: postType }).sort({ createdAt: -1 });
+            }else{
+                allCustomField = await CustomField.findOne({ post_type: postType }).sort({ createdAt: -1 });
+            }
         } else {
-            allCustomField = await CustomField.find({domain: domain }).sort({ createdAt: -1 });
+            allCustomField = await CustomField.find({ domain: domain }).sort({ createdAt: -1 });
         }
 
         ResponseHandler.success(res, { customField: allCustomField }, HTTP_STATUS_CODES.OK);

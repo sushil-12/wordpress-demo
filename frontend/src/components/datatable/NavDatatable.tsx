@@ -48,9 +48,23 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
     async function handleDelete(itemId, type, submenuKey = '') {
         if (type === "comman") {
             let currentCommonSchema = domainSidebarLinks.comman;
+            console.log(currentCommonSchema, itemId);
             let updatedCommonSchema = currentCommonSchema.filter(item => item.id !== itemId)
             domainSidebarLinks.comman = updatedCommonSchema
             console.log(updatedCommonSchema)
+        }
+        else if (type === 'comman-subcategory') {
+            let currentCommonSchema = domainSidebarLinks.comman;
+            let filterSchema = currentCommonSchema.filter(item => item.id === submenuKey); 
+            let subcategory = filterSchema[0].subcategory; 
+            filterSchema[0].subcategory= subcategory.filter(item => item.id !== itemId)
+            
+            const index = currentCommonSchema.findIndex(item => item.id === submenuKey);
+            console.log(filterSchema);
+            if (index !== -1) {
+                currentCommonSchema[index] = filterSchema[0];
+            }
+            
         }
         else if (type === "websites") {
             let currentWebsiteSchema = domainSidebarLinks.websites;
@@ -90,7 +104,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                     <React.Fragment key={link.label}>
                                         {link?.subcategory ? (
                                             <li key={link.label} className="left-sidebar-links flex-col  border-2 border-dashed mb-4 me-4 pe-4">
-                                                <button type="button" className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 w-full ">
+                                                <button type="button" className="flex  items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 w-full ">
                                                     <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
                                                     <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
                                                     <div className="flex gap-4 items-center">
@@ -99,17 +113,17 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                     </div>
 
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className={` flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-900 w-full pe-5 py-2  hover:bg-gray-100`}>
+                                                <ul id={`${link?.label}-dropdown`} className={`flex flex-col gap-4 items-center rounded-lg dark:text-main-bg   w-full pe-5 py-2  `}>
 
                                                     {link.subcategory.map((subcategoryLink: INavLink, index: Number) => ( // Changed variable name to avoid conflict
-                                                        <li key={subcategoryLink.label} className="list-disc w-full">
+                                                        <li key={subcategoryLink.label} className="list-disc w-full hover:bg-gray-100">
                                                             <div className="links flex justify-between w-full">
                                                                 <div className="flex gap-4 items-center  pl-14 pr-1 " >
 
-                                                                    <SvgComponent svgName={link?.imgURL} className='group-hover:invert-white ' />
+                                                                    <SvgComponent svgName={subcategoryLink?.imgURL} className='group-hover:invert-white ' />
                                                                     {subcategoryLink.label}
                                                                 </div>
-                                                                <button onClick={() => { confirmDelete(link?.id, "comman") }}><SvgComponent className='' svgName='delete' /></button>
+                                                                <button onClick={() => { confirmDelete(subcategoryLink?.id, "comman-subcategory", link?.id) }}><SvgComponent className='' svgName='delete' /></button>
                                                             </div>
                                                         </li>
                                                     ))}

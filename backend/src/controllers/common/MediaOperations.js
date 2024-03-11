@@ -26,11 +26,11 @@ const getAllMedia = async (req, res) => {
         }
 
         const media = await Media.find(query)
-            .where('domain',domainHeader)
+            .where('domain', domainHeader)
             .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
             .skip((page - 1) * limit)
             .limit(Number(limit));
-        
+
 
         // Simulate pagination metadata
         const totalDocuments = await Media.countDocuments(query).where('domain', domainHeader);
@@ -43,6 +43,9 @@ const getAllMedia = async (req, res) => {
             description: media?.description || 'upload file to hegroup',
             alt_text: media?.alt_text || 'upload file to hegroup',
             filename: media?.filename || media?.originalname || 'upload file to hegroup',
+            format: media?.format || (media?.resource_type ? media.resource_type + '/' + media.format : 'image/png'),
+            height: media?.height || media?.height || '200',
+            width: media?.width || media?.width || '500',
             cloudinary_id: media?.cloudinary_id || '',
             url: media?.url || '',
             size: media?.size,
@@ -50,6 +53,7 @@ const getAllMedia = async (req, res) => {
             author: media?.author || '', // Ensure req.user is defined
             category: media?.category || '',
             tags: media?.tags || [],
+            createdAt: media?.createdAt ,
         }));
 
         const paginationInfo = {
@@ -78,7 +82,7 @@ const getAllImages = async (req, res) => {
         }));
 
         // Return the media and pagination information
-        ResponseHandler.success(res, { imagesdata}, 200);
+        ResponseHandler.success(res, { imagesdata }, 200);
     } catch (error) {
         ErrorHandler.handleError(error, res);
     }
@@ -132,6 +136,6 @@ const editMedia = async (req, res) => {
 
 
 module.exports = {
-    getAllMedia,getAllImages,
+    getAllMedia, getAllImages,
     editMedia
 };

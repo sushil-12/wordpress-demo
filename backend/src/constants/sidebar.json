@@ -3,26 +3,26 @@
     {
       "id": "7dg9i97e9",
       "imgURL": "dashboard",
-      "route": "//dashboard",
+      "route": "/dashboard",
       "label": "Dashboard"
     },
     {
       "id": "hzjpof8p0",
       "imgURL": "profile",
-      "route": "////personal-statistics",
+      "route": "/personal-statistics",
       "label": "Personal Statistic"
     },
     {
-      "id": "85x0lipea",
+      "id": "8vfaflwpx",
       "imgURL": "briefcase",
-      "route": "/buisness-statistics",
-      "label": "Business Statistic",
+      "route": "/buisness-statistic",
+      "label": "Buisness Statistic",
       "subcategory": [
         {
-          "id": "hzjpof8p0",
-          "imgURL": "personal",
-          "route": "/personal-statistics",
-          "label": "Buisness Submenu"
+          "id": "hyr49pzvr",
+          "label": "submenu one",
+          "route": "/buisness-statistic/submenu-one",
+          "imgURL": "categories"
         }
       ]
     }
@@ -117,6 +117,14 @@
         "label": "Technology",
         "category": false,
         "type": "custom_post"
+      },
+      {
+        "id": "b692tn2q2",
+        "imgURL": "plugins",
+        "route": "/plugins",
+        "label": "plugins",
+        "category": false,
+        "type": "default"
       }
     ],
     "x_wear": [

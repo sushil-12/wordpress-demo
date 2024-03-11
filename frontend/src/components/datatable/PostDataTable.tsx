@@ -6,13 +6,20 @@ import { Button } from '../ui/button';
 import { Edit2, Trash2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Dropdown } from 'primereact/dropdown';
-import { useState } from 'react';
-import { useQuickEditPostById, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
+import { useEffect, useState } from 'react';
+import { useGetAllCustomFields, useQuickEditPostById, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
 import { Badge } from '../ui/badge';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import { useToast } from '../ui/use-toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { useUserContext } from '@/context/AuthProvider';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { PostFormSchema, quickEditFormSchema } from '@/lib/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import QuickEditForm from '@/plugin/post/_custom_form/QuickEditForm';
 
 interface PostDataTableProps {
     posts: PostModel[];
@@ -24,16 +31,59 @@ interface PostDataTableProps {
 const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, post_type, setRerender }) => {
 
     const navigate = useNavigate();
-    const {currentDomain} = useUserContext();
+    const { currentDomain } = useUserContext();
     const { toast } = useToast();
     const { mutateAsync: quickEditPostById, isPending: isLoading } = useQuickEditPostById();
     const { mutateAsync: deletePostById, isPending: isDeleting } = usedeltePostbyID();
-    type StatusType = 'published' | 'draft' | 'trash' | 'archived';
+    type StatusType = 'published' | 'draft' | 'draft' | 'draft';
     const [statuses] = useState(['draft', 'published', 'trash', 'archived']);
+    const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
+    const [customFields, setCustomFields] = useState([]);
+    const [expandedRows, setExpandedRows] = useState('');
+
+    const [status, setStatus] = useState(null);
+
+    async function fetchCustomFields() {
+        const customFieldsResponse = await getAllCustomFields('page');
+        console.log(customFieldsResponse?.data)
+        setCustomFields(customFieldsResponse?.data?.customField)
+    }
+
+    useEffect(() => {
+        fetchCustomFields();
+    }, [post_type])
+    console.log("POST TYPE customFields : ", customFields)
+    console.log("POST TYPE posts : ", posts)
+
+
+    const handleRowToggle = (rowData: PostModel) => {
+        // Toggle expandedRow state between null and rowData.id
+        console.log(expandedRows == rowData.id)
+        setExpandedRows(expandedRows === rowData.id ? '' : rowData.id);
+    };
 
     const titleTemplate = (rowData: PostModel) => {
-        return <h6>{rowData.title}</h6>;
+        return <> <h6 className='text-sm'>{rowData.title} <div className={`about_section absolute w-full  ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>  {quickEditPostForm()}</div></h6>
+        </>;
     };
+    const rowExpansionTemplate = (rowData: PostModel) => {
+        return (
+            <div className='flex gap-2.5 mt-1'>
+                <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
+                <button className='border-none text-primary-500'>Quick edit</button>
+                <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>trash</button>
+                <button className='border-none text-primary-500'>View</button>
+            </div>
+        );
+    };
+
+    const quickEditPostForm = () => {
+        return (
+            <>
+               <QuickEditForm />
+            </>
+        );
+    }
 
     const statusBodyTemplate = (rowData: PostModel) => {
         return <Tag value={rowData.status} severity={getSeverity(rowData)} className='px-4 py-2'></Tag>;
@@ -128,27 +178,35 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     };
 
     return (
-        <div className="card bg-white shadow-lg rounded-md">
+        <div className="rounded-md">
             <ConfirmDialog />
             {isPostLoading || isDeleting ? (<SkeletonTable rowCount={5} />
             ) : (
-                <DataTable
-                    value={posts}
-                    paginator={posts.length > 2} rows={2} rowsPerPageOptions={[5, 10, 15, 20]}
-                    tableStyle={{ minWidth: '60rem' }}
-                    className="w-full p-8"
-                >
-                    <Column field="title" header="Title" body={titleTemplate} className=" font-semibold"></Column>
-                    <Column field="categories" header="Categories" body={categoryTemplate} className="text-left font-semibold"></Column>
-                    <Column field="publicationDate" header="Publication Date" body={publicationDateTemplate} className="text-gray-600"></Column>
-                    <Column field="status" header="Status" body={statusBodyTemplate} editor={(options) => statusEditor(options)} className="text-green-500"></Column>
-                    <Column field="id" header="Actions" body={actionTemplate} className="text-center">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">Edit</button>
-                        {/* Add other action buttons/icons as needed */}
-                    </Column>
-                </DataTable>
+                <>
+                    <DataTable
+                        value={posts}
+                        paginator={posts.length > 2} rows={2} rowsPerPageOptions={[5, 10, 15, 20]}
+                        tableStyle={{ minWidth: '60rem' }}
+                        frozenRow={true}
+                        tableClassName='table-fixed '
+                        rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
+                        className="w-full p-8  post_data_table table-fixed"
+                        onRowClick={(e) => handleRowToggle(e.data)}
+                    >
+
+                        <Column expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
+                        <Column expander={true} field="categories" header="Seo Title" body={`About the ${currentDomain}`} className="text-left text-sm font-medium"></Column>
+                        <Column expander={true} field="id" header="Meta Desc" body={`Aviran Zazon: Crafting a Legacy in Tech and Beyond - Sticky ${currentDomain}`} className="text-left text-sm font-medium">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 text-sm">Edit</button>
+                        </Column>
+
+
+
+                    </DataTable>
+                </>
             )
             }
+           
 
         </div >
     );
