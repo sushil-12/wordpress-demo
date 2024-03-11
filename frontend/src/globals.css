@@ -272,7 +272,7 @@
     height: 40px;
   }
   .p-datatable .p-datatable-tbody >tr{
-    height: 270px;
+    min-height: 270px;
     padding: 0px;
     vertical-align: top;
   }

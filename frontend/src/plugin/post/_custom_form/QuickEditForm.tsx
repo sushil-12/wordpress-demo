@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Dropdown } from 'primereact/dropdown';
 
 
-const QuickEditForm = () => {
+const QuickEditForm = ({ setIsQuickEditForm }) => {
     const [status, setStatus] = useState(null);
     const [date, setDate] = useState(null);
     const [month, setMonth] = useState(null);
@@ -177,7 +177,7 @@ const QuickEditForm = () => {
                             <Button type="submit" className="shad-button_primary w-[64px] text-xs font-medium   self-end mt-2.5" >
                                 Update
                             </Button>
-                            <Button type="submit" className="bg-light-1 rounded flex text-main-bg-900 text-xs font-medium mt-2.5 items-center w-[64px]  border-main-bg-900 border" onClick={() => event?.preventDefault()} >
+                            <Button type="submit" className="bg-light-1 rounded flex text-main-bg-900 text-xs font-medium mt-2.5 items-center w-[64px]  border-main-bg-900 border" onClick={() => { event?.preventDefault(); setIsQuickEditForm(false); }} >
                                 Cancel
                             </Button>
                         </div>

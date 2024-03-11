@@ -40,6 +40,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
     const [customFields, setCustomFields] = useState([]);
     const [expandedRows, setExpandedRows] = useState('');
+    const [isQuickEditForm, setIsQuickEditForm] = useState(false)
 
     const [status, setStatus] = useState(null);
 
@@ -52,9 +53,6 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     useEffect(() => {
         fetchCustomFields();
     }, [post_type])
-    console.log("POST TYPE customFields : ", customFields)
-    console.log("POST TYPE posts : ", posts)
-
 
     const handleRowToggle = (rowData: PostModel) => {
         // Toggle expandedRow state between null and rowData.id
@@ -63,27 +61,24 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     };
 
     const titleTemplate = (rowData: PostModel) => {
-        return <> <h6 className='text-sm'>{rowData.title} <div className={`about_section absolute w-full  ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>  {quickEditPostForm()}</div></h6>
+        return <> <h6 className='text-sm'>{rowData.title} <div className={`about_section absolute w-full  ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>  {rowExpansionTemplate(rowData)}</div></h6>
         </>;
     };
     const rowExpansionTemplate = (rowData: PostModel) => {
         return (
-            <div className='flex gap-2.5 mt-1'>
-                <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
-                <button className='border-none text-primary-500'>Quick edit</button>
-                <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>trash</button>
-                <button className='border-none text-primary-500'>View</button>
-            </div>
+            !isQuickEditForm ? (
+                <div className='flex gap-2.5 mt-1'>
+                    <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
+                    <button className='border-none text-primary-500' onClick={()=>setIsQuickEditForm(true)}>Quick edit</button>
+                    <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>trash</button>
+                    <button className='border-none text-primary-500'>View</button>
+                </div>
+            ) : (
+                <QuickEditForm setIsQuickEditForm= {setIsQuickEditForm} />
+            )
         );
     };
 
-    const quickEditPostForm = () => {
-        return (
-            <>
-               <QuickEditForm />
-            </>
-        );
-    }
 
     const statusBodyTemplate = (rowData: PostModel) => {
         return <Tag value={rowData.status} severity={getSeverity(rowData)} className='px-4 py-2'></Tag>;

@@ -97,7 +97,8 @@ const LeftSidebar = () => {
                     <div className="cu-simple-bar-resizer-handle ng-tns-c2398600540-13"></div>
                     <div className="h-[10%] flex gap-3 items-center justify-center px-16">
                         <Link to="/" className="m-0">
-                            <img src={logoPath || '/assets/images/logo-dashboard.svg'} alt="Logo" width={108} height={34} />
+                            {/* <img src={logoPath || '/assets/images/logo-dashboard.svg'} alt="Logo" width={108} height={34} /> */}
+                             Wordpress
                         </Link>
                     </div>
                     <div className=" bg-light-1 dark:bg-gray-800  min-h-[80%] max-h-[80%] overflow-y-auto overflow-x-hidden">
@@ -256,7 +257,8 @@ const LeftSidebar = () => {
                             </div>
                             <div className="flex flex-col">
                                 <p className="body-bold">
-                                    {user?.firstName}
+                                    {/* {user?.firstName} */}
+                                    Sushil
                                 </p>
                                 <p className="text-xs underline font-normal">
                                     My Profile

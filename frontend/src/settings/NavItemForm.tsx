@@ -56,6 +56,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         // Make sure the index is valid
         console.log(fields);
         if (index >= 0 && index < fields.length) {
+            console.log(index, fields)
             const updatedFields = fields[index];
             console.log("UPDATED FIELDS", updatedFields)
             const label = currentIndexItem[index].label
@@ -116,12 +117,14 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
     useEffect(() => {
         setLocalItem(item)
+       
         //@ts-ignore
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
             console.log(type)
             console.log(svgName, localItem, "after reset")
             replace(localItem.subcategory)
+            setCurrentIndexItem(localItem.subcategory)
             setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category ? 'yes' : 'no'); setType(localItem.type);
         } else {
             form.reset()
@@ -173,8 +176,6 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                 newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label };
             }
 
-            console.log("NEW OBJECTS", newobject)
-
             // @ts-ignore
             if (values.id) {
                 // @ts-ignore
@@ -201,6 +202,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             const message = createOrEditNavItemResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
             form.reset();
             replace([]);
+            setLocalItem(null)
             setRerender((prev: boolean) => !prev);
             setSelectedItem(null); setSvgName('');
             return toast({ variant: 'default', description: message });
@@ -325,7 +327,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                             const labelValue = e.target.value;// @ts-ignore
                                                             setValue('label', labelValue);// @ts-ignore
                                                             const existingIndex = currentIndexItem.findIndex(item => item.index === index);
-                                                            console.log(existingIndex)
+                                                            
                                                             if (existingIndex !== -1) {
                                                                 setCurrentIndexItem(prevIndexItem => {
                                                                     const updatedItem = [...prevIndexItem];// @ts-ignore
@@ -335,6 +337,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                             } else {
                                                                 // @ts-ignore
                                                                 setCurrentIndexItem(prevIndexItem => [...prevIndexItem, { index, label: labelValue }]);
+                                                                console.log(currentIndexItem, "SUHSIl")
                                                             }
                                                         }}
                                                         className="shad-input"
