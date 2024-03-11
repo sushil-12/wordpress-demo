@@ -15,19 +15,19 @@
     {
       "id": "8vfaflwpx",
       "imgURL": "briefcase",
-      "route": "/////buisness-statistic",
+      "route": "/////////buisness-statistic",
       "label": "Buisness Statistic",
       "subcategory": [
         {
           "id": "8vfaflwpx",
-          "label": "submenu one",
-          "route": "/buisness-statistic//buisness-statistic//buisness-statistic//buisness-statistic//buisness-statistic/submenu-one",
+          "label": "Item one",
+          "route": "/buisness-statistic/item-one",
           "imgURL": "categories"
         },
         {
           "id": "8vfaflwpx",
-          "label": "submenu two",
-          "route": "/buisness-statistic//buisness-statistic/test",
+          "label": "Item two",
+          "route": "/buisness-statistic/item-two",
           "imgURL": "pages"
         }
       ]

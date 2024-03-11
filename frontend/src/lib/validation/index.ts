@@ -109,6 +109,7 @@ export const quickEditFormSchema = z.object({
     day:z.string(),
     time:z.string(),
     year:z.string(),
+    sticky:z.boolean()
 
 });
 

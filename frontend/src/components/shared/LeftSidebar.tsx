@@ -30,6 +30,7 @@ const LeftSidebar = () => {
         setActiveSubmenu(submenuKey);
         const dropdownArrows = document.getElementsByClassName(`${createSlug(submenuKey)}-dropdown-arrow`);
         const submenu = document.getElementsByClassName(`submenu`);
+
         for (let i = 0; i < submenu.length; i++) {
             submenu[i].classList.remove('rotated');
         }
@@ -40,7 +41,6 @@ const LeftSidebar = () => {
 
     const toggleDropdown = (label: any) => {
 
-        console.log("sdsd")
         Object.keys(dropdownVisibility).forEach((dropdownLabel) => {
             if (dropdownLabel !== label && dropdownVisibility[dropdownLabel]) {
                 closeDropdown(dropdownLabel);
@@ -114,7 +114,7 @@ const LeftSidebar = () => {
                                     <React.Fragment key={link.label}>
                                         {link?.subcategory ? (
                                             <li className="  left-sidebar-link-dropdown my-auto border-b">
-                                                <button type="button" className="flex relative justify-between items-center  pl-6 w-full" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
+                                                <button type="button" className="flex relative justify-between items-center  pl-6 w-full min-h-[60px]" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
                                                     <div className="flex items-center gap-[8px]">
                                                         <SvgComponent className=" leftsidebar_icons" svgName={link.imgURL || 'briefcase'} />
@@ -129,7 +129,7 @@ const LeftSidebar = () => {
                                                             <div className="links">
                                                                 
                                                                 <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
-                                                                    <SvgComponent className=" leftsidebar_icons group-hover:invert-primary-500 " svgName={subcategoryLink.imgURL || 'briefcase'} />
+                                                                    <SvgComponent className=" leftsidebar_icons-submenu w-4 h-4 group-hover:invert-primary-500 " svgName={subcategoryLink.imgURL || 'briefcase'} />
                                                                     {subcategoryLink.label}
                                                                 </NavLink>
                                                             </div>

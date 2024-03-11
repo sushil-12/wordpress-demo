@@ -52,18 +52,32 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
 
     useEffect(() => {
         fetchCustomFields();
-    }, [post_type])
+        if(expandedRows){setIsQuickEditForm(false)}
+    }, [post_type, expandedRows])
 
     const handleRowToggle = (rowData: PostModel) => {
         // Toggle expandedRow state between null and rowData.id
         console.log(expandedRows == rowData.id)
-        setExpandedRows(expandedRows === rowData.id ? '' : rowData.id);
+        setExpandedRows(expandedRows === rowData.id ? rowData.id : rowData.id);
     };
 
     const titleTemplate = (rowData: PostModel) => {
-        return <> <h6 className='text-sm'>{rowData.title} <div className={`about_section absolute w-full  ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>  {rowExpansionTemplate(rowData)}</div></h6>
-        </>;
+        return (
+            <>
+                <h6 className='text-sm'>
+                    {rowData.title}
+                    <div className={`about_section relative w-full ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>
+                        <table>
+                            <tr>
+                                <td colSpan={100}>{rowExpansionTemplate(rowData)}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </h6>
+            </>
+        );
     };
+    
     const rowExpansionTemplate = (rowData: PostModel) => {
         return (
             !isQuickEditForm ? (
@@ -74,7 +88,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                     <button className='border-none text-primary-500'>View</button>
                 </div>
             ) : (
-                <QuickEditForm setIsQuickEditForm= {setIsQuickEditForm} />
+                <QuickEditForm setIsQuickEditForm= {setIsQuickEditForm} rowData={rowData}/>
             )
         );
     };
@@ -180,16 +194,17 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                 <>
                     <DataTable
                         value={posts}
-                        paginator={posts.length > 2} rows={2} rowsPerPageOptions={[5, 10, 15, 20]}
+                        paginator={posts.length > 10} rows={10} rowsPerPageOptions={[5, 10, 15, 20]}
                         tableStyle={{ minWidth: '60rem' }}
                         frozenRow={true}
                         tableClassName='table-fixed '
                         rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
                         className="w-full p-8  post_data_table table-fixed"
-                        onRowClick={(e) => handleRowToggle(e.data)}
+                        onRowClick={(e) => {handleRowToggle(e.data); }}
+                        rowKey="id"
                     >
 
-                        <Column expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
+                        <Column  expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
                         <Column expander={true} field="categories" header="Seo Title" body={`About the ${currentDomain}`} className="text-left text-sm font-medium"></Column>
                         <Column expander={true} field="id" header="Meta Desc" body={`Aviran Zazon: Crafting a Legacy in Tech and Beyond - Sticky ${currentDomain}`} className="text-left text-sm font-medium">
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 text-sm">Edit</button>

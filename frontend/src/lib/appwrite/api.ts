@@ -221,6 +221,7 @@ export async function getPostsByID(post_id: string) {
 export async function quickEditPostById(post_id: string, postData: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
+    console.log(post_id, postData)
     const post = await authenticatedApiService.quickEditPostByIdApi(post_id, postData);
 
     return post?.data;

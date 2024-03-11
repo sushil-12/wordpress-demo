@@ -328,6 +328,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                             setValue('label', labelValue);// @ts-ignore
                                                             const existingIndex = currentIndexItem.findIndex(item => item.index === index);
                                                             
+                                                            console.log(existingIndex, currentIndexItem)
                                                             if (existingIndex !== -1) {
                                                                 setCurrentIndexItem(prevIndexItem => {
                                                                     const updatedItem = [...prevIndexItem];// @ts-ignore
@@ -337,7 +338,6 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                             } else {
                                                                 // @ts-ignore
                                                                 setCurrentIndexItem(prevIndexItem => [...prevIndexItem, { index, label: labelValue }]);
-                                                                console.log(currentIndexItem, "SUHSIl")
                                                             }
                                                         }}
                                                         className="shad-input"
@@ -352,7 +352,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                                     {/* Icon Selection */}
                                     <div className="flex align-middle items-center">
-                                        Choose Icon {index}
+                                        Choose Icon 
                                         <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><Edit3Icon /></Button >
                                         <Dialog visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
                                             <SvgPickerComponent setSvgName={currentIndex} currentIndexItem={currentIndexItem} updateFieldAtIndex={updateFieldAtIndex} setSvgPicker={setRepeaterSvgPicker} form_type={'repeater'} />

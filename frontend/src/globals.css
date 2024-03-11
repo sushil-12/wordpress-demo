@@ -275,6 +275,7 @@
     min-height: 270px;
     padding: 0px;
     vertical-align: top;
+    border-bottom: 1px solid #000;
   }
   .p-dropdown .p-dropdown-trigger {
     width: 2rem !important;
@@ -286,7 +287,8 @@
   }
   .p-datatable .p-datatable-tbody > tr > td {
     padding-top: 10px !important;
-    padding-bottom: 10px !important
+    padding: 10px !important;
+
 }
 
   .svg_logos>svg {
@@ -301,6 +303,12 @@
     max-width: 24px;
     min-height: 24px;
     min-width: 24px;
+  }
+  .leftsidebar_icons-submenu > svg{
+    max-height: 16px;
+    max-width: 16px;
+    min-height: 16px;
+    min-width: 16px;
   }
 
   .leftsidebar_icons_website>svg {
