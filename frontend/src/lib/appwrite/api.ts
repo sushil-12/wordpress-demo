@@ -16,7 +16,7 @@ export async function createUserAccount(user: INewUser) {
 }
 
 // ============================== SIGN IN
-export async function signInAccount(user: { email: string; password: string , staySignedIn:string, form_type: string, verification_code:string }) {
+export async function signInAccount(user: { email: string; password: string, staySignedIn: string, form_type: string, verification_code: string }) {
   try {
     const session = await Apiservices.authService.login(user.email, user.password, user.staySignedIn, user.form_type, user.verification_code);
     session ? localStorage.setItem("token", session?.data?.data?.token) : '';
@@ -28,17 +28,17 @@ export async function signInAccount(user: { email: string; password: string , st
 }
 
 // Reset passworx
-export async function resetPassword(user: { password: string;  form_type: string, reset_token:string}) {
+export async function resetPassword(user: { password: string; form_type: string, reset_token: string }) {
   try {
-    const session = await Apiservices.authService.resetPassword( user.password, user.form_type, user.reset_token);
+    const session = await Apiservices.authService.resetPassword(user.password, user.form_type, user.reset_token);
     return session;
   } catch (error: any) {
     throw new PromiseHandler(error?.response?.data?.message, 'Reset Password Failed', { user, error });
   }
 }
-export async function editProfile(user: { name: string;  id: string, bio:string, profile_pic?: File, email?:string, password?:string}) {
+export async function editProfile(user: { name: string; id: string, bio: string, profile_pic?: File, email?: string, password?: string }) {
   try {
-    const editProfileResponse = await Apiservices.authService.editProfile( user.name, user.id, user.bio, user?.profile_pic,  user?.email, user?.password,);
+    const editProfileResponse = await Apiservices.authService.editProfile(user.name, user.id, user.bio, user?.profile_pic, user?.email, user?.password,);
     console.log(editProfileResponse, "returned")
     return editProfileResponse;
   } catch (error: any) {
@@ -56,7 +56,7 @@ export async function getAccount() {
   }
 }
 
-export async function checkPasswordApi(password:string) {
+export async function checkPasswordApi(password: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const currentAccount = await authenticatedApiService.checkPassword(password);
@@ -67,7 +67,7 @@ export async function checkPasswordApi(password:string) {
   }
 }
 
-export async function sendOtpForVerificationApi(email:string, form_type: string) {
+export async function sendOtpForVerificationApi(email: string, form_type: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const currentAccount = await authenticatedApiService.sendOtpForVerification(email, form_type);
@@ -119,7 +119,7 @@ export async function uploadMediaFile(files: File) {
   }
 }
 
-export async function getAllMedia(page: number, limit: number, search?:string): Promise<any> {
+export async function getAllMedia(page: number, limit: number, search?: string): Promise<any> {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
     const allMedia = await authenticatedApiService.getAllMediaFiles(page, limit, search);
@@ -184,10 +184,10 @@ export async function createOrEditPost(post: any) {
   }
 }
 
-export async function getAllPosts(page: number, limit: number, post_type: any) {
+export async function getAllPosts(page: number, limit: number, post_type: any, search: string) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
-    const allMedia = await authenticatedApiService.getAllPostApi(page, limit, post_type);
+    const allMedia = await authenticatedApiService.getAllPostApi(page, limit, post_type, search);
 
     return allMedia?.data;
   } catch (error) {
@@ -284,7 +284,7 @@ export async function createOrEditCustomField(category: any) {
     return categoryData?.data;
   } catch (error: any) {
     return error?.response?.data;
-   
+
   }
 }
 
@@ -356,7 +356,7 @@ export async function quickEditNavItemsbyID(category_id: string, categoryData: a
 export async function saveDatatoSidebar(jsonData: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
-    const post = await authenticatedApiService.saveDatatoSidebarApi( jsonData);
+    const post = await authenticatedApiService.saveDatatoSidebarApi(jsonData);
 
     return post?.data;
   } catch (error: any) {
@@ -367,7 +367,7 @@ export async function saveDatatoSidebar(jsonData: any) {
 export async function uploadSvg(jsonData: any) {
   try {
     const authenticatedApiService = new AuthenticatedApiService();
-    const post = await authenticatedApiService.uploadSvg( jsonData);
+    const post = await authenticatedApiService.uploadSvg(jsonData);
 
     return post?.data;
   } catch (error: any) {

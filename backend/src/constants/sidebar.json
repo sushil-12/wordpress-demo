@@ -4,33 +4,42 @@
       "id": "7dg9i97e9",
       "imgURL": "dashboard",
       "route": "/dashboard",
-      "label": "Dashboard"
+      "label": "Dashboard",
+      "subcategory": []
     },
     {
       "id": "hzjpof8p0",
       "imgURL": "profile",
       "route": "/personal-statistics",
-      "label": "Personal Statistic"
+      "label": "Personal Statistic",
+      "subcategory": []
     },
     {
       "id": "8vfaflwpx",
       "imgURL": "briefcase",
-      "route": "/////////buisness-statistic",
+      "route": "/buisness-statistic",
       "label": "Buisness Statistic",
       "subcategory": [
         {
-          "id": "8vfaflwpx",
-          "label": "Item one",
-          "route": "/buisness-statistic/item-one",
+          "id": "oj7r51vah",
+          "label": "Stats one",
+          "route": "/buisness-statistic/stats-one",
           "imgURL": "categories"
         },
         {
-          "id": "8vfaflwpx",
-          "label": "Item two",
-          "route": "/buisness-statistic/item-two",
+          "id": "e6cyc6z3z",
+          "label": "Stats two",
+          "route": "/buisness-statistic/stats-two",
           "imgURL": "pages"
         }
       ]
+    },
+    {
+      "id": "9j9hrhaeb",
+      "imgURL": "posts",
+      "route": "/inventions",
+      "label": "Inventions",
+      "subcategory": []
     }
   ],
   "websites": {
@@ -178,6 +187,14 @@
         "imgURL": "posts",
         "route": "/posts",
         "label": "Posts",
+        "category": false,
+        "type": "default"
+      },
+      {
+        "id": "rlutfsjuj",
+        "imgURL": "plugins",
+        "route": "/plugins",
+        "label": "plugins",
         "category": false,
         "type": "default"
       }

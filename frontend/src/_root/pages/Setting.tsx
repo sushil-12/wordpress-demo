@@ -36,11 +36,11 @@ const Setting = () => {
 
         <Tabs defaultValue="sidebar" className="w-full">
           <TabsList className="grid w-full grid-cols-6 text-black">
-            <TabsTrigger value="sidebar">Sidebar</TabsTrigger>
-            <TabsTrigger value="upload_svg">Upload SVG Icons</TabsTrigger>
+            <TabsTrigger value="sidebar" className="bg-primary-500 text-white text-sm font-medium">Manage Sidebar</TabsTrigger>
+            {/* <TabsTrigger value="upload_svg">Upload SVG Icons</TabsTrigger> */}
           </TabsList>
           <TabsContent value="sidebar">
-            <div className="p-4 page-innersubtitles">
+            <div className="page-innersubtitles">
               <div className="flex  border-primary-500 gap-8" >
                 <div className="items w-full">
                   <NavDatatable navItems={navItems} setSelectedItem={setSelectedItem} render={render} />

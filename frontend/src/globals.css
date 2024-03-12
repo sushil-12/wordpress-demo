@@ -170,13 +170,8 @@
 
   .dropzone {
     /* HE Blue */
-    border-style: dashed;
-    border-color: #000C79;
-    border-width: 2px;
-    /* Adjust the width of the dashes */
-    border-radius: 12px;
-    border-spacing: 15px;
-    /* Adjust the spacing between dashes */
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='24' ry='24' stroke='%23000C79FF' stroke-width='3' stroke-dasharray='6%2c 14' stroke-dashoffset='23' stroke-linecap='square'/%3e%3c/svg%3e");
+    border-radius: 24px;
   }
 }
 
@@ -265,31 +260,56 @@
     transition: all 0.5s ease;
   }
 
-  .p-datatable-table {
-    border: 1px solid #D8D8D8;
-  }
-  .p-datatable .p-datatable-thead>tr{
+  .p-datatable .p-datatable-thead>tr {
     height: 40px;
   }
-  .p-datatable .p-datatable-tbody >tr{
+
+  .p-datatable .p-datatable-tbody>tr {
     min-height: 270px;
     padding: 0px;
     vertical-align: top;
     border-bottom: 1px solid #000;
   }
+
   .p-dropdown .p-dropdown-trigger {
     width: 2rem !important;
-}
+  }
+
   .p-datatable .p-datatable-thead>tr>th {
-    border-right: 1px solid #D8D8D8 !important;
     padding: 10px !important;
     background-color: #fff !important;
   }
-  .p-datatable .p-datatable-tbody > tr > td {
+
+  .p-datatable .p-datatable-thead>tr>th:not(:first-child) {
+    border-left: 1px solid #D8D8D8 !important;
+  }
+
+  .p-datatable .p-datatable-tbody>tr>td {
     padding-top: 10px !important;
     padding: 10px !important;
 
-}
+  }
+
+  .p-datepicker {
+    padding: 0px !important;
+  }
+
+  .p-datatable-wrapper {
+    overflow: hidden !important;
+    border: 1px solid #D8D8D8;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .p-datepicker .p-timepicker {
+    padding: 2px !important;
+    background-color: #E8EBFF;
+  }
+
+  .p-datepicker .p-timepicker span {
+    font-size: 14px !important;
+    font-weight: 400;
+  }
 
   .svg_logos>svg {
     max-height: 24px;
@@ -304,7 +324,8 @@
     min-height: 24px;
     min-width: 24px;
   }
-  .leftsidebar_icons-submenu > svg{
+
+  .leftsidebar_icons-submenu>svg {
     max-height: 16px;
     max-width: 16px;
     min-height: 16px;

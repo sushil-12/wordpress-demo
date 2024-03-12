@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from '@/components/ui/button';
+import { Calendar } from 'primereact/calendar';
+
 
 import {
     Select,
@@ -17,12 +19,22 @@ import {
 import { quickEditPostById } from '@/lib/appwrite/api';
 import { useQuickEditPostById } from '@/lib/react-query/queriesAndMutations';
 import { useToast } from '@/components/ui/use-toast';
-import { Calendar } from 'primereact/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
+import Loader from '@/components/shared/Loader';
+import { PostModel } from '@/lib/types';
+import { render } from 'react-dom';
 
-const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
+interface Props {
+    setIsQuickEditForm: React.Dispatch<React.SetStateAction<boolean>>;
+    rowData: PostModel; // Replace YourRowDataType with the type of rowData
+    setRerender: React.Dispatch<React.SetStateAction<boolean>>;
+    rerenderPostTable: boolean;
+}
+
+const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable }) => {
     const currentMonthIndex = new Date().getMonth();
-    const [time, setTime] = useState(null);
+    const currentdate = new Date();
+    const [date, setDate] = useState(currentdate);
     const { mutateAsync: quickEditPostById, isPending: isLoading } = useQuickEditPostById();
     const { toast } = useToast();
 
@@ -32,12 +44,6 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
         { name: 'Trash', code: 'trash' },
         { name: 'Archived', code: 'archived' },
     ];
-    const months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-
-    const dropdownOptions = months.map((month, index) => ({ code: month, name: month }));
 
     const form = useForm<z.infer<typeof quickEditFormSchema>>({
         resolver: zodResolver(quickEditFormSchema),
@@ -46,26 +52,29 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
             title: rowData?.title || '',
             status: rowData?.status || '',
             slug: rowData?.slug || '',
-            month: '',
-            day: '',
-            year: '',
-            time: '',
+            publicationDate: rowData?.publicationDate || date,
             sticky: false
         },
     });
-    
-    useEffect(() => {
-       
-    }, []);
 
+    useEffect(() => {
+        if (rowData) {
+            const publicationDate = rowData?.publicationDate ? new Date(rowData?.publicationDate) : currentdate;
+            setDate(publicationDate);
+            form.setValue('publicationDate', publicationDate)
+            console.table({ publicationDate });
+        }
+
+        console.table({ rowData });
+    }, [rerenderPostTable]);
     async function onSubmit(values: z.infer<typeof quickEditFormSchema>) {
-        console.log(rowData?.id, values);
+        values.publicationDate = date;
         const createOrEditPostResponse = await quickEditPostById({ post_id: rowData.id, postData: values });
-        console.log(createOrEditPostResponse);
         if (!createOrEditPostResponse) {
             return toast({ variant: "destructive", description: "Edit Failed" })
         }
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
+            setRerender(!rerenderPostTable);
             const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
             return toast({ variant: 'default', description: message });
         } else {
@@ -76,6 +85,7 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
 
     return (
         <div className='pt-8'>
+            <hr className="h-px ml-[-10px] bg-gray-300 border-0 mb-2.5" />
             <h6 className='mb-2.5 text-sm leading-[20px] font-medium'>QUICK EDIT</h6>
             <Form {...form}>
                 <div className="">
@@ -111,7 +121,7 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
                                             <FormControl>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value} >
                                                     <SelectTrigger className="w-[151px]">
-                                                        <SelectValue placeholder={dropdownOptions[currentMonthIndex].name} />
+                                                        <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {dropdownStatus.map((option) => (
@@ -174,50 +184,27 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
                             </div>
 
                             <div className="flex gap-2.5 items-center">
-                                <FormField
-                                    control={form.control}
-                                    name="month"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormField
-                                                control={form.control}
-                                                name="month"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormControl>
-                                                            <Select onValueChange={field.onChange} defaultValue={field.value} >
-                                                                <SelectTrigger className="w-[91px]">
-                                                                    <SelectValue placeholder="" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {dropdownOptions.map((option) => (
-                                                                        <SelectItem onChange={() => { }} key={option.code} value={option.code.toString()}>
-                                                                            {option.name}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </FormControl>
-                                                        <FormMessage className="shad-form_message" />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
 
-                                    )}
-                                />
                                 <FormField
                                     control={form.control}
-                                    name="day"
+                                    name="publicationDate"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input
-                                                    className="w-[45px]"
-                                                    placeholder="00"
-                                                    {...field}
-                                                />
+                                                <Calendar value={date} className="w-[91px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="month" dateFormat="M" />
+                                            </FormControl>
+                                            <FormMessage className="shad-form_message" />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="publicationDate"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Calendar value={date} className="w-[45px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="date" dateFormat="dd" />
                                             </FormControl>
                                             <FormMessage className="shad-form_message" />
                                         </FormItem>
@@ -226,15 +213,11 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="year"
+                                    name="publicationDate"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input
-                                                    className="shad-input text-sm w-[60px]"
-                                                    placeholder="2024"
-                                                    {...field}
-                                                />
+                                                <Calendar value={date} className="w-[60px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="year" dateFormat="yyyy" />
                                             </FormControl>
                                             <FormMessage className="shad-form_message" />
                                         </FormItem>
@@ -244,15 +227,17 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
                                 at
                                 <FormField
                                     control={form.control}
-                                    name="time"
+                                    name="publicationDate"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input
-                                                    className="shad-input w-[78px]"
-                                                    placeholder="00:00"
-                                                    {...field}
-                                                />
+                                                {/* <Input
+                                                        className="shad-input w-[78px]"
+                                                        placeholder="00:00"
+                                                        {...field}
+                                                    /> */}
+                                                <Calendar value={date} onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} className='shad-input w-[78px]' timeOnly />
+
                                             </FormControl>
                                             <FormMessage className="shad-form_message" />
                                         </FormItem>
@@ -264,8 +249,8 @@ const QuickEditForm = ({ setIsQuickEditForm, rowData }) => {
                         </div>
 
                         <div className="flex gap-2.5">
-                            <Button type="submit" className="shad-button_primary w-[64px] h-[33px] text-xs font-medium   self-end mt-2.5" >
-                                Update
+                            <Button type="submit" className="shad-button_primary w-[64px] h-[33px] text-xs font-medium   self-end mt-2.5" disabled={isLoading} >
+                                {isLoading ? (<Loader />) : 'Update'}
                             </Button>
                             <Button type="submit" className="bg-light-1 rounded flex  h-[33px] text-main-bg-900 text-xs font-medium mt-2.5 items-center w-[64px]  border-main-bg-900 border" onClick={() => { event?.preventDefault(); setIsQuickEditForm(false); console.log(setIsQuickEditForm) }} >
                                 Cancel

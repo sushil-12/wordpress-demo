@@ -101,7 +101,7 @@ const ImageUploader: React.FC = () => {
 };
 
 const dropzoneStyle = (isDragActive: boolean): string => `
-  bg-light-blue  w-full  border-primary-500 dropzone justify-center w-full items-center  h-[290px] ${isDragActive ? 'border-green-500' : 'border-gray-300'
+  bg-light-blue  w-full rounded-[24px]  border-primary-500 dropzone justify-center w-full items-center  h-[290px] ${isDragActive ? 'border-green-500' : 'border-gray-300'
   } rounded text-center cursor-pointer transition duration-300 ease-in-out
 `;
 

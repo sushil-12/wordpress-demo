@@ -33,9 +33,9 @@ class AuthenticatedApiService {
 
   async sendOtpForVerification(email: string, form_type: string): Promise<any> {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
-    if(form_type == 'send_mail'){
+    if (form_type == 'send_mail') {
       return await this.api.post('/api/verify-email', { email: email, form_type: form_type }, config);
-    }else{
+    } else {
       return await this.api.post('/api/verify-email', { verification_code: email, form_type: form_type }, config);
 
     }
@@ -48,8 +48,8 @@ class AuthenticatedApiService {
     return await this.api.post('/api/media/upload', formData, config);
   }
 
-  async getAllMediaFiles(page: number, limit: number,search?:string): Promise<any> {
-    const config: AxiosRequestConfig = { headers: this.getHeaders(), params: { page, limit,search } };
+  async getAllMediaFiles(page: number, limit: number, search?: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders(), params: { page, limit, search } };
     return await this.api.get('/api/media/all', config);
   }
 
@@ -73,8 +73,8 @@ class AuthenticatedApiService {
     return await this.api.post('/api/create-or-update/post', post, config);
   }
 
-  async getAllPostApi(page: number, limit: number, post_type: string): Promise<any> {
-    const config: AxiosRequestConfig = { headers: this.getHeaders(), params: { page, limit } };
+  async getAllPostApi(page: number, limit: number, post_type: string, search: string): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders(), params: { page, limit, search } };
     return await this.api.get('/api/get-all-post/' + post_type, config);
   }
 

@@ -157,9 +157,9 @@ import {
     });
   };
 
-  export const useGetAllPosts = (): UseMutationResult<any, unknown, { post_type:string , page: number; limit: number }, unknown> => {
+  export const useGetAllPosts = (): UseMutationResult<any, unknown, { post_type:string , page: number; limit: number, search:string }, unknown> => {
     return useMutation({
-      mutationFn: ({ page, limit, post_type }) => getAllPosts(page, limit, post_type),
+      mutationFn: ({ page, limit, post_type, search }) => getAllPosts(page, limit, post_type, search),
     });
   };
 

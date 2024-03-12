@@ -95,18 +95,18 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
         <div className="card">
              <ConfirmDialog />
             <TabView>
-                <TabPanel header="Common" >
+                <TabPanel header="Common" className='text-sm p-0' >
                     <div className="h-full overflow-y-auto bg-light-1 dark:bg-gray-800 flex gap-4">
                         <ol className="overflow-y-auto w-3/4">
                             {navItems.comman?.map((link: INavLink) => {
                                 const isActive = false;
                                 return (
                                     <React.Fragment key={link.label}>
-                                        {link?.subcategory ? (
-                                            <li key={link.label} className="left-sidebar-links flex-col  border-2 border-dashed mb-4 me-4 pe-4">
+                                        {link?.subcategory.length>0 ? (
+                                            <li key={link.label} className="flex-col   border-y border-dashed mb-2   me-4 pe-4">
                                                 <button type="button" className="flex  items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 w-full ">
                                                     <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
-                                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[22px]">{link?.label}</span>
+                                                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap my-[10px]">{link?.label}</span>
                                                     <div className="flex gap-4 items-center">
                                                         <Edit3Icon className='cursor-pointer h-4' onClick={() => {setSelectedItem(link); console.log("CLicked", selectedItem, setSelectedItem); }} />
                                                         <button onClick={() => { confirmDelete(link?.id, "comman") }}><SvgComponent className='' svgName='delete' /></button>
@@ -130,11 +130,11 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                 </ul>
                                             </li>
                                         ) : (
-                                            <li  key={link.label} className={`left-sidebar-links  border-2 border-dashed  hover:bg-gray-100 mb-4 me-4 pe-4 `}>
+                                            <li  key={link.label} className={`  border-y border-dashed mb-2    hover:bg-gray-100 me-4 pe-4 `}>
                                                 <div className="link-container w-full flex items-center justify-between me-5 " >
                                                     <div className="flex items-center rounded-lg dark:text-main-bg  dark:hover:bg-gray-700 group">
                                                         <SvgComponent svgName={link?.imgURL} className='pl-6 pr-1' />
-                                                        <span className="ms-3  my-[22px]">{link.label}</span>
+                                                        <span className="ms-3  my-[10px]">{link.label}</span>
                                                     </div>
                                                     <div className="flex gap-4 items-center">
                                                         <Edit3Icon className='cursor-pointer h-4' onClick={() => {setSelectedItem(link); console.log("CLicked"); }} />
@@ -153,7 +153,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                         </div>
                     </div>
                 </TabPanel>
-                <TabPanel header="Websites">
+                <TabPanel header="Websites"  className='text-sm p-0' >
                     <div className="card flex gap-4  ">
                         <Accordion activeIndex={activeIndex} className='w-1/2' onTabChange={(e) => { setActiveIndex(e.index); setActiveDomain(websitekeys[e.index]) }}>
                             {

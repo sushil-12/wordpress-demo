@@ -26,14 +26,14 @@ interface PostDataTableProps {
     post_type: string,
     isPostLoading: boolean;
     setRerender: any
+    render: boolean
 }
 
-const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, post_type, setRerender }) => {
+const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, post_type, setRerender, render }) => {
 
     const navigate = useNavigate();
     const { currentDomain } = useUserContext();
     const { toast } = useToast();
-    const { mutateAsync: quickEditPostById, isPending: isLoading } = useQuickEditPostById();
     const { mutateAsync: deletePostById, isPending: isDeleting } = usedeltePostbyID();
     type StatusType = 'published' | 'draft' | 'draft' | 'draft';
     const [statuses] = useState(['draft', 'published', 'trash', 'archived']);
@@ -41,6 +41,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const [customFields, setCustomFields] = useState([]);
     const [expandedRows, setExpandedRows] = useState('');
     const [isQuickEditForm, setIsQuickEditForm] = useState(false)
+    const [rerenderPostTable, setRerenderPostTable] = useState(false)
 
     const [status, setStatus] = useState(null);
 
@@ -52,8 +53,11 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
 
     useEffect(() => {
         fetchCustomFields();
-        if(expandedRows){setIsQuickEditForm(false)}
-    }, [post_type, expandedRows])
+        if (expandedRows) {
+            setIsQuickEditForm(false);
+        }
+        setRerender(!render);
+    }, [post_type, rerenderPostTable])
 
     const handleRowToggle = (rowData: PostModel) => {
         // Toggle expandedRow state between null and rowData.id
@@ -67,45 +71,38 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                 <h6 className='text-sm'>
                     {rowData.title}
                     <div className={`about_section relative w-full ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>
-                        <table>
-                            <tr>
-                                <td colSpan={100}>{rowExpansionTemplate(rowData)}</td>
-                            </tr>
+                        <table className='w-[100vw]'>
+                            <tbody>
+                                <tr>
+                                    <td colSpan={100}>{rowExpansionTemplate(rowData)}</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </h6>
             </>
         );
     };
-    
+
     const rowExpansionTemplate = (rowData: PostModel) => {
         return (
             !isQuickEditForm ? (
                 <div className='flex gap-2.5 mt-1'>
                     <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
-                    <button className='border-none text-primary-500' onClick={()=>setIsQuickEditForm(true)}>Quick edit</button>
+                    <button className='border-none text-primary-500' onClick={() => setIsQuickEditForm(true)}>Quick edit</button>
                     <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>trash</button>
                     <button className='border-none text-primary-500'>View</button>
                 </div>
             ) : (
-                <QuickEditForm setIsQuickEditForm= {setIsQuickEditForm} rowData={rowData}/>
+                <QuickEditForm setIsQuickEditForm={setIsQuickEditForm} rowData={rowData} setRerender={setRerenderPostTable} rerenderPostTable={rerenderPostTable} />
             )
         );
     };
 
 
-    const statusBodyTemplate = (rowData: PostModel) => {
-        return <Tag value={rowData.status} severity={getSeverity(rowData)} className='px-4 py-2'></Tag>;
-    };
-
-    const categoryTemplate = (rowData: PostModel) => {
-        return rowData?.categories.length > 0 ? rowData?.categories.map((item, index) => (
-            <Badge key={index} className='text-slate-500 bg-black-400 border-dark-1 mx-1'>{item}</Badge>
-        )) : <Badge className='text-slate-500 bg-black-400 border-dark-1 mx-1'>N/A</Badge>;
-    };
     async function accept(media_id: string) {
         const deleteMediaResponse = await deletePostById(media_id);
-        setRerender((prev: boolean) => !prev);
+        setRerender(!render);
         if (!deleteMediaResponse) return toast({ variant: "destructive", description: "You have cancelled the operations" })
         if (deleteMediaResponse?.code == 200) {
             return toast({ variant: "default", description: deleteMediaResponse.data.message })
@@ -128,63 +125,6 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
             reject: reject
         });
     }
-    const publicationDateTemplate = (rowData: PostModel) => {
-        return new Date(rowData?.publicationDate).toLocaleDateString();
-    }
-    const actionTemplate = (rowData: PostModel) => {
-        return (
-            <div className='flex gap-4'>
-                <Button className="rounded-full bg-none p-1 text-dark shadow-sm hover:text-primary-500  " size="sm" onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>
-                    <Edit2 className='h-5' />
-                </Button>
-                <Button className="p-1 rounded-full text-danger shadow-sm hover:text-danger focus-visible:outline " size="sm" onClick={() => confirmDelete(rowData.id)}>
-                    <Trash2Icon className='h-5' />
-                </Button>
-            </div>
-        )
-    }
-
-    const getSeverity = (data: PostModel | StatusType) => {
-        const status = typeof data === 'string' ? data : data.status;
-
-        switch (status) {
-            case 'published':
-                return 'success';
-
-            case 'draft':
-                return 'info';
-
-            case 'trash':
-                return 'danger';
-
-            default:
-                return null;
-        }
-    };
-
-    const statusEditor = (options: any) => {
-        const handleStatusChange = async (newValue: string) => {
-            try {
-                const updatedPost = { ...options.rowData, status: newValue };
-                await quickEditPostById({ post_id: options.rowData.id, postData: updatedPost });
-                options.editorCallback(newValue);
-            } catch (error) {
-                console.error('Error updating status:', error);
-            }
-        };
-        return (
-            <Dropdown
-                value={options.value}
-                options={statuses}
-                className='p-0'
-                onChange={(e) => handleStatusChange(e.value)}
-                placeholder="Change status"
-                itemTemplate={(option) => {
-                    return <Tag value={option} severity={getSeverity(option)}></Tag>;
-                }}
-            />
-        );
-    };
 
     return (
         <div className="rounded-md">
@@ -197,14 +137,13 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                         paginator={posts.length > 10} rows={10} rowsPerPageOptions={[5, 10, 15, 20]}
                         tableStyle={{ minWidth: '60rem' }}
                         frozenRow={true}
-                        tableClassName='table-fixed '
+                        tableClassName='table-fixed rounded '
                         rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
-                        className="w-full p-8  post_data_table table-fixed"
-                        onRowClick={(e) => {handleRowToggle(e.data); }}
-                        rowKey="id"
+                        className="w-full post_data_table table-fixed"
+                        onRowClick={(e) => { setIsQuickEditForm(false); handleRowToggle(e.data); }}
                     >
 
-                        <Column  expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
+                        <Column expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
                         <Column expander={true} field="categories" header="Seo Title" body={`About the ${currentDomain}`} className="text-left text-sm font-medium"></Column>
                         <Column expander={true} field="id" header="Meta Desc" body={`Aviran Zazon: Crafting a Legacy in Tech and Beyond - Sticky ${currentDomain}`} className="text-left text-sm font-medium">
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 text-sm">Edit</button>
@@ -216,7 +155,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                 </>
             )
             }
-           
+
 
         </div >
     );

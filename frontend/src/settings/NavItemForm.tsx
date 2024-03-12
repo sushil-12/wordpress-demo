@@ -14,7 +14,6 @@ import { createSlug } from "@/lib/utils";
 import { domainSidebarLinks } from "@/constants";
 import { Dropdown } from "primereact/dropdown";
 import { saveDatatoSidebar } from "@/lib/appwrite/api";
-import { Edit3Icon, Trash2Icon } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import SvgPickerComponent from "@/components/shared/SvgPickerComponent";
 import SvgComponent from "@/utils/SvgComponent";
@@ -122,13 +121,22 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
             console.log(type)
-            console.log(svgName, localItem, "after reset")
-            replace(localItem.subcategory)
-            setCurrentIndexItem(localItem.subcategory)
+            console.log(svgName, localItem, "after reset");
+            const updatedSubcategory = localItem?.subcategory?.map((item, index) => {
+                return {
+                    ...item,
+                    index: index // or any unique identifier you want to use as the key
+                };
+            });
+            
+            replace(updatedSubcategory)
+            console.table(updatedSubcategory)
+            setCurrentIndexItem(updatedSubcategory)
             setSvgName(localItem?.imgURL); form.setValue('id', localItem.id); form.setValue('route', localItem.route); form.setValue('label', localItem?.label); form.setValue('type', localItem.type); form.setValue('category', localItem.category ? 'yes' : 'no'); setType(localItem.type);
         } else {
             form.reset()
         };
+
 
     }, [item, localItem, activeDomain]);
 
@@ -136,17 +144,21 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     const { toast } = useToast()
 
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
+        replace(currentIndexItem)
         // @ts-ignore
-        values.subcategory = fields.map(field => ({
-            id: values.id || Math.random().toString(36).substr(2, 9),// @ts-ignore
+        values.subcategory = currentIndexItem.map(field => ({// @ts-ignore
+            id: values.subcategory?.id || Math.random().toString(36).substr(2, 9),// @ts-ignore
             label: field.label,// @ts-ignore
-            route: createSlug('/' + values.label + '/' + field.route),// @ts-ignore
+            route: field.route.includes('/' + values.label+'/') ? createSlug(field.label): createSlug('/' + values.label + '/' +  field.label),// @ts-ignore
             imgURL: field.imgURL
         }));
 
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
         let currentCommonSchema = domainSidebarLinks.comman;
+        if (values.route.includes('/')) {
+            values.route = values.route.replace('/', '');
+        }
         let route_link = values.type === 'custom_post' ? `/posts/${values.route}` : `/` + values.route;
 
         if (activeTab === 'website') {
@@ -172,10 +184,11 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
             if (values.subcategory.length > 0) {
                 newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, subcategory: values.subcategory };
+               
             } else {
-                newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label };
+                newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, subcategory:[] };
             }
-
+            
             // @ts-ignore
             if (values.id) {
                 // @ts-ignore
@@ -284,7 +297,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                     <FormLabel>
                         <div className="flex align-middle items-center">Choose Icon
-                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><Edit3Icon /></Button >
+                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><SvgComponent className="" svgName="edit"/></Button >
                             {/* @ts-ignore */}
                             <SvgComponent className="border border-primary-500 p-4" svgName={svgName} />
                         </div>
@@ -312,7 +325,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                     {activeTab === 'comman' && (
                         <div className="border border-dashed">
-                            {fields.map((field, index) => (
+                            {fields.length>0 && fields.map((field, index) => (
                                 <div key={field.id} className="dynamic-field p-4 flex gap-4 font-inter text-sm align-middle">
                                     {/* Field 1 in repeater */}
                                     <FormField
@@ -327,12 +340,11 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                                             const labelValue = e.target.value;// @ts-ignore
                                                             setValue('label', labelValue);// @ts-ignore
                                                             const existingIndex = currentIndexItem.findIndex(item => item.index === index);
-                                                            
-                                                            console.log(existingIndex, currentIndexItem)
                                                             if (existingIndex !== -1) {
                                                                 setCurrentIndexItem(prevIndexItem => {
                                                                     const updatedItem = [...prevIndexItem];// @ts-ignore
                                                                     updatedItem[existingIndex] = { ...updatedItem[existingIndex], label: labelValue };
+                                                                    console.table(updatedItem)
                                                                     return updatedItem;
                                                                 });
                                                             } else {
@@ -353,7 +365,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                     {/* Icon Selection */}
                                     <div className="flex align-middle items-center">
                                         Choose Icon 
-                                        <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><Edit3Icon /></Button >
+                                        <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><SvgComponent className="" svgName="edit"/></Button >
                                         <Dialog visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
                                             <SvgPickerComponent setSvgName={currentIndex} currentIndexItem={currentIndexItem} updateFieldAtIndex={updateFieldAtIndex} setSvgPicker={setRepeaterSvgPicker} form_type={'repeater'} />
                                         </Dialog>

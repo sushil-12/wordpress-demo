@@ -13,14 +13,13 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({ rowCount }) => {
     const renderSkeleton = () => <Skeleton width="100%" height="1.5rem" />;
     
     const columns = [
-        { field: 'code', width: '25%' },
-        { field: 'name', width: '25%' },
-        { field: 'category', width: '25%' },
-        { field: 'quantity', width: '25%' },
+        { field: 'code', width: '33%' },
+        { field: 'name', width: '33%' },
+        { field: 'category', width: '33%' },
     ];
     return (
         <div className="card">
-            <DataTable value={items} className="p-datatable-striped" header={<Skeleton  width="100%" height="1.5rem" />}>
+            <DataTable value={items} className="p-datatable-striped" >
                 {columns.map((column, index) => (
                     <Column key={index} field={column.field} style={{ width: column.width }} body={renderSkeleton} />
                 ))}

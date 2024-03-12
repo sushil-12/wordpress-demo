@@ -31,7 +31,7 @@ const PageComponent = () => {
   const { mutateAsync: getAllPosts, isPending: isLoading } = useGetAllPosts();
   const fetchPosts = async () => {
     try {
-      const postResponse = await getAllPosts({ page: pagination.page, limit: pagination.limit, post_type: defaultPostType });
+      const postResponse = await getAllPosts({ page: pagination.page, limit: pagination.limit, post_type: defaultPostType, search: searchInput  });
       setPost(postResponse?.data?.posts);
       setPagination(postResponse?.data?.pagination || {});
     } catch (error) {
@@ -41,10 +41,11 @@ const PageComponent = () => {
   };
   useEffect(() => {
     fetchPosts();
-  }, [setPost, post_type]);
-  console.log(`${currentDomain}/post/${post_type}`);
+    console.error(`posts`, posts);
+  }, [setPost, post_type, render, searchInput]);
+
   return (
-    <div className="main-container px-5 w-full overflow-hidden ">
+    <div className="main-container w-full overflow-hidden ">
       <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[31px]">
         <div className="flex gap-[15px]">
           <h3 className="page-titles capitalize">{(post_type + 's')}</h3>
@@ -67,7 +68,9 @@ const PageComponent = () => {
 
         </div>
       </div>
-      <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} setRerender={setRerender} />
+      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5 py-5">
+        <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} setRerender={setRerender} render={render} />
+      </div>
     </div>
   )
 }

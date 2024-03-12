@@ -175,7 +175,7 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                             ) : (
                                 <>
                                     <SvgComponent className="h-6 w-6" svgName="checked" />
-                                    Copy URL to clipboard
+                                    Copied to clipboard
                                 </>
                             )}
                         </span>

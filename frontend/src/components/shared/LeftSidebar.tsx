@@ -27,19 +27,29 @@ const LeftSidebar = () => {
     const [activeSubmenu, setActiveSubmenu] = useState('');
 
     const toggleActiveSubmenu = (submenuKey: string) => {
+
         setActiveSubmenu(submenuKey);
+        const submenuDropdown = document.getElementById(`${submenuKey}-dropdown`);
+        const hasBlockClass = submenuDropdown?.classList.contains('hidden');
+        console.log(hasBlockClass, submenuDropdown);
         const dropdownArrows = document.getElementsByClassName(`${createSlug(submenuKey)}-dropdown-arrow`);
         const submenu = document.getElementsByClassName(`submenu`);
 
         for (let i = 0; i < submenu.length; i++) {
             submenu[i].classList.remove('rotated');
         }
+
+        // Toggle the 'rotated' class for dropdown arrows
         for (let i = 0; i < dropdownArrows.length; i++) {
-            dropdownArrows[i].classList.toggle('rotated');
+            const arrow = dropdownArrows[i] as HTMLElement;
+            arrow.classList.toggle('rotated', !hasBlockClass);
         }
     };
 
     const toggleDropdown = (label: any) => {
+        const websiteDropdown = document.getElementById(`${createSlug(label)}-dropdown`);
+        const hasBlockClasswebsiteDropdown = websiteDropdown?.classList.contains('hidden');
+        console.log(websiteDropdown, createSlug(label), document.getElementsByClassName(`${createSlug(label)}-dropdown-arrow`)[0])
 
         Object.keys(dropdownVisibility).forEach((dropdownLabel) => {
             if (dropdownLabel !== label && dropdownVisibility[dropdownLabel]) {
@@ -57,7 +67,13 @@ const LeftSidebar = () => {
             menu[i].classList.remove('rotated');
         }
         if (dropdownArrow) {
-            dropdownArrow.classList.toggle('rotated');
+            dropdownArrow.classList.toggle('rotated', true);
+        }
+        console.warn(hasBlockClasswebsiteDropdown, '')
+        if (hasBlockClasswebsiteDropdown) {
+            document.getElementsByClassName(`${createSlug(label)}-dropdown-arrow`)[0].classList.remove('rotated')
+        } else {
+            document.getElementsByClassName(`${createSlug(label)}-dropdown-arrow`)[0].classList.add('rotated')
         }
     };
     const closeDropdown = (label: any) => {
@@ -72,7 +88,7 @@ const LeftSidebar = () => {
         if (isSuccess) {
             navigate(0);
         }
-        console.log(rerender, "TEST REE")
+
         const websiteKeys = Object.keys(websites);
         let matchedKey = null;
         websiteKeys.some(key => {
@@ -97,8 +113,7 @@ const LeftSidebar = () => {
                     <div className="cu-simple-bar-resizer-handle ng-tns-c2398600540-13"></div>
                     <div className="h-[10%] flex gap-3 items-center justify-center px-16">
                         <Link to="/" className="m-0">
-                            {/* <img src={logoPath || '/assets/images/logo-dashboard.svg'} alt="Logo" width={108} height={34} /> */}
-                             Wordpress
+                            <img src={logoPath || '/assets/images/logo-dashboard.svg'} alt="Logo" width={108} height={34} />
                         </Link>
                     </div>
                     <div className=" bg-light-1 dark:bg-gray-800  min-h-[80%] max-h-[80%] overflow-y-auto overflow-x-hidden">
@@ -112,7 +127,7 @@ const LeftSidebar = () => {
 
                                 return (
                                     <React.Fragment key={link.label}>
-                                        {link?.subcategory ? (
+                                        {link?.subcategory.length > 0 ? (
                                             <li className="  left-sidebar-link-dropdown my-auto border-b">
                                                 <button type="button" className="flex relative justify-between items-center  pl-6 w-full min-h-[60px]" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
@@ -123,11 +138,11 @@ const LeftSidebar = () => {
 
                                                     <img src="/assets/icons/down-arrow.svg" className={`${createSlug(link?.label)}-dropdown-arrow menu float-right me-5 `} alt="" />
                                                 </button>
-                                                <ul id={`${link?.label}-dropdown`} className={`relative pl-6 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
+                                                <ul id={`${createSlug(link?.label)}-dropdown`} className={`relative pl-6 ${dropdownVisibility[link?.label || ''] ? 'block' : 'hidden'}`}>
                                                     {link.subcategory.map((subcategoryLink: INavLink) => ( // Changed variable name to avoid conflict
                                                         <li key={subcategoryLink.label} className={` group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                             <div className="links">
-                                                                
+
                                                                 <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
                                                                     <SvgComponent className=" leftsidebar_icons-submenu w-4 h-4 group-hover:invert-primary-500 " svgName={subcategoryLink.imgURL || 'briefcase'} />
                                                                     {subcategoryLink.label}
@@ -174,8 +189,10 @@ const LeftSidebar = () => {
                                         <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
                                             <button type="button" className="flex items-center justify-between w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
-                                                <div className="flex gap-[9px] items-center"><SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
-                                                <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(submenuKey)}</span></div>
+                                                <div className="flex gap-[9px] items-center">
+                                                    <SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
+                                                    <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] leading-6 ">{formatString(submenuKey)}</span>
+                                                </div>
                                                 <img src="/assets/icons/down-arrow.svg" className={`${createSlug(submenuKey)}-dropdown-arrow submenu me-14`} alt="" />
                                             </button>
 
@@ -191,7 +208,7 @@ const LeftSidebar = () => {
                                                         {link.category ? (
                                                             <li className="left-sidebar-web-link hover:bg-gray-100 ">
                                                                 <button type="button" className=" left-sidebar-web-link justify-between flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
-                                                                    <div className="flex gap-[6px]">
+                                                                    <div className="flex gap-[6px] items-center">
                                                                         <SvgComponent className=" leftsidebar_icons_website group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                                         <span className="flex-1 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(link.label)}</span>
                                                                     </div>
@@ -257,8 +274,7 @@ const LeftSidebar = () => {
                             </div>
                             <div className="flex flex-col">
                                 <p className="body-bold">
-                                    {/* {user?.firstName} */}
-                                    Sushil
+                                    {user?.firstName}
                                 </p>
                                 <p className="text-xs underline font-normal">
                                     My Profile

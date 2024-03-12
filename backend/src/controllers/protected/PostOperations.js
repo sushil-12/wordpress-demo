@@ -204,7 +204,6 @@ const getAllPosts = async (req, res) => {
             };
         }));
         const totalCount = await Post.countDocuments(query);
-        console.log(formattedPosts)
         ResponseHandler.success(res, { posts: formattedPosts, totalCount, currentPage: parseInt(page) }, 200);
     } catch (error) {
         ErrorHandler.handleError(error, res);
@@ -280,7 +279,7 @@ const deletePost = async (req, res) => {
 const quickEditPost = async (req, res) => {
     try {
         const { post_id } = req.params;
-        const { title, slug, month, date, day, time, status } = req.body;
+        const { title, slug, publicationDate, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(post_id)) {
             throw new CustomError(400, 'Invalid post ID');
@@ -303,6 +302,9 @@ const quickEditPost = async (req, res) => {
 
         if (status && allowedStatuses.includes(status)) {
             post.status = status;
+        }
+        if(publicationDate){
+            post.publicationDate = publicationDate;
         }
 
         await post.save();

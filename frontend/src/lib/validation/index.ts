@@ -105,10 +105,7 @@ export const quickEditFormSchema = z.object({
     title: z.string().min(1),
     slug: z.string(),
     status:z.string(),
-    month:z.string(),
-    day:z.string(),
-    time:z.string(),
-    year:z.string(),
+    publicationDate:z.date(),
     sticky:z.boolean()
 
 });
@@ -150,6 +147,7 @@ export const mediaEditFormSchema = z.object({
 })
 
 const subNavItemSchema = z.object({
+    id:z.string(),
     name:  z.string().min(1, { message: "Too Short" }).max(50).refine(value => value.length <= 50, {
         message: 'Too big, less than 50 characters please',
         path: ['label'],
