@@ -21,16 +21,22 @@
       "label": "Buisness Statistic",
       "subcategory": [
         {
-          "id": "oj7r51vah",
+          "id": "o8tq215dn",
           "label": "Stats one",
           "route": "/buisness-statistic/stats-one",
           "imgURL": "categories"
         },
         {
-          "id": "e6cyc6z3z",
+          "id": "8j4whex9f",
           "label": "Stats two",
           "route": "/buisness-statistic/stats-two",
           "imgURL": "pages"
+        },
+        {
+          "id": "l5yckp2lq",
+          "label": "Stats three",
+          "route": "/buisness-statistic/stats-three",
+          "imgURL": "star"
         }
       ]
     },
@@ -39,6 +45,13 @@
       "imgURL": "posts",
       "route": "/inventions",
       "label": "Inventions",
+      "subcategory": []
+    },
+    {
+      "id": "ooii78et7",
+      "imgURL": "reviews",
+      "route": "/pages",
+      "label": "Pages",
       "subcategory": []
     }
   ],

@@ -20,7 +20,6 @@ const SvgPickerComponent = ({ setSvgName, setSvgPicker, form_type = 'normal', up
     // @ts-ignore
     const handleDoubleClick = (svgName) => {
         if (form_type === 'repeater' && updateFieldAtIndex) {
-            console.log("Propes", setSvgName)
             updateFieldAtIndex(setSvgName, svgName, currentIndexItem );
             setSvgPicker(false);
         }

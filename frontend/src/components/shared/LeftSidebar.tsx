@@ -201,7 +201,7 @@ const LeftSidebar = () => {
                                         <ul id={`${submenuKey}-dropdown`} className={` ${activeSubmenu === submenuKey ? 'block' : 'hidden'}`}>
                                             {/* Render submenu items */}
                                             {submenuItems.map((link: INavLink) => {
-                                                const isWebActive = new RegExp(`\\b${submenuKey}${link.route}\\b`).test(pathname);
+                                                const isWebActive = new RegExp(`${submenuKey}${link.route}$`).test(pathname);
                                                 // Assuming pathname is defined somewhere
                                                 return (
                                                     <React.Fragment key={link.label}>

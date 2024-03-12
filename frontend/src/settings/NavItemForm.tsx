@@ -51,16 +51,16 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         name: 'fields',
     });
     // @ts-ignore
-    const updateFieldAtIndex = (index, svgName, currentIndexItem) => {
+    const updateFieldAtIndex = (index, svgName,  currentIndexItem) => {
         // Make sure the index is valid
-        console.log(fields);
         if (index >= 0 && index < fields.length) {
-            console.log(index, fields)
+            console.log(index, fields);
             const updatedFields = fields[index];
-            console.log("UPDATED FIELDS", updatedFields)
-            const label = currentIndexItem[index].label
-            console.log("UPDATED", updatedFields)
+            console.table(currentIndexItem);
+            const label = currentIndexItem[index].label;
 
+            console.log("UPDATED", updatedFields, svgName);
+    
             const route = createSlug(label);
             let updatedFieldsArray = {
                 label: label,
@@ -68,6 +68,16 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                 route: route
             };
             update(index, updatedFieldsArray);
+    
+            // Update currentIndexItem as well
+            const updatedCurrentIndexItem = [...currentIndexItem];
+            console.table(updatedCurrentIndexItem);
+            updatedCurrentIndexItem[index] = {
+                ...updatedCurrentIndexItem[index],
+                imgURL: svgName,
+                route: route
+            };// @ts-ignore
+            setCurrentIndexItem(updatedCurrentIndexItem);
         } else {
             console.error('Invalid index provided for update');
         }
@@ -149,8 +159,8 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         values.subcategory = currentIndexItem.map(field => ({// @ts-ignore
             id: values.subcategory?.id || Math.random().toString(36).substr(2, 9),// @ts-ignore
             label: field.label,// @ts-ignore
-            route: field.route.includes('/' + values.label+'/') ? createSlug(field.label): createSlug('/' + values.label + '/' +  field.label),// @ts-ignore
-            imgURL: field.imgURL
+            route: field?.route?.includes('/' + values.label+'/') ? createSlug(field.label): createSlug('/' + values.label + '/' +  field.label),// @ts-ignore
+            imgURL: field?.imgURL
         }));
 
         // @ts-ignore
@@ -216,6 +226,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             form.reset();
             replace([]);
             setLocalItem(null)
+            setCurrentIndexItem([])
             setRerender((prev: boolean) => !prev);
             setSelectedItem(null); setSvgName('');
             return toast({ variant: 'default', description: message });
