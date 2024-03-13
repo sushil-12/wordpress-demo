@@ -94,7 +94,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                     <button className='border-none text-primary-500'>View</button>
                 </div>
             ) : (
-                <QuickEditForm setIsQuickEditForm={setIsQuickEditForm} rowData={rowData} setRerender={setRerenderPostTable} rerenderPostTable={rerenderPostTable} />
+                <QuickEditForm setIsQuickEditForm={setIsQuickEditForm} rowData={rowData} setRerender={setRerenderPostTable} rerenderPostTable={rerenderPostTable} post_type={post_type} />
             )
         );
     };

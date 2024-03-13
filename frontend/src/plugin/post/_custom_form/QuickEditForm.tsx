@@ -29,9 +29,10 @@ interface Props {
     rowData: PostModel; // Replace YourRowDataType with the type of rowData
     setRerender: React.Dispatch<React.SetStateAction<boolean>>;
     rerenderPostTable: boolean;
+    post_type: string
 }
 
-const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable }) => {
+const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable, post_type }) => {
     const currentMonthIndex = new Date().getMonth();
     const currentdate = new Date();
     const [date, setDate] = useState(currentdate);
@@ -154,97 +155,98 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
 
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="sticky"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <div className="flex align-items-center gap-[8px] w-[200px]">
-                                                    <input
-                                                        type="checkbox"
-                                                        id="sticky"
-                                                        name="sticky"
-                                                        onChange={(e) => {
-                                                            form.setValue('sticky', e.target.checked);
-                                                        }}
-                                                        width={"16px"}
-                                                        height={"16px"}
-                                                        checked={form.getValues('sticky')}
-                                                    />
-                                                    <label htmlFor="sticky" className="text-sm font-medium leading-[20px]">
-                                                        Make this interview sticky
-                                                    </label>
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
-                                    )}
-                                />
+                                {post_type !== 'page' && (
+                                    <FormField
+                                        control={form.control}
+                                        name="sticky"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <div className="flex align-items-center gap-[8px] w-[250px]">
+                                                        <input
+                                                            type="checkbox"
+                                                            id="sticky"
+                                                            name="sticky"
+                                                            onChange={(e) => {
+                                                                form.setValue('sticky', e.target.checked);
+                                                            }}
+                                                            width={"16px"}
+                                                            height={"16px"}
+                                                            checked={form.getValues('sticky')}
+                                                        />
+                                                        <label htmlFor="sticky" className="text-sm font-medium leading-[20px]">
+                                                            Make this {post_type} sticky
+                                                        </label>
+                                                    </div>
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
+
                             </div>
 
-                            <div className="flex gap-2.5 items-center">
+                            {post_type !== 'page' && (
+                                <div className="flex gap-2.5 items-center">
 
-                                <FormField
-                                    control={form.control}
-                                    name="publicationDate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Calendar value={date} className="w-[91px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="month" dateFormat="M" />
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
-                                    )}
-                                />
+                                    <FormField
+                                        control={form.control}
+                                        name="publicationDate"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Calendar value={date} className="w-[91px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="month" dateFormat="M" />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
+                                        )}
+                                    />
 
-                                <FormField
-                                    control={form.control}
-                                    name="publicationDate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Calendar value={date} className="w-[45px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="date" dateFormat="dd" />
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
+                                    <FormField
+                                        control={form.control}
+                                        name="publicationDate"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Calendar value={date} className="w-[45px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="date" dateFormat="dd" />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
 
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="publicationDate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Calendar value={date} className="w-[60px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="year" dateFormat="yyyy" />
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="publicationDate"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Calendar value={date} className="w-[60px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="year" dateFormat="yyyy" />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
 
-                                    )}
-                                />
-                                at
-                                <FormField
-                                    control={form.control}
-                                    name="publicationDate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                {/* <Input
-                                                        className="shad-input w-[78px]"
-                                                        placeholder="00:00"
-                                                        {...field}
-                                                    /> */}
-                                                <Calendar value={date} onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} className='shad-input w-[78px]' timeOnly />
+                                        )}
+                                    />
+                                    at
+                                    <FormField
+                                        control={form.control}
+                                        name="publicationDate"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Calendar value={date} onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} className='shad-input w-[78px]' timeOnly />
+                                                </FormControl>
+                                                <FormMessage className="shad-form_message" />
+                                            </FormItem>
 
-                                            </FormControl>
-                                            <FormMessage className="shad-form_message" />
-                                        </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            )}
 
-                                    )}
-                                />
-                            </div>
+
 
                         </div>
 
