@@ -223,11 +223,11 @@ const Profile = () => {
                 <div className="flex action_buttons gap-[10px]">
                   <input type="file" accept="image/*" multiple={false} className="hidden" onChange={handleFileChange} ref={fileInputRef} />
                   {/* @ts-ignore */}
-                  <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[40px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
+                  <button className="bg-primary-500 rounded flex text-white items-center w-[86px] h-[30px] small-regular py-2.5" onClick={() => fileInputRef.current.click()}>
                     <SvgComponent className="pl-3 pr-2 " svgName="upload" />Upload
                     {/* <img src="/assets/icons/upload.svg" alt="" className="pl-3 pr-2 " />Upload */}
                   </button>
-                  <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[40px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
+                  <button onClick={() => { form.unregister('profile_pic'); setImageSrc(currentUser?.profile_pic); console.log(imageSrc) }} className="bg-light-1 rounded flex text-main-bg-900 items-center w-[64px] h-[30px] small-regular py-2.5 pl-2.5 border-main-bg-900 border" >Cancel</button>
                 </div>
               </div>
             </div>
@@ -265,13 +265,13 @@ const Profile = () => {
                       <div className={`flex items-center `}>
                         <Input className={`outline-none shadow-none w-[350px] read-only:border-none  ${isEmailVerified && 'pointer-events-none'}`} readOnly={!isEditingEmail} {...field} />
 
-                        {!isEditingEmail ? (<button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>) :
+                        {!isEditingEmail ? (<button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Email</button>) :
                           (
                             <div className="flex flex-row gap-2">
-                              {form.getValues('email') !== currentUser.email && !isEmailVerified ? (<button onClick={() => { event?.preventDefault(); verifyEmail();  }} className="bg-primary-500 rounded flex ml-1 text-white items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" > {
+                              {form.getValues('email') !== currentUser.email && !isEmailVerified ? (<button onClick={() => { event?.preventDefault(); verifyEmail();  }} className="bg-primary-500 rounded flex ml-1 text-white items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" > {
                                 isVerifyingEmail ? <Loader /> : 'Verify Email'
                               }</button>) : ''}
-                              <button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); setIsEmailVerified(false); form.setValue('email', currentUser.email); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >{'Cancel Editing Email'}</button>
+                              <button onClick={() => { event?.preventDefault(); setIsEditingEmail(!isEditingEmail); setIsEmailVerified(false); form.setValue('email', currentUser.email); }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >{'Cancel Editing Email'}</button>
                             </div>
                           )
                         }                        
@@ -326,7 +326,7 @@ const Profile = () => {
 
                           {errormessage != '' && <p className="text-sm ml-1 text-danger">{errormessage}</p>}
                         </Dialog>
-                        <button onClick={(e) => { e.preventDefault(); setDialog('password'); setVisible(true) }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[40px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
+                        <button onClick={(e) => { e.preventDefault(); setDialog('password'); setVisible(true) }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
                       </div>
                     </FormControl>
 
@@ -337,12 +337,12 @@ const Profile = () => {
                 />
 
                 <div className="flex gap-2.5 mt-[34px]">
-                  <Button type="submit" className="text-white w-[131px] bg-primary-500 rounded text-[16px] " disabled={disabled}>
+                  <Button type="submit" className="text-white w-[131px] h-9 bg-primary-500 rounded text-[16px] " disabled={disabled}>
                     {
                       isUpdating ? <Loader /> : 'Save changes'
                     }
                   </Button>
-                  <Button className=" bg-light-1 w-[86px] border border-primary-500 text-[16px] cursor-pointer" onClick={(event) => { event.preventDefault(); form.reset() }}>
+                  <Button className=" bg-light-1 w-[86px] border h-9 border-primary-500 text-[16px] cursor-pointer" onClick={(event) => { event.preventDefault(); form.reset() }}>
                     Clear all
                   </Button>
                 </div>
