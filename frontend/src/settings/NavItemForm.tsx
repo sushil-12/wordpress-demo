@@ -150,13 +150,12 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
     }, [item, localItem, activeDomain]);
 
-
     const { toast } = useToast()
 
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
         replace(currentIndexItem)
         // @ts-ignore
-        if(currentIndexItem && currentIndexItem.length > 0 ) {
+        if(currentIndexItem &&currentIndexItem.length > 0 ) {
             values.subcategory = currentIndexItem.map(field => ({// @ts-ignore
                 id: values.subcategory?.id || Math.random().toString(36).substr(2, 9),// @ts-ignore
                 label: field.label,// @ts-ignore

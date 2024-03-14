@@ -195,22 +195,6 @@
         "label": "Posts",
         "category": false,
         "type": "default"
-      },
-      {
-        "id": "rlutfsjuj",
-        "imgURL": "plugins",
-        "route": "/plugins",
-        "label": "plugins",
-        "category": false,
-        "type": "default"
-      },
-      {
-        "id": "iua9ypwnj",
-        "imgURL": "categories",
-        "route": "/posts/new-test-post-type-with-categorys",
-        "label": "new test post type with categorys",
-        "category": true,
-        "type": "custom_post"
       }
     ]
   }

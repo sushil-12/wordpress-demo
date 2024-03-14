@@ -32,6 +32,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
     }
     React.useEffect(()=>{console.log(render)},[render]);
     const confirmDelete= (itemId, type, submenuKey='') =>{
+        console.log(itemId, type, submenuKey)
         confirmDialog({
             message: 'Are you sure you want to delete?',
             header: 'Delete Confirmation',
@@ -46,6 +47,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
 
 
     async function handleDelete(itemId, type, submenuKey = '') {
+        console.log(itemId, type, submenuKey, "sushil");
         if (type === "comman") {
             let currentCommonSchema = domainSidebarLinks.comman;
             console.log(currentCommonSchema, itemId);
@@ -197,7 +199,7 @@ const NavDatatable: React.FC<NavDatatableprops> = ({ navItems }) => {
                                                                         </div>
                                                                         <div className="flex gap-4 items-center">
                                                                             <Edit3Icon className='cursor-pointer h-4 ' onClick={() => {setSelectedItem(link); console.log("CLicked"); }} />
-                                                                            <button onClick={() => { confirmDelete(link?.id, "comman") }}><SvgComponent className='' svgName='delete' /></button>
+                                                                            <button onClick={() => { confirmDelete(link?.id, "websites") }}><SvgComponent className='' svgName='delete' /></button>
 
                                                                         </div>
                                                                     </div>
