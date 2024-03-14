@@ -207,10 +207,10 @@
       {
         "id": "iua9ypwnj",
         "imgURL": "categories",
-        "route": "/new-test-post-type-with-category",
-        "label": "new test post type with category",
+        "route": "/posts/new-test-post-type-with-categorys",
+        "label": "new test post type with categorys",
         "category": true,
-        "type": "default"
+        "type": "custom_post"
       }
     ]
   }
