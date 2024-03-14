@@ -19,7 +19,7 @@ const SvgGrid = () => {
     return (
         <div className="card w-full h-full  bg-white border border-gray-200 rounded-lg shadow sm:p-6 dark:bg-gray-800 dark:border-gray-700 ">
             <Button className='shad-button_primary static float-right mb-2' onClick={() => setVisible(true)}>+ Upload Svg </Button>
-            <Dialog visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw', minWidth:'300px' }} header={headerTemplate} closable={false} > <UploadSvgForm setVisible={setVisible} /> </Dialog>
+            <Dialog draggable={false} visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw', minWidth:'300px' }} header={headerTemplate} closable={false} > <UploadSvgForm setVisible={setVisible} /> </Dialog>
             <div className="w-full grid sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4 text-center">
                 {/* SVG > path we can set dynamic color */}
                 {Object.entries(Icons).map(([svgName, svgContent]) => (

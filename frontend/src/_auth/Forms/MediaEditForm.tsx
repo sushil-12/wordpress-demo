@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { mediaEditFormSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
-import { useEditMedia } from "@/lib/react-query/queriesAndMutations";
+import { useDeleteMedia, useEditMedia } from "@/lib/react-query/queriesAndMutations";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { MediaItem } from "@/lib/types";
@@ -15,9 +15,11 @@ import { useEffect, useState } from "react";
 import { useMedia } from "@/context/MediaProvider";
 import { bytesToSize } from "@/lib/utils";
 import SvgComponent from "@/utils/SvgComponent";
+import { confirmDialog } from "primereact/confirmdialog";
 
 const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, handleModal }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const { mutateAsync: deleteMedia, isPending: isDeleting } = useDeleteMedia();
 
     const form = useForm<z.infer<typeof mediaEditFormSchema>>({
         resolver: zodResolver(mediaEditFormSchema),
@@ -32,7 +34,37 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
             title: item?.title,
         },
     });
-    console.log(item, "ITEM")
+    console.log(item, "ITEM");
+
+    async function accept(media_id: string) {
+        const deleteMediaResponse = await deleteMedia(media_id);
+        const updatedMedia = media.filter((item) => item.id !== media_id);
+        setMedia(updatedMedia);
+        if (!deleteMediaResponse) return toast({ variant: "destructive", description: "You have cancelled the operations" })
+        if (deleteMediaResponse?.code == 200) {
+            handleModal();
+            return toast({ variant: "default", description: deleteMediaResponse.data.message })
+        } else {
+            handleModal();
+            return toast({ variant: "destructive", description: "You have cancelled the operations" })
+        }
+    }
+
+    const reject = () => {
+        return toast({ variant: "destructive", description: "You have cancelled the operations" })
+    }
+    const confirmDelete = (media_id: string) => {
+        confirmDialog({
+            message: 'Do you want to delete this media file?',
+            header: 'Delete Confirmation',
+            acceptClassName: 'pl-4 outline-none p-2 text-sm',
+            rejectClassName: 'pl-4 outline-none p-2 text-sm text-white',
+            className: 'border bg-light-1 shadow-lg p-0',
+            accept: () => accept(media_id),
+            reject: reject,
+            draggable: false,
+        });
+    }
 
     useEffect(() => {
         form.setValue('id', item?.id);
@@ -85,7 +117,7 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                         <span className="text-xs font-[400] leading-[150%]">
                             {item.width} by {item.height} pixels
                         </span>
-                    ): (<span className="text-xs font-[400] leading-[150%]"> undefined</span>)}
+                    ) : (<span className="text-xs font-[400] leading-[150%]"> undefined</span>)}
                 </p>
                 <form
                     onChange={form.handleSubmit(onSubmit)}
@@ -181,6 +213,9 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                         </span>
 
                     </Button>
+                    <span className="text-danger cursor-pointer text-xs font-normal" onClick={() => confirmDelete(item?.id)}>
+                       {isDeleting ? 'Deleting' : 'Delete permanently'} 
+                    </span>
                 </form>
             </div>
         </Form>

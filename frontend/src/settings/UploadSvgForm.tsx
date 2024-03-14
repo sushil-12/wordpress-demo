@@ -9,6 +9,7 @@ import { useState } from "react";
 import { uploadSvg } from "@/lib/appwrite/api";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { messages } from "@/constants/message";
 
 // @ts-ignore
 const UploadSvgForm = ({setVisible}) => {
@@ -34,7 +35,7 @@ const UploadSvgForm = ({setVisible}) => {
             return toast({
                 variant: "destructive",
                 title: "Reset Failed",
-                description: "Something went wrong",
+                description: messages.default_error,
             });
         }
         const response_data = session;
@@ -43,12 +44,12 @@ const UploadSvgForm = ({setVisible}) => {
             setVisible(false);
             return  toast({
                 variant: "default",
-                title: "Icon Added Succesfuly",
+                title: messages.item_created,
             });
         } else {
             return toast({
                 variant: "destructive",
-                title: "Something went wrong",
+                title: messages.default_error,
             });
         }
 

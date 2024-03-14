@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import { messages } from '@/constants/message';
 import { useGetAllPostsAndPages, usecreateOrEditCustomField } from '@/lib/react-query/queriesAndMutations';
 import { CustomFormFieldSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -86,7 +87,7 @@ const CustomFieldForm: React.FC<CustomFieldFormSchema> = ({ setVisible, selected
             setVisible(false)
             return toast({ variant: 'destructive', description: createOrEditCustomFieldResponse.message });
         }
-        const message = createOrEditCustomFieldResponse?.code === 200 ? 'Successfully Updated CustomField' : 'Successfully Created CustomField';
+        const message = createOrEditCustomFieldResponse?.code === 200 ? messages.item_updated : messages.item_created;
         setVisible(false)
         selectedCustomField = {};
         if (createOrEditCustomFieldResponse) { return toast({ variant: 'default', description: message }); }

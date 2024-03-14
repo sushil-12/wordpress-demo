@@ -228,7 +228,7 @@ const LeftSidebar = () => {
                                                                             </NavLink>
                                                                         </div>
                                                                     </li>
-                                                                    <li className={`left-sidebar-web-link ${isWebActive ? 'bg-primary-500 text-white ' : ''}`}>
+                                                                    <li className={`left-sidebar-web-link ${isWebActive ? '' : ''}`}>
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center " to={`${submenuKey}/category${link?.route}`}>
                                                                                 {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}

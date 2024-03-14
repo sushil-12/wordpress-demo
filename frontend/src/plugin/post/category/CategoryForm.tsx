@@ -15,6 +15,7 @@ import { TreeSelect, TreeSelectChangeEvent } from 'primereact/treeselect';
 import { createSlug } from '@/lib/utils';
 import { useCategory } from './CategoryContext';
 import { useUserContext } from '@/context/AuthProvider';
+import { messages } from '@/constants/message';
 
 interface CategoryProps {
     post_type: any;
@@ -71,18 +72,18 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
         const createOrEditPostResponse = await createOrEditCategory(values);
         if (!createOrEditPostResponse) {
-            return toast({ variant: "destructive", description: "Edit Failed" })
+            return toast({ variant: "destructive", description: messages.update_error })
         }
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             const updatedPost = createOrEditPostResponse?.data?.post;
             setCurrentCategory(updatedPost);
             setSelectedCategory(updatedPost);
             form.setValue('id', updatedPost?.id);
-            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Category' : 'Successfully Created Category';
+            const message = createOrEditPostResponse?.code === 200 ? messages.item_updated :  messages.item_created;
             navigate('/' + currentDomain + '/category/' + post_type)
             return toast({ variant: 'default', description: message });
         } else {
-            return toast({ variant: 'default', description: 'Something went wrong' });
+            return toast({ variant: 'default', description: messages.default_error });
         }
     }
 

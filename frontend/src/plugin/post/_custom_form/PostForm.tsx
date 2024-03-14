@@ -17,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Tree } from "primereact/tree";
 import CustomField from "@/plugin/myCustomFields/_custom_field";
 import RepeaterField from "@/plugin/myCustomFields/_repeater_custom_field";
+import { messages } from "@/constants/message";
 
 
 interface PostFormSchema {
@@ -118,17 +119,17 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     async function onSubmit(values: z.infer<typeof PostFormSchema>) {
         const createOrEditPostResponse = await createOrEditPost(values);
         if (!createOrEditPostResponse) {
-            return toast({ variant: "destructive", description: "Edit Failed" })
+            return toast({ variant: "destructive", description: messages.update_error })
         }
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             const updatedPost = createOrEditPostResponse?.data?.post;
             setCurrentPost(updatedPost);
             form.setValue('id', updatedPost?.id);
-            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
+            const message = createOrEditPostResponse?.code === 200 ? messages.item_updated : messages.item_created;
             navigate('/'+currentDomain +'/posts/' + post_type)
             return toast({ variant: 'default', description: message });
         } else {
-            return toast({ variant: 'default', description: 'Something went wrong' });
+            return toast({ variant: 'default', description: messages.default_error });
         }
     }
 

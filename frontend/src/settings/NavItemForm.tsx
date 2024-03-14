@@ -17,6 +17,7 @@ import { saveDatatoSidebar } from "@/lib/appwrite/api";
 import { Dialog } from "primereact/dialog";
 import SvgPickerComponent from "@/components/shared/SvgPickerComponent";
 import SvgComponent from "@/utils/SvgComponent";
+import { messages } from "@/constants/message";
 
 type Website =
     | "the_logician"
@@ -59,8 +60,6 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             console.table(currentIndexItem);
             const label = currentIndexItem[index].label;
 
-            console.log("UPDATED", updatedFields, svgName);
-    
             const route = createSlug(label);
             let updatedFieldsArray = {
                 label: label,
@@ -224,7 +223,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         const createOrEditNavItemResponse = await saveDatatoSidebar(domainSidebarLinks);
 
         if (createOrEditNavItemResponse?.code === 200 || createOrEditNavItemResponse?.code === 201) {
-            const message = createOrEditNavItemResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
+            const message = createOrEditNavItemResponse?.code === 200 ?  messages.item_updated : messages.item_created;
             form.reset();
             replace([]);
             setLocalItem(null)
@@ -233,7 +232,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             setSelectedItem(null); setSvgName('');
             return toast({ variant: 'default', description: message });
         } else {
-            return toast({ variant: 'default', description: 'Something went wrong' });
+            return toast({ variant: 'default', description:  messages.default_error });
         }
     }
 
@@ -379,7 +378,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                     <div className="flex align-middle items-center">
                                         Choose Icon 
                                         <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><SvgComponent className="" svgName="edit"/></Button >
-                                        <Dialog visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
+                                        <Dialog  draggable={false} visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
                                             <SvgPickerComponent setSvgName={currentIndex} currentIndexItem={currentIndexItem} updateFieldAtIndex={updateFieldAtIndex} setSvgPicker={setRepeaterSvgPicker} form_type={'repeater'} />
                                         </Dialog>
                                         {/* @ts-ignore */}
@@ -403,7 +402,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                         </div>
                     )}
 
-                    <Dialog visible={svgPicker} onHide={() => setSvgPicker(false)} style={{ width: '60vw' }} header={headerTemplate} closable={false} > {/* @ts-ignore */}
+                    <Dialog draggable={false} visible={svgPicker} onHide={() => setSvgPicker(false)} style={{ width: '60vw' }} header={headerTemplate} closable={false} > {/* @ts-ignore */}
                         <SvgPickerComponent setSvgName={setSvgName} setSvgPicker={setSvgPicker} />
                     </Dialog>
 

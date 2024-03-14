@@ -71,6 +71,7 @@ const Profile = () => {
       setErrorMessage('');
       setVisible(false);
       setIsEditingPass(!isEditingPass);
+      form.setValue('password', '');
     }
   }
 
@@ -87,6 +88,7 @@ const Profile = () => {
           setErrorMessage(result?.response?.data?.message?.message);
           return;
         } else if (result?.data?.status == 'success' && result?.data?.data?.email_sent) {
+         
           setIsVerifyingEmail(false);
           setErrorMessage('');
           setFormType('verification')
@@ -186,9 +188,11 @@ const Profile = () => {
         updateData.profile_pic = values.profile_pic;
       }
       const updateResponse = await editProfile(updateData);
-      console.log(updateResponse);
+      form.setValue('password', 'Click the button to change your password')
       setRerender((prev: boolean) => !prev);
       setisUpdating(false);
+      setIsEditingPass(false);
+      setIsEditingEmail(false);
       return toast({ description: 'Profile Edited Succesfuly!' })
     } catch (error) {
       return toast({ description: 'Profile Edited Failed!', variant: 'destructive' })
@@ -211,7 +215,7 @@ const Profile = () => {
       {loader ? (<ProfilePageSkeleton />) : (
         <div className="main-content  h-[90vh] min-h-[90vh] max-h-[90vh] overflow-x-hidden overflow-y-auto p-5">
           <h3 className="page-subtitles mt-3">Edit profile picture</h3>
-          <div className="edit_image_container pt-[40px] mb-[70px]">
+          <div className="edit_image_container pt-[2.5rem] mb-[4.375rem]">
             <div className="flex items-center gap-8">
               <div className="">
                 {imageSrc == '' ? (<Skeleton width="110px" height="110px" className="rounded-full"></Skeleton>) : <img src={`${imageSrc}`} alt="" className="w-[110px] h-[110px]" />}
@@ -219,7 +223,7 @@ const Profile = () => {
               </div>
               <div className="img_description flex flex-col ">
                 <span className="page-innertitles mb-2.5">Upload new image</span>
-                <span className="mb-4 font-normal text-[16px] leading-[150%]">Max file size - 128kb</span>
+                <span className="mb-4 font-normal text-[1rem] leading-[150%]">Max file size - 128kb</span>
                 <div className="flex action_buttons gap-[10px]">
                   <input type="file" accept="image/*" multiple={false} className="hidden" onChange={handleFileChange} ref={fileInputRef} />
                   {/* @ts-ignore */}
@@ -242,7 +246,7 @@ const Profile = () => {
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem className="outline-none">
                     <FormLabel className="text-secondary-label">Name</FormLabel>
-                    <FormControl><Input className="outline-none w-[350px]" placeholder="Add name" {...field} /></FormControl>
+                    <FormControl><Input className="outline-none w-[21.875rem]" placeholder="Add name" {...field} /></FormControl>
                     <FormMessage className="shad-form_message" />
                   </FormItem>
                 )}
@@ -291,7 +295,7 @@ const Profile = () => {
                     <FormControl>
                       <div className="flex items-center">
                         <Input
-                          className="outline-none w-[350px] read-only:border-none"
+                          className="outline-none w-[21.875rem] read-only:border-none"
                           {...field}
                           readOnly={!isEditingPass}
                           onInputCapture={() => {
@@ -301,7 +305,7 @@ const Profile = () => {
                             }
                           }}
                         />
-                        <Dialog visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw', minWidth: '300px' }} header={headerTemplate} closable={false} >
+                        <Dialog visible={visible} onHide={() => setVisible(false)} style={{ width: '30vw', minWidth: '300px' }} header={headerTemplate} closable={false} draggable={false} >
                           {
                             dialog == 'verification' ? (
                               <div className="flex">
@@ -324,7 +328,7 @@ const Profile = () => {
                             )
                           }
 
-                          {errormessage != '' && <p className="text-sm ml-1 text-danger">{errormessage}</p>}
+                          {errormessage != '' && <p className="text-sm ml-1 text-error">{errormessage}</p>}
                         </Dialog>
                         <button onClick={(e) => { e.preventDefault(); setDialog('password'); setVisible(true) }} className="bg-light-1 rounded flex ml-1 text-main-bg-900 items-center  h-[30px] small-regular py-2.5 pl-2.5 pr-2.5 border-main-bg-900 border" >Edit Password</button>
                       </div>

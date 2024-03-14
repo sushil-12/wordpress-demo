@@ -20,6 +20,7 @@ import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { useEffect, useState } from "react";
+import { messages } from "@/constants/message";
 
 const SignInForm = () => {
   const location = useLocation();
@@ -107,7 +108,7 @@ const SignInForm = () => {
       return toast({
         variant: "destructive",
         title: "SignIn Failed",
-        description: "Something went wrong",
+        description: messages.default_error,
       });
     }
     if (session?.response?.data?.status == 'error') {

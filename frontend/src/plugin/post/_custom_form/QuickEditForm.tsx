@@ -23,6 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Loader from '@/components/shared/Loader';
 import { PostModel } from '@/lib/types';
 import { render } from 'react-dom';
+import { messages } from '@/constants/message';
 
 interface Props {
     setIsQuickEditForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -72,14 +73,14 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
         values.publicationDate = date;
         const createOrEditPostResponse = await quickEditPostById({ post_id: rowData.id, postData: values });
         if (!createOrEditPostResponse) {
-            return toast({ variant: "destructive", description: "Edit Failed" })
+            return toast({ variant: "destructive", description: messages.delete_error })
         }
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             setRerender(!rerenderPostTable);
-            const message = createOrEditPostResponse?.code === 200 ? 'Successfully Updated Post' : 'Successfully Created Post';
+            const message = createOrEditPostResponse?.code === 200 ? messages.item_updated : messages.item_updated;
             return toast({ variant: 'default', description: message });
         } else {
-            return toast({ variant: 'default', description: 'Something went wrong' });
+            return toast({ variant: 'default', description: messages.default_error });
         }
 
     }

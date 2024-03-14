@@ -47,7 +47,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, defaultValue }) => 
       {selectedImage && (
         <div className='p-0'>
           <ImageView src={selectedImage.url} alt={selectedImage.alt_text} preview title='Featured Image' className='p-0' />
-          <Button label="Remove Featured Image" className='p-2 text-sm bg-transparent text-danger border-none text-right' icon="pi pi-trash" onClick={removeFeaturedImage} />
+          <Button label="Remove Featured Image" className='p-2 text-sm bg-transparent text-error border-none text-right' icon="pi pi-trash" onClick={removeFeaturedImage} />
         </div>
       )}
 
@@ -55,7 +55,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, defaultValue }) => 
         className="min-w-fit bg-white dark:bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl"
         style={{ maxWidth: "60%", width: '60%', minWidth: '600px' }}
         visible={isModalOpen}
-        onHide={closeModal}
+        onHide={closeModal}draggable={false}
         header="Media Library"
       >
         <ImageLibrary onSelect={handleImageSelect} />

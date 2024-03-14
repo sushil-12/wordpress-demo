@@ -60,7 +60,7 @@ const CustomFieldDatatable = () => {
                         <span className='text-xs'> Edit</span>
                     </div>
                 </button>
-                <button className="border border-primary-500 rounded-md text-danger  px-4" onClick={() => alert('in progress')} >
+                <button className="border border-primary-500 rounded-md text-error  px-4" onClick={() => alert('in progress')} >
                     <div className="flex items-center gap-2">
                         <SvgComponent className='' svgName='delete' />
                         <span className='text-xs'> Delete</span>
@@ -83,7 +83,7 @@ const CustomFieldDatatable = () => {
 
                 </div>
                 <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden">
-                    <Dialog header="Add/Edit Custom Field" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+                    <Dialog draggable={false} header="Add/Edit Custom Field" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
                         <CustomFieldForm setVisible={setVisible} selectedCustomField={selectedCustomField} />
                     </Dialog>
                     {isCustomFieldLoading ? (<SkeletonTable rowCount={5} />) : (

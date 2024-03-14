@@ -62,7 +62,8 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const handleRowToggle = (rowData: PostModel) => {
         // Toggle expandedRow state between null and rowData.id
         console.log(expandedRows == rowData.id)
-        setExpandedRows(expandedRows === rowData.id ? rowData.id : rowData.id);
+        setExpandedRows(expandedRows === rowData.id ? ( rowData.id) : ( setIsQuickEditForm(false), rowData.id));
+
     };
 
     const titleTemplate = (rowData: PostModel) => {
@@ -90,7 +91,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                 <div className='flex gap-2.5 mt-1'>
                     <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
                     <button className='border-none text-primary-500' onClick={() => setIsQuickEditForm(true)}>Quick edit</button>
-                    <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>trash</button>
+                    <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>Trash</button>
                     <button className='border-none text-primary-500'>View</button>
                 </div>
             ) : (
@@ -127,20 +128,20 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     }
 
     return (
-        <div className="rounded-md">
+        <div className="rounded-[1px] pr-4">
             <ConfirmDialog />
             {isPostLoading || isDeleting ? (<SkeletonTable rowCount={5} />
             ) : (
                 <>
                     <DataTable
                         value={posts}
-                        paginator={posts.length > 10} rows={10} rowsPerPageOptions={[5, 10, 15, 20]}
+                        paginator={posts.length > import.meta.env.VITE_POST_PAGINATION} rows={import.meta.env.VITE_POST_PAGINATION} rowsPerPageOptions={[5, 10, 15, 20]}
                         tableStyle={{ minWidth: '60rem' }}
                         frozenRow={true}
-                        tableClassName='table-fixed rounded '
+                        tableClassName='table-fixed rounded-sm '
                         rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
                         className="w-full post_data_table table-fixed"
-                        onRowClick={(e) => { setIsQuickEditForm(false); handleRowToggle(e.data); }}
+                        onRowMouseEnter={(e) => { handleRowToggle(e.data);  }}
                     >
 
                         <Column expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>

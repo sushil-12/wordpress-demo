@@ -141,28 +141,28 @@
   }
 
   .page-titles {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 600;
     font-family: 'Inter';
     line-height: 120%;
   }
 
   .page-subtitles {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 600;
     font-family: 'Inter';
     line-height: 120%;
   }
 
   .page-innertitles {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 600;
     font-family: 'Inter';
     line-height: 120%;
   }
 
   .page-innersubtitles {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
     font-family: 'Inter';
     line-height: 120%;
@@ -171,7 +171,7 @@
   .dropzone {
     /* HE Blue */
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='24' ry='24' stroke='%23000C79FF' stroke-width='3' stroke-dasharray='6%2c 14' stroke-dashoffset='23' stroke-linecap='square'/%3e%3c/svg%3e");
-    border-radius: 24px;
+    border-radius: 1.5rem;
   }
 }
 
@@ -187,7 +187,7 @@
     font-family: "Inter", sans-serif !important;
     font-optical-sizing: auto !important;
     font-weight: 600 !important;
-    font-size: 16px !important;
+    font-size: 1rem !important;
     font-style: normal !important;
     font-variation-settings: "slnt" 0 !important;
   }
@@ -201,7 +201,7 @@
     font-family: "Inter", sans-serif !important;
     font-optical-sizing: auto !important;
     font-weight: 400 !important;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     font-style: normal !important;
     font-variation-settings: "slnt" 0 !important;
   }
@@ -219,7 +219,7 @@
     outline-offset: 0;
     box-shadow: none !important;
   }
-
+  
   .p-inputgroup:focus-within>.p-inputgroup-addon {
     border: 1px solid #000C79;
   }
@@ -307,7 +307,7 @@
   }
 
   .p-datepicker .p-timepicker span {
-    font-size: 14px !important;
+    font-size: 0.85rem !important;
     font-weight: 400;
   }
 
@@ -342,7 +342,7 @@
   .left-sidebar-web-link {
     min-height: 37px;
     font-family: 'Inter';
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
     line-height: 100%;
     background: #F8F8F8;
