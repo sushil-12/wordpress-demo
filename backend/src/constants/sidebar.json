@@ -46,13 +46,6 @@
       "route": "/inventions",
       "label": "Inventions",
       "subcategory": []
-    },
-    {
-      "id": "ooii78et7",
-      "imgURL": "reviews",
-      "route": "/pages",
-      "label": "Pages",
-      "subcategory": []
     }
   ],
   "websites": {
@@ -209,6 +202,14 @@
         "route": "/plugins",
         "label": "plugins",
         "category": false,
+        "type": "default"
+      },
+      {
+        "id": "iua9ypwnj",
+        "imgURL": "categories",
+        "route": "/new-test-post-type-with-category",
+        "label": "new test post type with category",
+        "category": true,
         "type": "default"
       }
     ]
