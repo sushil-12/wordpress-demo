@@ -80,6 +80,8 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
         if (createOrEditPostResponse?.code === 200 || createOrEditPostResponse?.code === 201) {
             setRerender(!rerenderPostTable);
             const message = createOrEditPostResponse?.code === 200 ? messages.item_updated : messages.item_updated;
+            setExpandedQuickEditRows('');
+            setIsQuickEditForm(false)
             return toast({ variant: 'default', description: message });
         } else {
             return toast({ variant: 'default', description: messages.default_error });
