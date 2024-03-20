@@ -39,13 +39,6 @@
           "imgURL": "star"
         }
       ]
-    },
-    {
-      "id": "9j9hrhaeb",
-      "imgURL": "posts",
-      "route": "/inventions",
-      "label": "Inventions",
-      "subcategory": []
     }
   ],
   "websites": {

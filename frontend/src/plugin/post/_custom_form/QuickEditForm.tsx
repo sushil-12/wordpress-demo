@@ -27,13 +27,15 @@ import { messages } from '@/constants/message';
 
 interface Props {
     setIsQuickEditForm: React.Dispatch<React.SetStateAction<boolean>>;
+    setExpandedQuickEditRows: React.Dispatch<React.SetStateAction<string>>;
+    
     rowData: PostModel; // Replace YourRowDataType with the type of rowData
     setRerender: React.Dispatch<React.SetStateAction<boolean>>;
     rerenderPostTable: boolean;
     post_type: string
 }
 
-const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable, post_type }) => {
+const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable, post_type , setExpandedQuickEditRows}) => {
     const currentMonthIndex = new Date().getMonth();
     const currentdate = new Date();
     const [date, setDate] = useState(currentdate);
@@ -255,7 +257,7 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                             <Button type="submit" className="shad-button_primary w-[64px] h-[33px] text-xs font-medium   self-end mt-2.5" disabled={isLoading} >
                                 {isLoading ? (<Loader />) : 'Update'}
                             </Button>
-                            <Button type="submit" className="bg-light-1 rounded flex  h-[33px] text-main-bg-900 text-xs font-medium mt-2.5 items-center w-[64px]  border-main-bg-900 border" onClick={() => { event?.preventDefault(); setIsQuickEditForm(false); console.log(setIsQuickEditForm) }} >
+                            <Button type="submit" className="bg-light-1 rounded flex  h-[33px] text-main-bg-900 text-xs font-medium mt-2.5 items-center w-[64px]  border-main-bg-900 border" onClick={() => { event?.preventDefault(); setIsQuickEditForm(false); setExpandedQuickEditRows('') }} >
                                 Cancel
                             </Button>
                         </div>

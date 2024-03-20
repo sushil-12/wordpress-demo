@@ -40,6 +40,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
     const [customFields, setCustomFields] = useState([]);
     const [expandedRows, setExpandedRows] = useState('');
+    const [expandedQuickEditRows, setExpandedQuickEditRows] = useState('');
     const [isQuickEditForm, setIsQuickEditForm] = useState(false)
     const [rerenderPostTable, setRerenderPostTable] = useState(false)
 
@@ -62,8 +63,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const handleRowToggle = (rowData: PostModel) => {
         // Toggle expandedRow state between null and rowData.id
         console.log(expandedRows == rowData.id)
-        setExpandedRows(expandedRows === rowData.id ? ( rowData.id) : ( setIsQuickEditForm(false), rowData.id));
-
+        setExpandedRows(expandedRows === rowData.id ? (rowData.id) : (setIsQuickEditForm(false), rowData.id));
     };
 
     const titleTemplate = (rowData: PostModel) => {
@@ -71,7 +71,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
             <>
                 <h6 className='text-sm'>
                     {rowData.title}
-                    <div className={`about_section relative w-full ${expandedRows == rowData.id ? 'block' : 'hidden'}`}>
+                    <div className={`about_section relative w-full ${expandedRows == rowData.id || expandedQuickEditRows == rowData.id ? 'block' : 'hidden'}`}>
                         <table className='w-[100vw]'>
                             <tbody>
                                 <tr>
@@ -86,16 +86,20 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     };
 
     const rowExpansionTemplate = (rowData: PostModel) => {
+        console.log(!isQuickEditForm || (expandedQuickEditRows && expandedQuickEditRows === rowData.id));
+
+        let showQuickEditForm = isQuickEditForm || expandedQuickEditRows== rowData.id
+        console.log("SHOW", showQuickEditForm)
         return (
-            !isQuickEditForm ? (
+            (!showQuickEditForm) ? (
                 <div className='flex gap-2.5 mt-1'>
                     <button className='border-none text-primary-500' onClick={() => navigate(`/${currentDomain}/post/${post_type}/${rowData?.id}`)}>Edit</button>
-                    <button className='border-none text-primary-500' onClick={() => setIsQuickEditForm(true)}>Quick edit</button>
+                    <button className='border-none text-primary-500' onClick={() => { setIsQuickEditForm(true); setExpandedQuickEditRows(rowData.id) }}>Quick   edit</button>
                     <button className='border-none text-danger' onClick={() => confirmDelete(rowData.id)}>Trash</button>
                     <button className='border-none text-primary-500'>View</button>
                 </div>
             ) : (
-                <QuickEditForm setIsQuickEditForm={setIsQuickEditForm} rowData={rowData} setRerender={setRerenderPostTable} rerenderPostTable={rerenderPostTable} post_type={post_type} />
+                <QuickEditForm setIsQuickEditForm={setIsQuickEditForm} rowData={rowData} setRerender={setRerenderPostTable} rerenderPostTable={rerenderPostTable} post_type={post_type} setExpandedQuickEditRows={setExpandedQuickEditRows} />
             )
         );
     };
@@ -141,7 +145,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                         tableClassName='table-fixed rounded-sm '
                         rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
                         className="w-full post_data_table table-fixed"
-                        onRowMouseEnter={(e) => { handleRowToggle(e.data);  }}
+                        onRowMouseEnter={(e) => { handleRowToggle(e.data); }}
                     >
 
                         <Column expander={true} field="title" header="Title" body={titleTemplate} className="text-sm font-medium"></Column>
