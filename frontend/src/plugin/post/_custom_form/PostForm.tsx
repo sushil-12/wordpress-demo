@@ -13,7 +13,7 @@ import { Loader } from "lucide-react";
 import { PostModel } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/context/AuthProvider";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Tree } from "primereact/tree";
 import CustomField from "@/plugin/myCustomFields/_custom_field";
 import RepeaterField from "@/plugin/myCustomFields/_repeater_custom_field";
@@ -38,6 +38,7 @@ const PostForm: React.FC<PostFormSchema> = ({ post_type, post }) => {
     const [customFields, setCustomFields] = useState<{ name: string; type: string, value: string }[]>([]);
     const [customRepeaterFields, setCustomRepeaterFields] = useState([]);
     const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
+    console.log(setMetaKey, isCustomFieldLoading, isCategoryLoading)
 
 
     async function fetchCategories() {
