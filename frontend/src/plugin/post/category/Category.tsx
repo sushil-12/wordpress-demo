@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import CategoryForm from './CategoryForm';
 import { useGetAllCategories } from '@/lib/react-query/queriesAndMutations';
 import CategoryDataTable from '@/components/datatable/CategoryDatatable';
@@ -6,7 +6,6 @@ import Header from '@/components/ui/header';
 import { Card } from 'primereact/card';
 import { CategoryProvider } from './CategoryContext';
 import { useParams } from 'react-router-dom';
-import SkeletonTable from '@/components/skeletons/SkeletonTable';
 import { useUserContext } from '@/context/AuthProvider';
 
 const Category = () => {
@@ -17,7 +16,7 @@ const Category = () => {
   const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
   const [categories, setCategories] = useState(null);
   const [key, setKey] = useState(0); // Add key state
-
+  console.log(categories)
   useEffect(() => {
     console.log(post_type);
 
