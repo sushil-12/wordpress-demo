@@ -46,7 +46,7 @@ const PageComponent = () => {
 
   return (
     <div className="main-container w-full overflow-hidden ">
-      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[31px]">
+      <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[31px]  overflow-hidden ">
         <div className="flex gap-[15px]">
           <h3 className="page-titles capitalize">{(post_type + 's')}</h3>
           <Button className="shad-button_primary place-self-end" size="sm" onClick={() => navigate(`/${currentDomain}/post/${post_type}`)}>
@@ -54,7 +54,7 @@ const PageComponent = () => {
           </Button>
         </div>
 
-        <div className="flex justify-start items-center py-7 relative">
+        <div className="flex justify-start items-center py-7 relative  overflow-hidden ">
           <input
             onChange={() => setSearchInput(event?.target.value)}
             value={searchInput}
@@ -68,7 +68,7 @@ const PageComponent = () => {
 
         </div>
       </div>
-      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5 py-5">
+      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto pl-5 px-[31px] py-5 overflow-x-hidden">
         <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} setRerender={setRerender} render={render} />
       </div>
     </div>

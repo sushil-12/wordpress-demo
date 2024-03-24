@@ -103,7 +103,7 @@ const login = async (req, res) => {
 
     if (form_type == 'verify_account_form') {
       if (staySignedIn == true && !user.staySignedIn || user.staySignedIn == false) {
-        sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        sign_in_stamp = new Date(Date.now() + 60 * 1000);
       }
       if (verification_code !== user.otp || new Date() > user.otpExpiry) {
         ResponseHandler.error(res, HTTP_STATUS_CODES.UNAUTHORIZED, { field_error: 'verification_code', message: "Invalid or expired verification code. Please check and try again!" }, HTTP_STATUS_CODES.UNAUTHORIZED); return;
@@ -113,7 +113,8 @@ const login = async (req, res) => {
     if (form_type === 'login_form') {
       otp = generateRandomString(6);
       if (staySignedIn == true && !user.staySignedIn || user.staySignedIn == false) {
-        sign_in_stamp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        sign_in_stamp = new Date(Date.now() + 60 * 1000);
+        console.log(sign_in_stamp);
       }
       if (staySignedIn || !require_verification) {
 
@@ -152,7 +153,7 @@ const login = async (req, res) => {
       }
     }
 
-    const token_expiry = '24h';
+    const token_expiry = '24H';
     user.staySignedIn = staySignedIn;
     user.signInTimestamp = sign_in_stamp
     user.save();

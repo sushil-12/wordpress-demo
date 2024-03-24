@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { domainSidebarLinks, logos, websites } from "@/constants";
 import { INavLink } from "@/lib/types";
-import { MenuIcon, Settings } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import { useUserContext } from "@/context/AuthProvider";
 import * as React from "react";
 import { createSlug, formatString } from "@/lib/utils";
@@ -20,7 +20,7 @@ const LeftSidebar = () => {
     const { pathname } = useLocation();
 
     const { user, currentDomain, rerender } = useUserContext();
-    const [renderSidebar, rerenderSideBar] = useState(rerender);
+    const [renderSidebar] = useState(rerender);
     const logoPath: string | undefined = logos[currentDomain as keyof typeof logos];
 
     const [dropdownVisibility, setDropdownVisibility] = useState<DropdownVisibilityState>({});
@@ -39,6 +39,11 @@ const LeftSidebar = () => {
             submenu[i].classList.remove('rotated');
         }
 
+        Object.keys(dropdownVisibility).forEach((dropdownLabel) => {
+            if (dropdownLabel !== submenuKey && dropdownVisibility[dropdownLabel]) {
+                closeDropdown(dropdownLabel);
+            }
+        });
         // Toggle the 'rotated' class for dropdown arrows
         for (let i = 0; i < dropdownArrows.length; i++) {
             const arrow = dropdownArrows[i] as HTMLElement;
@@ -131,7 +136,7 @@ const LeftSidebar = () => {
                                             <li className="  left-sidebar-link-dropdown my-auto border-b">
                                                 <button type="button" className="flex relative justify-between items-center  pl-6 w-full min-h-[60px]" aria-controls={`${link?.label}-dropdown`} data-collapse-toggle={`${link?.label}-dropdown`} onClick={() => toggleDropdown(link.label || '')}>
                                                     {/* <img src={link?.imgURL} alt={link?.label} className='pl-6 pr-1' /> */}
-                                                    <div className="flex items-center gap-[8px]">
+                                                    <div className="flex items-center gap-[8px]">{/* @ts-ignore */}
                                                         <SvgComponent className=" leftsidebar_icons" svgName={link.imgURL || 'briefcase'} />
                                                         <span className="flex-1 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] min-w-[150px] ">{link?.label}</span>
                                                     </div>
@@ -143,7 +148,7 @@ const LeftSidebar = () => {
                                                         <li key={subcategoryLink.label} className={` group ${isActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                             <div className="links">
 
-                                                                <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>
+                                                                <NavLink className="flex gap-4 items-center p-4" to={subcategoryLink.route}>{/* @ts-ignore */}
                                                                     <SvgComponent className=" leftsidebar_icons-submenu w-4 h-4 group-hover:invert-primary-500 " svgName={subcategoryLink.imgURL || 'briefcase'} />
                                                                     {subcategoryLink.label}
                                                                 </NavLink>
@@ -157,7 +162,7 @@ const LeftSidebar = () => {
                                                 <div className="link-container" >
                                                     <NavLink className="flex items-center rounded-lg dark:text-main-bg pl-6 dark:hover:bg-gray-700 group" to={link?.type == 'custom_post' ? `/posts/${link?.route}` : link?.route}>
                                                         {/* <img src={link?.imgURL} alt={link?.label} className={`pl-6 pr-1`} /> */}
-                                                        <div className="flex gap-[8px] items-center ">
+                                                        <div className="flex gap-[8px] items-center ">{/* @ts-ignore */}
                                                             <SvgComponent className=" leftsidebar_icons" svgName={link.imgURL || 'briefcase'} />
                                                             <span className="">{link.label}</span>
                                                         </div>
@@ -189,7 +194,7 @@ const LeftSidebar = () => {
                                         <li className="left-sidebar-link border-b bg-secondary-gray hover:bg-gray-100 ">
                                             <button type="button" className="flex items-center justify-between w-full" aria-controls={`${submenuKey}-dropdown`} data-collapse-toggle={`${submenuKey}-dropdown`} onClick={() => toggleActiveSubmenu(submenuKey)}>
                                                 {/* @ts-ignore */}
-                                                <div className="flex gap-[9px] items-center">
+                                                <div className="flex gap-[9px] items-center">{/* @ts-ignore */}
                                                     <SvgComponent className=" leftsidebar_icons pl-6 pr-1" svgName={submenuKey || 'briefcase'} />
                                                     <span className="flex-1  text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] leading-6 ">{formatString(submenuKey)}</span>
                                                 </div>
@@ -208,7 +213,7 @@ const LeftSidebar = () => {
                                                         {link.category ? (
                                                             <li className="left-sidebar-web-link hover:bg-gray-100 ">
                                                                 <button type="button" className=" left-sidebar-web-link justify-between flex items-center w-full  links pl-0" aria-controls={`${link.label}-dropdown`} data-collapse-toggle={`${link.label}-dropdown`} onClick={() => toggleDropdown(link.label)}>
-                                                                    <div className="flex gap-[6px] items-center">
+                                                                    <div className="flex gap-[6px] items-center">{/* @ts-ignore */}
                                                                         <SvgComponent className=" leftsidebar_icons_website group-hover:invert-white pl-6 pr-1" svgName={link.imgURL || 'briefcase'} />
                                                                         <span className="flex-1 text-left rtl:text-right whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px] ">{formatString(link.label)}</span>
                                                                     </div>
@@ -220,7 +225,7 @@ const LeftSidebar = () => {
                                                                     <li className={`left-sidebar-web-link ${isWebActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center" to={`${submenuKey}${link?.route}`}>
-                                                                                <div className="flex gap-[6px]">
+                                                                                <div className="flex gap-[6px]">{/* @ts-ignore */}
                                                                                     <SvgComponent className=" leftsidebar_icons_website" svgName={link.imgURL || 'briefcase'} />
                                                                                     {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
                                                                                     <span className="whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px]" title={link?.label}>{link.label}</span>
@@ -232,7 +237,7 @@ const LeftSidebar = () => {
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center " to={`${submenuKey}/category${link?.route}`}>
                                                                                 {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
-                                                                                <div className="flex gap-[6px]">
+                                                                                <div className="flex gap-[6px]">{/* @ts-ignore */}
                                                                                     <SvgComponent className=" leftsidebar_icons_website" svgName={link.imgURL || 'briefcase'} />
                                                                                     <span>Manage category</span>
                                                                                 </div>
@@ -247,7 +252,7 @@ const LeftSidebar = () => {
                                                             <li key={link.label} className={`left-sidebar-web-link ${isWebActive ? 'bg-light-blue text-primary-500 border-b-primary-500' : ''}`}>
                                                                 <div className="links">
                                                                     <NavLink className="flex gap-4 items-center" to={`${submenuKey}${link.route}`}>
-                                                                        <div className="flex gap-[6px]">
+                                                                        <div className="flex gap-[6px]">{/* @ts-ignore */}
                                                                             <SvgComponent className=" leftsidebar_icons_website group-hover:invert-primary-500 text-primary-500" svgName={link.imgURL || 'briefcase'} />
                                                                             <span>{link.label}</span>
                                                                         </div>

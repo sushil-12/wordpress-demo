@@ -5,7 +5,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { mediaEditFormSchema } from "@/lib/validation";
-import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
 import { useDeleteMedia, useEditMedia } from "@/lib/react-query/queriesAndMutations";
 import { z } from "zod";
@@ -106,8 +105,8 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
 
     return (
         <Form {...form}>
-            <div className="">
-                <p><span className="text-xs font-semibold leading-[150%]">Uploaded on:</span> <span className="text-xs font-[400] leading-[150%]"> {new Date(item?.createdAt).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}</span></p>
+            <div className="mt-[-6px]">
+                <p><span className="text-xs font-semibold leading-[1px]">Uploaded on:</span> <span className="text-xs font-[400] leading-[150%]"> {new Date(item?.createdAt).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}</span></p>
                 <p><span className="text-xs font-semibold leading-[150%]">File name:</span> <span className="text-xs font-[400] leading-[150%]">{item?.filename}</span></p>
                 <p><span className="text-xs font-semibold leading-[150%]">File type:</span> <span className="text-xs font-[400] leading-[150%]">{item?.format}</span></p>
                 <p><span className="text-xs font-semibold leading-[150%]">File size:</span> <span className="text-xs font-[400] leading-[150%]">{bytesToSize(item.size)}</span></p>

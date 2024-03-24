@@ -66,7 +66,7 @@ const PostComponent = () => {
 
         </div>
       </div>
-      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5 py-5">
+      <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden pl-5 px-[31px] py-5">
         <PostDataTable posts={posts} post_type={defaultPostType} isPostLoading={isLoading} setRerender={setRerender} render={render} />
       </div>
     </div>

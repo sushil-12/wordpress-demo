@@ -41,6 +41,24 @@ const getProfile = async (req, res) => {
     ErrorHandler.handleError(error, res);
   }
 };
+const logout = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new CustomError(404, 'User not found');
+    }
+    user.staySignedIn = false;
+    user.save();
+
+    ResponseHandler.success(res, 200);
+  } catch (error) {
+    ErrorHandler.handleError(error, res);
+  }
+};
 
 const sendOtpVerificationOnEmail = async (req, res) => {
   try {
@@ -130,5 +148,5 @@ const checkPassword = async (req, res) => {
 
 
 module.exports = {
-  getProfile, checkPassword,sendOtpVerificationOnEmail
+  getProfile, checkPassword,sendOtpVerificationOnEmail, logout
 };

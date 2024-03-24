@@ -26,6 +26,11 @@ class AuthenticatedApiService {
     return await this.api.get('/api/profile', config);
   }
 
+  async logout(): Promise<any> {
+    const config: AxiosRequestConfig = { headers: this.getHeaders() };
+    return await this.api.get('/api/sign-out', config);
+  }
+
   async checkPassword(password: string): Promise<any> {
     const config: AxiosRequestConfig = { headers: this.getHeaders() };
     return await this.api.post('/api/check-password', { password: password }, config);

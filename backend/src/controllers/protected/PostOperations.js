@@ -66,6 +66,7 @@ const createEditPost = async (req, res) => {
 
         // Update or set fields based on the request body
         post.title = title || post.title;
+        post.slug = createSlug(post.title);
         post.post_type = post_type || post.post_type;
         post.content = content || post.content;
         post.publicationDate = publicationDate || post.publicationDate;

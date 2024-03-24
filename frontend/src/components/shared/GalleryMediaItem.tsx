@@ -16,7 +16,7 @@ const GalleryMediaItem: React.FC<{ item: MediaItem, modalVisibility: any }> = ({
                     <img src={currentItem?.url} alt={currentItem?.alt_text} className="object-cover w-full h-full" />
                 </div>
             </div>
-            <div className="w-1/4 md:w-auto h-full px-4">
+            <div className="w-1/4 md:w-auto h-full ">
                 <MediaEditForm item={currentItem} handleModal={modalVisibility} />
             </div>
         </div>

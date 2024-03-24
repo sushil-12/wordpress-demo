@@ -86,7 +86,18 @@ export default function Media() {
                   <MediaGrid media={localMedia} isLoading={isLoading} />
                 </div>
                 <div className="card">
-                  {pagination.totalPages > 1 && <Paginator className='mt-10 mb-10' first={pagination.page} rows={pagination.limit} totalRecords={pagination.totalItems} onPageChange={onPageChange} />}
+                  {pagination.totalPages > 1 && <Paginator
+                    pt={{
+                      pageButton: ({ context }) => ({
+                        className: context.currentPage === context.page ? 'bg-primary' : undefined
+                      })
+                    }}
+                    className={`mt-10 mb-10 page_${pagination.page}`} 
+                    first={pagination.page * pagination.limit -1 }
+                    rows={pagination.limit}
+                    totalRecords={pagination.totalItems}
+                    onPageChange={onPageChange}
+                  />}
                 </div>
               </>
             </div>

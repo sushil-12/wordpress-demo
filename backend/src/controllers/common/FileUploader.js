@@ -25,8 +25,10 @@ const uploadMediaToLibrary = async (req, res) => {
         throw new CustomError(500, 'Failed to upload one or more images to Cloudinary.');
       }
 
+      console.log(uploadInfo, req.file.originalname);
+
       const uploadedMedia = {
-        title: req.body.title ? req.body.title : req.file.originalname,
+        title: req.body.title ? req.body.title : req.file.originalname.replace(/\.[^.]*$/, ''),
         caption: req.body.caption ? req.body.caption : '',
         description: req.body.description ? req.body.description : 'upload file to hegroup',
         alt_text: req.body.alt_text ? req.body.alt_text : 'upload file to hegroup',

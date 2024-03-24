@@ -132,7 +132,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     }
 
     return (
-        <div className="rounded-[1px] pr-4">
+        <div className="rounded-[1px] overflow-x-hidden w-full">
             <ConfirmDialog />
             {isPostLoading || isDeleting ? (<SkeletonTable rowCount={5} />
             ) : (
@@ -142,9 +142,9 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                         paginator={posts.length > import.meta.env.VITE_POST_PAGINATION} rows={import.meta.env.VITE_POST_PAGINATION} rowsPerPageOptions={[5, 10, 15, 20]}
                         tableStyle={{ minWidth: '60rem' }}
                         frozenRow={true}
-                        tableClassName='table-fixed rounded-sm '
+                        tableClassName='table-fixed rounded-sm overflow-x-hidden'
                         rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
-                        className="w-full post_data_table table-fixed"
+                        className="post_data_table table-fixed overflow-x-hidden"
                         onRowMouseEnter={(e) => { handleRowToggle(e.data); }}
                     >
 

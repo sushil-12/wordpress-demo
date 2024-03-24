@@ -103,6 +103,10 @@ export async function getCurrentUser() {
 export async function signOutAccount() {
   try {
     localStorage.removeItem("token");
+    const authenticatedApiService = new AuthenticatedApiService();
+    const logout = await authenticatedApiService.logout();
+    return logout?.data;
+
   } catch (error) {
     throw new PromiseHandler('Error during user sign-out', 'SIGN_OUT_ERROR', { error });
   }

@@ -36,11 +36,6 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
         setSelectedMedia(null);
     };
 
-    const itemTemplate = (item: any) => {
-        return (
-            <GalleryMediaItem item={item} modalVisibility={onHide} />
-        );
-    };
 
     const headerTemplate = (item: any) => {
         return (

@@ -13,6 +13,7 @@ const { HTTP_STATUS_CODES } = require('./constants/error_message_codes');
 
 // Connect to MongoDB
 connectDB();
+console.log(Date.now());
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());

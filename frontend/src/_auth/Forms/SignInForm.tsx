@@ -85,8 +85,8 @@ const SignInForm = () => {
     resolver: zodResolver(validationSchema[state]),
     defaultValues: {
       form_type: state,
-      email: "hegroup-admin@yopmail.com",
-      password: "adminPassword",
+      email: "hegroup@yopmail.com",
+      password: "test@1234",
       staySignedIn: 'yes',
       verification_code: '',
     },
@@ -362,6 +362,7 @@ const SignInForm = () => {
                           <InputText
                             maxLength={6}
                             className="b"
+                            readOnly={timerFinished}
                             placeholder="Enter verfication code "
                             {...field}
                           />

@@ -1,6 +1,6 @@
 const express = require('express');
 const { verifyToken } = require('../middleware/authMiddleware');
-const { getProfile, checkPassword, sendOtpVerificationOnEmail } = require('../controllers/protected/UserController');
+const { getProfile, checkPassword, sendOtpVerificationOnEmail, logout } = require('../controllers/protected/UserController');
 const { uploadMediaToLibrary, deleteMedia } = require('../controllers/common/FileUploader');
 const { getAllMedia, editMedia, getAllImages } = require('../controllers/common/MediaOperations');
 const { createEditPost, getAllPosts, getPostById, deletePost, quickEditPost, getAllPostTypesAndPages } = require('../controllers/protected/PostOperations');
@@ -14,6 +14,7 @@ router.use(verifyToken);
 
 // Protected routes
 router.get('/profile', getProfile);
+router.get('/sign-out', logout);
 router.post('/check-password', checkPassword);
 router.post('/verify-email', sendOtpVerificationOnEmail);
 

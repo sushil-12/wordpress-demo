@@ -331,6 +331,9 @@
     min-height: 16px;
     min-width: 16px;
   }
+  .post_data_table{
+    width: fit-content;
+  }
 
   .leftsidebar_icons_website>svg {
     max-height: 16px;
