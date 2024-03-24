@@ -1,6 +1,5 @@
 import MediaEditForm from '@/_auth/Forms/MediaEditForm';
 import { MediaItem } from '@/lib/types';
-import { Image } from 'primereact/image';
 import { useEffect, useState } from 'react';
 
 const GalleryMediaItem: React.FC<{ item: MediaItem, modalVisibility: any }> = ({ item, modalVisibility }) => {

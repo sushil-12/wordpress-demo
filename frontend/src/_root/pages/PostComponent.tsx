@@ -4,7 +4,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { useUserContext } from '@/context/AuthProvider';
 import { useGetAllPosts } from '@/lib/react-query/queriesAndMutations';
 import SvgComponent from '@/utils/SvgComponent';
-import { PlusSquare, Router } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -29,7 +28,7 @@ const PostComponent = () => {
   const { mutateAsync: getAllPosts, isPending: isLoading } = useGetAllPosts();
   const fetchPosts = async () => {
     try {
-      const postResponse = await getAllPosts({ page: pagination.page, limit: pagination.limit, post_type: defaultPostType, search:searchInput });
+      const postResponse = await getAllPosts({ page: pagination.page, limit: pagination.limit, post_type: defaultPostType, search: searchInput });
       setPost(postResponse?.data?.posts);
       setPagination(postResponse?.data?.pagination || {});
     } catch (error) {
@@ -54,6 +53,7 @@ const PostComponent = () => {
 
         <div className="flex justify-start items-center py-7 relative">
           <input
+            // @ts-ignore
             onChange={() => setSearchInput(event?.target.value)}
             value={searchInput}
             className="leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300 outline-none w-[239px] h-10 text-[14px] font-medium hover:rounded-[50px] "

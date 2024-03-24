@@ -1,25 +1,9 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Tag } from 'primereact/tag';
-import { PostModel } from '@/lib/types';
-import { Button } from '../ui/button';
-import { Edit2, Trash2Icon } from 'lucide-react';
+
 import { useNavigate } from 'react-router-dom';
-import { Dropdown } from 'primereact/dropdown';
-import { useEffect, useState } from 'react';
-import { useGetAllCustomFields, useQuickEditPostById, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
-import { Badge } from '../ui/badge';
-import SkeletonTable from '../skeletons/SkeletonTable';
-import { useToast } from '../ui/use-toast';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import { useUserContext } from '@/context/AuthProvider';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { PostFormSchema, quickEditFormSchema } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import QuickEditForm from '@/plugin/post/_custom_form/QuickEditForm';
+
+import { ConfirmDialog,  } from 'primereact/confirmdialog';
 import SvgComponent from '@/utils/SvgComponent';
 
 interface PluginDataTable {
@@ -30,7 +14,6 @@ interface PluginDataTable {
 const PluginDataTable: React.FC<PluginDataTable> = ({ plugins, domain }) => {
 
     const navigate = useNavigate();
-    const { currentDomain } = useUserContext();
 
     const titleTemplate = (rowData: any) => {
         return (
@@ -50,7 +33,7 @@ const PluginDataTable: React.FC<PluginDataTable> = ({ plugins, domain }) => {
             </>
         );
     };
-    const actionTemplate = (rowData: any) => {
+    const actionTemplate = () => {
         return (
             <>
                 <button className="bg-primary-500 rounded-md text-white py-2 px-4" onClick={() => navigate(`/${domain}/manage-custom-fields`)}>
@@ -75,6 +58,7 @@ const PluginDataTable: React.FC<PluginDataTable> = ({ plugins, domain }) => {
                     tableStyle={{ minWidth: '60rem' }}
                     frozenRow={true}
                     tableClassName='table-fixed rounded '
+                    // @ts-ignore
                     rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
                     pt={{
                         headerRow: { className: 'hidden' }

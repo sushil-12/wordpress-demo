@@ -61,6 +61,7 @@ export default function Media() {
         <h3 className="page-titles">Media</h3>
         <div className="flex justify-start items-center py-7 relative">
           <input
+            // @ts-ignore
             onChange={() => setSearchInput(event?.target.value)}
             value={searchInput}
             className="leading-none text-left text-gray-600 px-4 py-3 border rounded border-gray-300 outline-none w-[239px] h-10 text-[14px] font-medium hover:rounded-[50px] "
@@ -87,11 +88,6 @@ export default function Media() {
                 </div>
                 <div className="card">
                   {pagination.totalPages > 1 && <Paginator
-                    pt={{
-                      pageButton: ({ context }) => ({
-                        className: context.currentPage === context.page ? 'bg-primary' : undefined
-                      })
-                    }}
                     className={`mt-10 mb-10 page_${pagination.page}`} 
                     first={pagination.page * pagination.limit -1 }
                     rows={pagination.limit}

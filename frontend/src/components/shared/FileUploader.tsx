@@ -1,4 +1,4 @@
-import  { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Toast } from 'primereact/toast';
 import { FileUpload } from 'primereact/fileupload';
 import { ProgressBar } from 'primereact/progressbar';
@@ -10,7 +10,7 @@ export default function TemplateDemo() {
     const toast = useRef(null);
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef(null);
-    
+    //@ts-ignore
     const onTemplateSelect = (e) => {
         let _totalSize = totalSize;
         let files = e.files;
@@ -21,18 +21,18 @@ export default function TemplateDemo() {
 
         setTotalSize(_totalSize);
     };
-
+    //@ts-ignore
     const onTemplateUpload = (e) => {
         let _totalSize = 0;
-
+        //@ts-ignore
         e.files.forEach((file) => {
             _totalSize += file.size || 0;
         });
-
-        setTotalSize(_totalSize);
+        //@ts-ignore
+        setTotalSize(_totalSize);//@ts-ignore
         toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     };
-
+    //@ts-ignore
     const onTemplateRemove = (file, callback) => {
         setTotalSize(totalSize - file.size);
         callback();
@@ -41,10 +41,10 @@ export default function TemplateDemo() {
     const onTemplateClear = () => {
         setTotalSize(0);
     };
-
+    //@ts-ignore
     const headerTemplate = (options) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;
-        const value = totalSize / 10000;
+        const value = totalSize / 10000;//@ts-ignore
         const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
 
         return (
@@ -59,7 +59,7 @@ export default function TemplateDemo() {
             </div>
         );
     };
-
+    //@ts-ignore
     const itemTemplate = (file, props) => {
         return (
             <div className="flex align-items-center flex-wrap">

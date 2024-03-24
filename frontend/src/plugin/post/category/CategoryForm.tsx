@@ -28,7 +28,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ post_type }) => {
     const { mutateAsync: createOrEditCategory, isPending: isOperating } = useCreateOrEditCategory();
     const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategory();
     const [currentCategory, setCurrentCategory] = useState<CategoryModel | null>(selectedCategory);
-    const { mutateAsync: getAllCategories, isPending: isLoading } = useGetAllCategories();
+    const { mutateAsync: getAllCategories } = useGetAllCategories();
 
     const [selectedNodeKeys, setSelectedNodeKeys] = useState<any>('');
     function filterOutSelectedCategory(categories: any, selectedCategoryId: any) {

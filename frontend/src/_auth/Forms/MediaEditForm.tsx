@@ -84,7 +84,8 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
     const { toast } = useToast()
     const { mutateAsync: editMedia, isPending: isUpdatingMedia } = useEditMedia();
     const { media, setMedia } = useMedia();
-
+        console.log(isUpdatingMedia);
+        
     async function onSubmit(values: z.infer<typeof mediaEditFormSchema>) {
         const editMediaResponse = await editMedia(values);
         const updatedItems = media.map(currentItem =>
@@ -138,7 +139,7 @@ const MediaEditForm: React.FC<{ item: MediaItem, handleModal: any }> = ({ item, 
                         </FormItem>
                     )}
                     />
-                    <FormField control={form.control} name="title" render={({ field }) => (
+                    <FormField control={form.control} name="title" render={({  }) => (
                         <FormItem>
                             <FormLabel>File URL:</FormLabel>
                             <FormControl><Input className="w-[350px] focus:shadow-none focus-within:shadow-none focus-visible:shadow-none" placeholder="Add url" value={item?.url} /></FormControl>

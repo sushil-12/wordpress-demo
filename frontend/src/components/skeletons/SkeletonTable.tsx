@@ -8,7 +8,7 @@ interface SkeletonTableProps {
 }
 
 const SkeletonTable: React.FC<SkeletonTableProps> = ({ rowCount }) => {
-    const items: any = Array.from({ length: rowCount }, (v, i) => i);
+    const items: any = Array.from({ length: rowCount }, ( i) => i);
 
     const renderSkeleton = () => <Skeleton width="100%" height="1.5rem" />;
     

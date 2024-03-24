@@ -46,17 +46,16 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     const [currentIndexItem, setCurrentIndexItem] = useState([])
 
     const [localItem, setLocalItem] = useState<any>(item); // Initialize localItem with item passed from parent
-    const { control, setValue, getValues } = useForm();
-    let { fields, append, remove, update, insert, replace } = useFieldArray({
+    const { control, setValue } = useForm();
+    let { fields, append, remove, update, replace } = useFieldArray({
         control,
         name: 'fields',
     });
     // @ts-ignore
-    const updateFieldAtIndex = (index, svgName,  currentIndexItem) => {
+    const updateFieldAtIndex = (index, svgName, currentIndexItem) => {
         // Make sure the index is valid
         if (index >= 0 && index < fields.length) {
             console.log(index, fields);
-            const updatedFields = fields[index];
             console.table(currentIndexItem);
             const label = currentIndexItem[index].label;
 
@@ -67,7 +66,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                 route: route
             };
             update(index, updatedFieldsArray);
-    
+
             // Update currentIndexItem as well
             const updatedCurrentIndexItem = [...currentIndexItem];
             console.table(updatedCurrentIndexItem);
@@ -125,19 +124,19 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
     useEffect(() => {
         setLocalItem(item)
-       
+
         //@ts-ignore
         if (activeDomain) { setWebsite(activeDomain) }
         if (localItem) {
             console.log(type)
-            console.log(svgName, localItem, "after reset");
+            console.log(svgName, localItem, "after reset"); {/* @ts-ignore */ }
             const updatedSubcategory = localItem?.subcategory?.map((item, index) => {
                 return {
                     ...item,
                     index: index // or any unique identifier you want to use as the key
                 };
             });
-            
+
             replace(updatedSubcategory)
             console.table(updatedSubcategory)
             setCurrentIndexItem(updatedSubcategory)
@@ -154,15 +153,16 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
     async function onSubmit(values: z.infer<typeof navItemFormSchema>) {
         replace(currentIndexItem)
         // @ts-ignore
-        if(currentIndexItem &&currentIndexItem.length > 0 ) {
+        if (currentIndexItem && currentIndexItem.length > 0) {
+            {/* @ts-ignore */ }
             values.subcategory = currentIndexItem.map(field => ({// @ts-ignore
                 id: values.subcategory?.id || Math.random().toString(36).substr(2, 9),// @ts-ignore
                 label: field.label,// @ts-ignore
-                route: field?.route?.includes('/' + values.label+'/') ? createSlug(field.label): createSlug('/' + values.label + '/' +  field.label),// @ts-ignore
+                route: field?.route?.includes('/' + values.label + '/') ? createSlug(field.label) : createSlug('/' + values.label + '/' + field.label),// @ts-ignore
                 imgURL: field?.imgURL
             }));
         }
-       
+
 
         // @ts-ignore
         let currentWebsiteSchema = domainSidebarLinks.websites[website];
@@ -195,11 +195,11 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
             if (values.subcategory.length > 0) {
                 newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, subcategory: values.subcategory };
-               
+
             } else {
-                newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, subcategory:[] };
+                newobject = { id: values.id || Math.random().toString(36).substr(2, 9), imgURL: svgName, route: route_link, label: values.label, subcategory: [] };
             }
-            
+
             // @ts-ignore
             if (values.id) {
                 // @ts-ignore
@@ -223,7 +223,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
         const createOrEditNavItemResponse = await saveDatatoSidebar(domainSidebarLinks);
 
         if (createOrEditNavItemResponse?.code === 200 || createOrEditNavItemResponse?.code === 201) {
-            const message = createOrEditNavItemResponse?.code === 200 ?  messages.item_updated : messages.item_created;
+            const message = createOrEditNavItemResponse?.code === 200 ? messages.item_updated : messages.item_created;
             form.reset();
             replace([]);
             setLocalItem(null)
@@ -232,7 +232,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
             setSelectedItem(null); setSvgName('');
             return toast({ variant: 'default', description: message });
         } else {
-            return toast({ variant: 'default', description:  messages.default_error });
+            return toast({ variant: 'default', description: messages.default_error });
         }
     }
 
@@ -260,7 +260,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                     />
 
                     {activeTab !== 'comman' && (
-                        <FormField control={form.control} name="label" render={({ field }) => (
+                        <FormField control={form.control} name="label" render={({ }) => (
                             <FormItem>
                                 <FormLabel>Post Type</FormLabel>
                                 <FormControl>
@@ -276,7 +276,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                         )}
                         />)}
                     {activeTab !== 'comman' && (
-                        <FormField control={form.control} name="domain" render={({ field }) => (
+                        <FormField control={form.control} name="domain" render={({ }) => (
                             <FormItem>
                                 <FormLabel>Select Website</FormLabel>
                                 <FormControl>
@@ -293,7 +293,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                         />
                     )}
                     {activeTab !== 'comman' && (
-                        <FormField control={form.control} name="place_after" render={({ field }) => (
+                        <FormField control={form.control} name="place_after" render={({ }) => (
                             <FormItem>
                                 <FormLabel>Select After</FormLabel>
                                 <FormControl>
@@ -309,7 +309,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                     <FormLabel>
                         <div className="flex align-middle items-center">Choose Icon
-                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><SvgComponent className="" svgName="edit"/></Button >
+                            <Button onClick={(e) => { e.preventDefault(); setSvgPicker(true); }} ><SvgComponent className="" svgName="edit" /></Button >
                             {/* @ts-ignore */}
                             <SvgComponent className="border border-primary-500 p-4" svgName={svgName} />
                         </div>
@@ -322,7 +322,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
                                 <FormControl className="mx-4 mt-4">
                                     <InputSwitch
                                         checked={form.getValues("category") === 'yes'}
-                                        onChange={(e) => {
+                                        onChange={() => {
                                             const newValue = form.getValues("category") === 'yes' ? 'no' : 'yes';
                                             form.setValue("category", newValue);
                                             field.onChange(newValue);
@@ -337,7 +337,7 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                     {activeTab === 'comman' && (
                         <div className="border border-dashed">
-                            {fields.length>0 && fields.map((field, index) => (
+                            {fields.length > 0 && fields.map((field, index) => (
                                 <div key={field.id} className="dynamic-field p-4 flex gap-4 font-inter text-sm align-middle">
                                     {/* Field 1 in repeater */}
                                     <FormField
@@ -376,9 +376,9 @@ const NavItemForm: React.FC<{ item: any, setRerender: any, activeTab: string, ac
 
                                     {/* Icon Selection */}
                                     <div className="flex align-middle items-center">
-                                        Choose Icon 
-                                        <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><SvgComponent className="" svgName="edit"/></Button >
-                                        <Dialog  draggable={false} visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
+                                        Choose Icon
+                                        <Button onClick={(e) => { e.preventDefault(); setRepeaterSvgPicker(true); setCurrentIndex(index) }} ><SvgComponent className="" svgName="edit" /></Button >
+                                        <Dialog draggable={false} visible={repeaterSvgPicker} onHide={() => setRepeaterSvgPicker(false)} style={{ width: '60vw' }} header={headerRepeaterTemplate(currentIndex)} closable={false} >
                                             <SvgPickerComponent setSvgName={currentIndex} currentIndexItem={currentIndexItem} updateFieldAtIndex={updateFieldAtIndex} setSvgPicker={setRepeaterSvgPicker} form_type={'repeater'} />
                                         </Dialog>
                                         {/* @ts-ignore */}

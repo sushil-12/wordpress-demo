@@ -9,7 +9,7 @@ const fs = require('fs');
 const handlebars = require('handlebars');
 const crypto = require('crypto');
 const cloudinary = require('../../config/cloudinary');
-
+const path = require('path');
 const { Readable } = require('stream');
 
 
@@ -53,7 +53,8 @@ const login = async (req, res) => {
 
     if (form_type == 'forgot_password_form') {
       try {
-        const templateFile = fs.readFileSync('./src/email-templates/reset-password.hbs', 'utf8');
+        const resettemplateFilePath = path.join(__dirname, 'src', 'email-templates', 'reset-password.hbs');
+        const templateFile = fs.readFileSync(resettemplateFilePath, 'utf8');
         const resetToken = generateRandomString(32);
         user.resetToken = resetToken;
         user.resetTokenExpiry = new Date(Date.now() + 1 * 60 * 60 * 1000)
@@ -128,7 +129,8 @@ const login = async (req, res) => {
       }
       if (require_verification) {
         try {
-          const templateFile = fs.readFileSync('./src/email-templates/send-verification-code.hbs', 'utf8');
+          const templateFilePath = path.join(__dirname, 'src', 'email-templates', 'send-verification-code.hbs');
+          const templateFile = fs.readFileSync(templateFilePath, 'utf8');
           const template = handlebars.compile(templateFile);
 
           const mailOptions = {

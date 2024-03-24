@@ -7,6 +7,7 @@ import { useMedia } from '@/context/MediaProvider';
 
 const ImageUploader: React.FC = () => {
   const [uploadedImages, setUploadedImages] = useState<MediaItem[]>([]);
+  console.log(setUploadedImages)
   const { mutateAsync: uploadMediaFile, isPending: isLoading } = useUploadFiles();
   const { setMedia } = useMedia();
   useEffect(() => {
@@ -29,6 +30,10 @@ const ImageUploader: React.FC = () => {
         description: '',
         alt_text: '',
         filename: '',
+        format: '',
+        height: '',
+        resource_type: '',
+        width: '',
         cloudinary_id: '',
         url: '',
         size: '',
@@ -40,6 +45,7 @@ const ImageUploader: React.FC = () => {
         createdAt: ''
       };
 
+
       // Add the temporary image to the beginning of the array
       setMedia((prevImages) => [tempImage, ...prevImages]);
 
@@ -49,14 +55,14 @@ const ImageUploader: React.FC = () => {
       const uploadedImage: MediaItem = {
         id: response.data._id,
         tempUrl,
+        format: response.data.format || '',
+        width: response.data.width || '',
+        height: response.data.height || '',
+        resource_type: response.data.resource_type || '',
         title: response.data.title || '',
         caption: response.data.caption || '',
         description: response.data.description || '',
         alt_text: response.data.alt_text || '',
-        height: response.data.height || '',
-        width: response.data.width || '',
-        format: response.data.format || '',
-        resource_type: response.data.resource_type || '',
         filename: response.data.filename || '',
         cloudinary_id: response.data.cloudinary_id || '',
         url: response.data.url || '',

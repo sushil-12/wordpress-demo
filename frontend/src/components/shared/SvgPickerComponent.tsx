@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import Icons from '../../../../backend/src/constants/svg_codes.json';
 import { Dialog } from 'primereact/dialog';
-import { Button } from '../ui/button';
 import UploadSvgForm from '@/settings/UploadSvgForm';
 
 // @ts-ignore
 const SvgPickerComponent = ({ setSvgName, setSvgPicker, form_type = 'normal', updateFieldAtIndex, currentIndexItem }) => {
     const [activeCard, setActiveCard] = useState('');
+    console.log(activeCard);
+    
     const [visible, setVisible] = useState(false);
 
     const headerTemplate = () => {

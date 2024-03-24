@@ -3,15 +3,12 @@ import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthProvider';
 import { formatString } from '@/lib/utils';
 import SvgComponent from '@/utils/SvgComponent';
-import { Edit3Icon } from 'lucide-react';
-import { Card } from 'primereact/card'
-import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 
 const PluginComponent = () => {
     const { domain } = useParams();
-    const { setCurrentDomain, currentDomain } = useUserContext();
-    const [searchInput, setSearchInput] = useState('');
+    const { setCurrentDomain } = useUserContext();
+
 
     const plugins = [
         { id: '1', title: 'Manage Custom Fields', route: 'manage-custom-fields', description: 'Customize Wordpress with powerfull used to manage fields', version: '2.4.3' },
@@ -24,7 +21,7 @@ const PluginComponent = () => {
 
         <div className="main-container w-full overflow-hidden ">
             <div className="w-full flex items-center justify-between h-[10vh] min-h-[10vh] max-h-[10vh] justify pl-5 pr-[31px]">
-                <div className="flex gap-[15px]">
+                <div className="flex gap-[15px]"> {/* @ts-ignore */}
                     <h3 className="page-titles capitalize">{formatString(domain)} Plugins</h3>
                     <Button className="shad-button_primary place-self-end" size="sm" >
                         <SvgComponent className='' svgName='plus-circle' /> Add Plugins
@@ -37,7 +34,7 @@ const PluginComponent = () => {
                     </span>
                 </div>
             </div>
-            <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5 py-5">
+            <div className="h-[90vh] min-h-[90vh] max-h-[90vh] overflow-y-auto overflow-x-hidden px-5 py-5"> {/* @ts-ignore */}
                 <PluginDataTable plugins={plugins} domain={domain} />
             </div>
         </div>

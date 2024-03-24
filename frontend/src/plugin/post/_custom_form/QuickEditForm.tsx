@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { PostFormSchema, quickEditFormSchema } from '@/lib/validation';
+import { quickEditFormSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem,  FormMessage } from "@/components/ui/form";
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'primereact/calendar';
 
@@ -16,13 +16,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { quickEditPostById } from '@/lib/appwrite/api';
 import { useQuickEditPostById } from '@/lib/react-query/queriesAndMutations';
 import { useToast } from '@/components/ui/use-toast';
-import { Checkbox } from '@/components/ui/checkbox';
 import Loader from '@/components/shared/Loader';
 import { PostModel } from '@/lib/types';
-import { render } from 'react-dom';
 import { messages } from '@/constants/message';
 
 interface Props {
@@ -36,7 +33,6 @@ interface Props {
 }
 
 const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerender, rerenderPostTable, post_type , setExpandedQuickEditRows}) => {
-    const currentMonthIndex = new Date().getMonth();
     const currentdate = new Date();
     const [date, setDate] = useState(currentdate);
     const { mutateAsync: quickEditPostById, isPending: isLoading } = useQuickEditPostById();
@@ -164,7 +160,7 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                                     <FormField
                                         control={form.control}
                                         name="sticky"
-                                        render={({ field }) => (
+                                        render={({  }) => (
                                             <FormItem>
                                                 <FormControl>
                                                     <div className="flex align-items-center gap-[8px] w-[250px]">
@@ -198,9 +194,9 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                                     <FormField
                                         control={form.control}
                                         name="publicationDate"
-                                        render={({ field }) => (
+                                        render={({ }) => (
                                             <FormItem>
-                                                <FormControl>
+                                                <FormControl> {/* @ts-ignore */}
                                                     <Calendar value={date} className="w-[91px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="month" dateFormat="M" />
                                                 </FormControl>
                                                 <FormMessage className="shad-form_message" />
@@ -211,9 +207,9 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                                     <FormField
                                         control={form.control}
                                         name="publicationDate"
-                                        render={({ field }) => (
+                                        render={({  }) => (
                                             <FormItem>
-                                                <FormControl>
+                                                <FormControl> {/* @ts-ignore */}
                                                     <Calendar value={date} className="w-[45px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="date" dateFormat="dd" />
                                                 </FormControl>
                                                 <FormMessage className="shad-form_message" />
@@ -224,9 +220,9 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                                     <FormField
                                         control={form.control}
                                         name="publicationDate"
-                                        render={({ field }) => (
+                                        render={({  }) => (
                                             <FormItem>
-                                                <FormControl>
+                                                <FormControl> {/* @ts-ignore */}
                                                     <Calendar value={date} className="w-[60px]" onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} view="year" dateFormat="yyyy" />
                                                 </FormControl>
                                                 <FormMessage className="shad-form_message" />
@@ -238,9 +234,10 @@ const QuickEditForm: React.FC<Props> = ({ setIsQuickEditForm, rowData, setRerend
                                     <FormField
                                         control={form.control}
                                         name="publicationDate"
-                                        render={({ field }) => (
+                                        render={({  }) => (
                                             <FormItem>
                                                 <FormControl>
+                                                    {/* @ts-ignore */}
                                                     <Calendar value={date} onChange={(e) => { setDate(e.value); form.setValue('publicationDate', date) }} className='shad-input w-[78px]' timeOnly />
                                                 </FormControl>
                                                 <FormMessage className="shad-form_message" />

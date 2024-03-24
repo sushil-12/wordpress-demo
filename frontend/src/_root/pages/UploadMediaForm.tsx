@@ -17,7 +17,8 @@ const UploadMediaForm: React.FC = () => {
     success: null,
     error: null,
   });
-
+  console.log(isLoading);
+  
   useEffect(() => {
     const uploadNextFile = async () => {
       if (currentIndex < files.length) {

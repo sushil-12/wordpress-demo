@@ -1,24 +1,14 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Tag } from 'primereact/tag';
 import { PostModel } from '@/lib/types';
-import { Button } from '../ui/button';
-import { Edit2, Trash2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Dropdown } from 'primereact/dropdown';
 import { useEffect, useState } from 'react';
-import { useGetAllCustomFields, useQuickEditPostById, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
-import { Badge } from '../ui/badge';
+import { useGetAllCustomFields, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import { useToast } from '../ui/use-toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { useUserContext } from '@/context/AuthProvider';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { PostFormSchema, quickEditFormSchema } from '@/lib/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+
 import QuickEditForm from '@/plugin/post/_custom_form/QuickEditForm';
 
 interface PostDataTableProps {
@@ -35,16 +25,16 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const { currentDomain } = useUserContext();
     const { toast } = useToast();
     const { mutateAsync: deletePostById, isPending: isDeleting } = usedeltePostbyID();
-    type StatusType = 'published' | 'draft' | 'draft' | 'draft';
-    const [statuses] = useState(['draft', 'published', 'trash', 'archived']);
+    // type StatusType = 'published' | 'draft' | 'draft' | 'draft';
+    // const [statuses] = useState(['draft', 'published', 'trash', 'archived']);
     const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
     const [customFields, setCustomFields] = useState([]);
+    console.log(isCustomFieldLoading, customFields)
     const [expandedRows, setExpandedRows] = useState('');
     const [expandedQuickEditRows, setExpandedQuickEditRows] = useState('');
     const [isQuickEditForm, setIsQuickEditForm] = useState(false)
     const [rerenderPostTable, setRerenderPostTable] = useState(false)
 
-    const [status, setStatus] = useState(null);
 
     async function fetchCustomFields() {
         const customFieldsResponse = await getAllCustomFields('page');
@@ -88,7 +78,7 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const rowExpansionTemplate = (rowData: PostModel) => {
         console.log(!isQuickEditForm || (expandedQuickEditRows && expandedQuickEditRows === rowData.id));
 
-        let showQuickEditForm = isQuickEditForm || expandedQuickEditRows== rowData.id
+        let showQuickEditForm = isQuickEditForm || expandedQuickEditRows == rowData.id
         console.log("SHOW", showQuickEditForm)
         return (
             (!showQuickEditForm) ? (
@@ -142,9 +132,9 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
                         paginator={posts.length > import.meta.env.VITE_POST_PAGINATION} rows={import.meta.env.VITE_POST_PAGINATION} rowsPerPageOptions={[5, 10, 15, 20]}
                         tableStyle={{ minWidth: '60rem' }}
                         frozenRow={true}
-                        tableClassName='table-fixed rounded-sm overflow-x-hidden'
-                        rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`}
-                        className="post_data_table table-fixed overflow-x-hidden"
+                        tableClassName='table-fixed rounded-sm overflow-x-hidden' // @ts-ignore
+                        rowClassName={`odd:bg-[#F6F6F6] cursor-pointer`} // @ts-ignore
+                        className="post_data_table table-fixed overflow-x-hidden" // @ts-ignore
                         onRowMouseEnter={(e) => { handleRowToggle(e.data); }}
                     >
 

@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { Galleria } from 'primereact/galleria';
+import { useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { MediaItem } from '@/lib/types';
 import GalleryMediaItem from './GalleryMediaItem';
@@ -21,11 +20,11 @@ interface MediaGridProps {
 const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
     const [visible, setVisible] = useState<boolean>(false);
     const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
-    const galleria = useRef(null);
     const { toast } = useToast();
     const { mutateAsync: deleteMedia, isPending: isDeleting } = useDeleteMedia();
     const { setMedia } = useMedia();
-
+    console.log(isLoading);
+    
     const openEditModal = (mediaItem: MediaItem) => {
         setSelectedMedia(mediaItem);
         setVisible(true);
@@ -37,7 +36,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ media, isLoading }) => {
     };
 
 
-    const headerTemplate = (item: any) => {
+    const headerTemplate = () => {
         return (
             <div className="flex items-center justify-between">
                 <h1 className='page-innertitles'>Attachment Details</h1>

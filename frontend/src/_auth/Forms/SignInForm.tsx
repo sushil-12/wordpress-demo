@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -250,7 +249,7 @@ const SignInForm = () => {
                           inputId="staySignedIn"
                           className="form_check"
                           checked={form.getValues("staySignedIn") === 'yes'}
-                          onChange={(e) => {
+                          onChange={() => {
                             const newValue = form.getValues("staySignedIn") === 'yes' ? 'no' : 'yes';
                             form.setValue("staySignedIn", newValue);
                             field.onChange(newValue);

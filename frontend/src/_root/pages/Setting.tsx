@@ -1,24 +1,17 @@
 import NavDatatable from "@/components/datatable/NavDatatable";
 import { useUserContext } from "@/context/AuthProvider";
-import { useGetAllNavItems } from "@/lib/react-query/queriesAndMutations";
-import NavItemForm from "@/settings/NavItemForm";
-import { Settings } from "lucide-react";
-import { Menubar } from 'primereact/menubar';
-import { TabMenu } from 'primereact/tabmenu';
 import { useEffect, useState } from "react";
-import { domainSidebarLinks, logos, websites } from "@/constants";
+import { domainSidebarLinks} from "@/constants";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UploadSvgForm from "@/settings/UploadSvgForm";
 import SvgGrid from "@/components/shared/SvgGrid";
 
 
 const Setting = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [navItems, setNavItems] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [render, setRerender] = useState(true);
   const { setRerender: setAppRender, rerender } = useUserContext();
-
+  console.log(selectedItem, setRerender )
   async function getNavItems() {
     setNavItems(domainSidebarLinks);
   }

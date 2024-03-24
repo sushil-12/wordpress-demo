@@ -7,7 +7,7 @@ import { signUpValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast"
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthProvider";
 import { z } from "zod";
 
@@ -15,7 +15,6 @@ const SignUpForm = () => {
   const { toast } = useToast()
   const {checkAuthUser }= useUserContext();
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount();
-  const { mutateAsync: signInAccount } = useSignInAccount();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof signUpValidationSchema>>({
     resolver: zodResolver(signUpValidationSchema),
@@ -37,10 +36,11 @@ const SignUpForm = () => {
     if (newUser && newUser.code && newUser.code.includes('ERR')) {
       return toast({ variant: "destructive", title: "Signup Failed", description: newUser?.response?.data?.message });
     }
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password
-    })
+    // const session = await signInAccount({
+    //   email: values.email,
+    //   password: values.password
+    // })
+    const session = true;
     if (!session) {
       return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
     }

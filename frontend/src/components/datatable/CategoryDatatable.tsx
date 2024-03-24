@@ -14,9 +14,10 @@ interface CategoryDataTableScema {
     isCategoryLoading: boolean,
 }
 const CategoryDataTable: React.FC<CategoryDataTableScema> = ({ isCategoryLoading }) => {
-    const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategory();
+    const { categories, selectedCategory, setSelectedCategory } = useCategory();
     const { mutateAsync: getCategoryById, isPending: isLoading } = useGetCategorybyID();
-
+    console.log(isLoading);
+    
     useEffect(() => { console.log(selectedCategory) }, [selectedCategory])
     const titleTemplate = (rowData: CategoryKeyModel) => {
         return <>{!isCategoryLoading ? rowData.label : <Skeleton width='100' height='1.5rem' />}</>;

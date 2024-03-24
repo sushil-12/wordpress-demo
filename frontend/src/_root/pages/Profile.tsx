@@ -7,35 +7,28 @@ import { useToast } from "@/components/ui/use-toast"
 import { z } from "zod";
 import {
   NavLink,
-  Outlet,
 } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useRef, useState } from "react";
 import { IUser } from "@/lib/types";
-import { useEditProfile } from "@/lib/react-query/queriesAndMutations";
-import Loader from "@/components/shared/Loader";
 import { Settings } from "lucide-react";
 import ProfilePageSkeleton from "@/components/skeletons/ProfilePageSkeleton";
 import { Skeleton } from "primereact/skeleton";
 import { checkPasswordApi, editProfile, sendOtpForVerificationApi } from "@/lib/appwrite/api";
 import SvgComponent from "@/utils/SvgComponent";
-import Header from "@/components/ui/header";
-import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { Dialog } from "primereact/dialog";
+import { useEffect, useRef, useState } from "react";
+import Loader from "@/components/shared/Loader";
 
 
 const Profile = () => {
-  const { user, setUser, isLoading, setRerender } = useUserContext();
+  const { user,  isLoading, setRerender } = useUserContext();
   const { toast } = useToast();
   const [currentUser, setCurrentUser] = useState<IUser>(user);
   const [loader, setloader] = useState(true);
   const [isUpdating, setisUpdating] = useState(false);
   const fileInputRef = useRef(null);
   const [imageSrc, setImageSrc] = useState('');
-  const [emailDisabled, setEmailDisabled] = useState(true)
-  const [passwordDisabled, setPasswordDisabled] = useState(true);
   const [oldPassword, setOldPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [errormessage, setErrorMessage] = useState('');
@@ -50,7 +43,8 @@ const Profile = () => {
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false); // State to track whether email is being edited 
   const [visible, setVisible] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const headerTemplate = (item: any) => {
+  const headerTemplate = () => {
+    console.log(isLoading)
     return (
       <div className="flex items-center justify-between">
         <h1 className='page-innertitles'>{form_type==='validation' ? 'Enter Your Current Password' : 'Enter verification code'}</h1>
@@ -188,6 +182,7 @@ const Profile = () => {
         updateData.profile_pic = values.profile_pic;
       }
       const updateResponse = await editProfile(updateData);
+      console.log(updateResponse)
       form.setValue('password', 'Click the button to change your password')
       setRerender((prev: boolean) => !prev);
       setisUpdating(false);

@@ -5,7 +5,7 @@ import { Skeleton } from 'primereact/skeleton';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import { DataTable } from 'primereact/datatable';
 import { Button } from '../ui/button';
-import { useGetAllCustomFields, useGetCustomFieldsbyIDApi } from '@/lib/react-query/queriesAndMutations';
+import { useGetAllCustomFields} from '@/lib/react-query/queriesAndMutations';
 import { Dialog } from 'primereact/dialog';
 import CustomFieldForm from '@/plugin/post/_custom_form/CustomFieldForm';
 import { useUserContext } from '@/context/AuthProvider';
@@ -35,9 +35,6 @@ const CustomFieldDatatable = () => {
         return <h6 className='text-sm'>{!isCustomFieldLoading ? rowData.title : <Skeleton width='100' height='1.5rem' />}</h6>;
     };
 
-    const itemTypeTemplate = (rowData: any) => {
-        return <Tag value={rowData.item_type} className='px-4 py-2 text-sm'></Tag>;
-    };
     const postTypeTemplate = (rowData: any) => {
         return <Tag value={rowData.post_type} className='px-4 py-2'></Tag>;
     };

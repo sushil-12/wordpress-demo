@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { Button } from '../ui/button'
 import { Dialog } from 'primereact/dialog'
 import UploadSvgForm from '@/settings/UploadSvgForm';
@@ -8,7 +8,7 @@ import SvgComponent from '@/utils/SvgComponent';
 const SvgGrid = () => {
     const [visible, setVisible] = useState(false);
     console.log(Icons, "ICONS")
-    const headerTemplate = (item: any) => {
+    const headerTemplate = () => {
         return (
             <div className="flex items-center justify-between">
                 <h1 className='page-innertitles'>Upload Svgs</h1>

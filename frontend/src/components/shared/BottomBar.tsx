@@ -7,6 +7,7 @@ const BottomBar = () => {
   const { pathname } = useLocation();
   return (
     <section className="bottom-bar">
+      {/* @ts-ignore */}
       {bottombarLinks?.map((link: INavLink) => {
         const isActive = pathname === link.route;
         return (

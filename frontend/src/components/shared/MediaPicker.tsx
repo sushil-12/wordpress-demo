@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ImageLibrary from './ImageLibrary';
 import { Dialog } from 'primereact/dialog';
 import { Image as ImageView } from 'primereact/image';
-import { MousePointerSquare, TrashIcon } from 'lucide-react';
+import { MousePointerSquare } from 'lucide-react';
 import { Button } from 'primereact/button';
 
 
