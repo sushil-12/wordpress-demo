@@ -1,5 +1,4 @@
 import { IContextType, IUser } from "@/lib/types";
-import { useNavigate } from "react-router";
 import { createContext, useContext, useEffect, useState } from "react"
 import { getCurrentUser } from "@/lib/appwrite/api";
 export const INITIAL_USER = {id: '',firstName: '', lastName: '',username: '',email: '', bio:'', profile_pic:'' ,role:'', permissions:[]};
@@ -13,13 +12,12 @@ export const INITIAL_STATE = {
     setRerender:()=>{},
     setIsAuthenticated: () => { },
     currentDomain:'he_group', 
-    setCurrentDomain: async (newDomain: string) => {},
+    setCurrentDomain: async (newDomain: string) => {console.log(newDomain)},
     checkAuthUser: async () => false as boolean,
 }
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const navigate = useNavigate();
     const savedDomain:any = localStorage.hasOwnProperty('domain') ? localStorage.getItem('domain') :'he_group';
     const [user, setUser] = useState<IUser>(INITIAL_USER);
     const [isLoading, setIsLoading] = useState(false)
