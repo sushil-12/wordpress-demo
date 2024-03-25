@@ -3,8 +3,6 @@ import { useUserContext } from "@/context/AuthProvider";
 import { useEffect, useState } from "react";
 import { domainSidebarLinks} from "@/constants";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SvgGrid from "@/components/shared/SvgGrid";
-
 
 const Setting = () => {
   const [navItems, setNavItems] = useState({});
@@ -30,7 +28,6 @@ const Setting = () => {
         <Tabs defaultValue="sidebar" className="w-full">
           <TabsList className="grid w-full grid-cols-6 text-black">
             <TabsTrigger value="sidebar" className="bg-primary-500 text-white text-sm font-medium">Manage Sidebar</TabsTrigger>
-            {/* <TabsTrigger value="upload_svg">Upload SVG Icons</TabsTrigger> */}
           </TabsList>
           <TabsContent value="sidebar">
             <div className="page-innersubtitles">
@@ -40,18 +37,6 @@ const Setting = () => {
                 </div>
                 {/* <div className="form w-1/2">
                   <NavItemForm item={selectedItem} setRerender={setRerender}  />
-                </div> */}
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="upload_svg">
-            <div className="p-4 page-innersubtitles">
-              <div className="flex  border-primary-500 gap-8" >
-                <div className="items w-full">
-                  <SvgGrid />
-                </div>
-                {/* <div className="form w-1/2">
-                  <UploadSvgForm />
                 </div> */}
               </div>
             </div>
