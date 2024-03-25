@@ -34,22 +34,20 @@ export default function Media() {
     currentDomain
   }, [contextMedia, currentDomain]);
 
+  const fetchData = async () => {
+    try {
+      const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit, search: searchInput });
+      setMedia(mediaResponse?.data?.mediadata);
+      setPagination(mediaResponse?.data?.pagination || {});
+      // return toast({ variant: "default", description: "Fetched sucessfully" })
+    } catch (error) {
+      return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
 
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const mediaResponse = await getAllMedia({ page: pagination.page, limit: pagination.limit, search: searchInput });
-        setMedia(mediaResponse?.data?.mediadata);
-        setPagination(mediaResponse?.data?.pagination || {});
-        // return toast({ variant: "default", description: "Fetched sucessfully" })
-      } catch (error) {
-        return toast({ variant: "destructive", title: "SigIn Failed", description: "Something went wrong" })
-
-      }
-    };
-
     fetchData();
-  }, [getAllMedia, setMedia, pagination.page, pagination.limit, searchInput]);
+  }, [searchInput, pagination.page]);
 
   const onPageChange = (event: any) => {
     setPagination({ ...pagination, page: event.page + 1 });
@@ -88,8 +86,8 @@ export default function Media() {
                 </div>
                 <div className="card">
                   {pagination.totalPages > 1 && <Paginator
-                    className={`mt-10 mb-10 page_${pagination.page}`} 
-                    first={pagination.page * pagination.limit -1 }
+                    className={`mt-10 mb-10 page_${pagination.page}`}
+                    first={pagination.page * pagination.limit - 1}
                     rows={pagination.limit}
                     totalRecords={pagination.totalItems}
                     onPageChange={onPageChange}

@@ -40,8 +40,7 @@ const PageComponent = () => {
   };
   useEffect(() => {
     fetchPosts();
-    console.error(`posts`, posts);
-  }, [setPost, post_type, render, searchInput]);
+  }, [ post_type,searchInput]);
 
   return (
     <div className="main-container w-full overflow-hidden ">

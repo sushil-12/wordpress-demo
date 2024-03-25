@@ -3,7 +3,7 @@ import { Column } from 'primereact/column';
 import { PostModel } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useGetAllCustomFields, usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
+import {  usedeltePostbyID } from '@/lib/react-query/queriesAndMutations';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import { useToast } from '../ui/use-toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
@@ -27,23 +27,23 @@ const PostDataTable: React.FC<PostDataTableProps> = ({ isPostLoading, posts, pos
     const { mutateAsync: deletePostById, isPending: isDeleting } = usedeltePostbyID();
     // type StatusType = 'published' | 'draft' | 'draft' | 'draft';
     // const [statuses] = useState(['draft', 'published', 'trash', 'archived']);
-    const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
-    const [customFields, setCustomFields] = useState([]);
-    console.log(isCustomFieldLoading, customFields)
+    // const { mutateAsync: getAllCustomFields, isPending: isCustomFieldLoading } = useGetAllCustomFields();
+    // const [customFields, setCustomFields] = useState([]);
+    // console.log(isCustomFieldLoading, customFields)
     const [expandedRows, setExpandedRows] = useState('');
     const [expandedQuickEditRows, setExpandedQuickEditRows] = useState('');
     const [isQuickEditForm, setIsQuickEditForm] = useState(false)
     const [rerenderPostTable, setRerenderPostTable] = useState(false)
 
 
-    async function fetchCustomFields() {
-        const customFieldsResponse = await getAllCustomFields('page');
-        console.log(customFieldsResponse?.data)
-        setCustomFields(customFieldsResponse?.data?.customField)
-    }
+    // async function fetchCustomFields() {
+    //     const customFieldsResponse = await getAllCustomFields('page');
+    //     console.log(customFieldsResponse?.data)
+    //     setCustomFields(customFieldsResponse?.data?.customField)
+    // }
 
     useEffect(() => {
-        fetchCustomFields();
+        // fetchCustomFields();
         if (expandedRows) {
             setIsQuickEditForm(false);
         }

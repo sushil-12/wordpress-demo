@@ -38,8 +38,7 @@ const PostComponent = () => {
   };
   useEffect(() => {
     fetchPosts();
-    console.log("Render", render, post_type)
-  }, [setPost, post_type, render, searchInput]);
+  }, [ post_type, searchInput]);
   return (
 
     <div className="main-container w-full overflow-hidden ">
