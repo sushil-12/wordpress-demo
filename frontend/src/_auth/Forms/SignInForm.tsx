@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { messages } from "@/constants/message";
 
 const SignInForm = () => {
+  console.log(import.meta.env.VITE_API_URL, "API URL");
   const location = useLocation();
   const { pathname } = location;
   const form_state = (pathname === '/verify-account') ? 'verify_account_form' : (pathname === '/forgot-password') ? 'forgot_password_form' : 'login_form';
