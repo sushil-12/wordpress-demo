@@ -225,7 +225,7 @@ const LeftSidebar = () => {
                                                                     <li className={`left-sidebar-web-link ${isWebActive ? 'bg-primary-500 text-white ' : ''}`}>
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center" to={`${submenuKey}${link?.route}`}>
-                                                                                <div className="flex gap-[6px]">{/* @ts-ignore */}
+                                                                                <div className="flex gap-[6px] items-center">{/* @ts-ignore */}
                                                                                     <SvgComponent className=" leftsidebar_icons_website" svgName={link.imgURL || 'briefcase'} />
                                                                                     {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-white pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
                                                                                     <span className="whitespace-nowrap text-ellipsis overflow-hidden max-w-[150px]" title={link?.label}>{link.label}</span>
@@ -237,7 +237,7 @@ const LeftSidebar = () => {
                                                                         <div className="links">
                                                                             <NavLink className="flex items-center " to={`${submenuKey}/category${link?.route}`}>
                                                                                 {/* <img src={link?.imgURL} alt={link?.label} className={`group-hover:invert-primary-500 pl-6 pr-1 ${isWebActive ? 'invert-white' : ''}`} /> */}
-                                                                                <div className="flex gap-[6px]">{/* @ts-ignore */}
+                                                                                <div className="flex gap-[6px] items-center">{/* @ts-ignore */}
                                                                                     <SvgComponent className=" leftsidebar_icons_website" svgName={link.imgURL || 'briefcase'} />
                                                                                     <span>Manage category</span>
                                                                                 </div>
@@ -252,7 +252,7 @@ const LeftSidebar = () => {
                                                             <li key={link.label} className={`left-sidebar-web-link ${isWebActive ? 'bg-light-blue text-primary-500 border-b-primary-500' : ''}`}>
                                                                 <div className="links">
                                                                     <NavLink className="flex gap-4 items-center" to={`${submenuKey}${link.route}`}>
-                                                                        <div className="flex gap-[6px]">{/* @ts-ignore */}
+                                                                        <div className=" flex gap-[6px] items-center">{/* @ts-ignore */}
                                                                             <SvgComponent className=" leftsidebar_icons_website group-hover:invert-primary-500 text-primary-500" svgName={link.imgURL || 'briefcase'} />
                                                                             <span>{link.label}</span>
                                                                         </div>

@@ -53,7 +53,7 @@ const login = async (req, res) => {
 
     if (form_type == 'forgot_password_form') {
       try {
-        const resettemplateFilePath = path.join(__dirname, 'src', 'email-templates', 'reset-password.hbs');
+        const resettemplateFilePath = path.join(__dirname, '..', '..',  'email-templates', 'reset-password.hbs');
         const templateFile = fs.readFileSync(resettemplateFilePath, 'utf8');
         const resetToken = generateRandomString(32);
         user.resetToken = resetToken;
@@ -129,7 +129,8 @@ const login = async (req, res) => {
       }
       if (require_verification) {
         try {
-          const templateFilePath = path.join(__dirname, 'src', 'email-templates', 'send-verification-code.hbs');
+          const templateFilePath = path.join(__dirname, '..', '..',  'email-templates', 'send-verification-code.hbs');
+          console.log(templateFilePath);
           const templateFile = fs.readFileSync(templateFilePath, 'utf8');
           const template = handlebars.compile(templateFile);
 
